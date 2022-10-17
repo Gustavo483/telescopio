@@ -12,21 +12,29 @@
 </head>
 <body class="container">
 <div>
-    <a href="{{route('vizualizar.conteudo',['conteudo'=>$dadosconteudo])}}">
-        Voltar para o cronograma do curso
+    <a href="{{route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$Questao->fk_conteudo])}}">
+        Voltar
     </a>
 </div>
 <div>
     <h4 class="mt-5 mb-2">
-        Cadastro de atividade de resposta breve {{$dadosconteudo->st_nome_conteudo}}
+        Editar questão RB
     </h4>
 </div>
-<form method="post" action="{{route('StoreQuestaoRB.conteudo', ['dadosconteudo'=>$dadosconteudo])}}">
+<form method="post" action="{{ route('update.QuestaoFZRB', ['IDQuestao' =>$Questao->id])}}">
     @csrf
+    @method('PUT')
+
+    <label class="mt-2">Datos da banca:</label>
+
+    <input type="text" name="DadosBanca" value="{{ $Questao->DadosBanca?? old('DadosBanca') }}" placeholder="Dados da banca">
+    <div>
+        {{ $errors->has('DadosBanca') ? $errors->first('DadosBanca') : '' }}
+    </div>
 
     <label class="mt-5" for="">Pergunta:</label>
     <textarea name="st_pergunta" id="st_pergunta_RB" cols="30" rows="10">
-                {{{ old('st_pergunta')}}}
+                {{{ $Questao->st_pergunta?? old('st_pergunta')}}}
             </textarea>
     <div>
         {{ $errors->has('st_pergunta') ? $errors->first('st_pergunta') : '' }}
@@ -34,15 +42,15 @@
 
 
     <label class="mt-5" for="">Resposta da atividade:</label>
-    <input type="text" name="st_respostaRB">
+    <input type="text" name="st_gabarito" value="{{ $Questao->st_gabarito?? old('st_gabarito') }}">
     <div>
-        {{ $errors->has('st_respostaRB') ? $errors->first('st_respostaRB') : '' }}
+        {{ $errors->has('st_gabarito') ? $errors->first('st_gabarito') : '' }}
     </div>
 
 
     <label class="mt-5" for="">Resolução da atividade:</label>
     <textarea name="st_resolusao" id="st_resolusao_RB" cols="30" rows="10">
-        {{{ old('st_resolusao')}}}
+        {{{ $Questao->st_resolusao?? old('st_resolusao')}}}
     </textarea>
     <div>
         {{ $errors->has('st_resolusao') ? $errors->first('st_resolusao') : '' }}
@@ -51,6 +59,7 @@
     <div class="mt-2 text-center">
         <button type="submit" class="btn btn-lg btn-primary mt-5"> enviar </button>
     </div>
+
 </form>
 
 <script>

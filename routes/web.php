@@ -7,6 +7,7 @@ use App\Http\Controllers\UnidadeController;
 use App\Http\Controllers\ConteudoController;
 use App\Http\Controllers\CronogramaController;
 use App\Http\Controllers\CadastrasAtividadesControlller;
+use App\Http\Controllers\QuestoesFizacaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,7 @@ Route::controller(ConteudoController::class)->group(function () {
     Route::post('conteudo/create{idUnidade}', 'store')->name('conteudo.store');
     Route::get('conteudo/visualizar{conteudo}', 'vizualizarConteudo')->name('vizualizar.conteudo');
     Route::delete('conteudo/deletar{conteudo}', 'delete')->name('delete.conteudo');
+
 });
 
 Route::controller(CronogramaController::class)->group(function () {
@@ -59,6 +61,7 @@ Route::controller(CadastrasAtividadesControlller::class)->group(function () {
     Route::get('criarQuestaoRB{dadosconteudo}', 'criarQuestaoRB')->name('criarQuestaoRB.conteudo');
     Route::get('criarQuestaoRN{dadosconteudo}', 'criarQuestaoRN')->name('criarQuestaoRN.conteudo');
     Route::get('vizualixarAtividades/{dadosconteudo}', 'vizualizarAtividadesCurso')->name('vizualizar.TodasAtividades');
+
     Route::get('editarME{IDQuestao}', 'EditarQuestaoConteudoME')->name('editar.QuestaoME');
     Route::get('editarRB{IDQuestao}', 'EditarQuestaoConteudoRB')->name('editar.QuestaoRB');
     Route::get('editarRN{IDQuestao}', 'EditarQuestaoConteudoRN')->name('editar.QuestaoRN');
@@ -73,3 +76,25 @@ Route::controller(CadastrasAtividadesControlller::class)->group(function () {
     Route::post('Store/QuestaoRN{dadosconteudo}', 'StoreQuestaoRN')->name('StoreQuestaoRN.conteudo');
     Route::post('Store/Conteudo{dadosconteudo}', 'StoreConteudoEscrito')->name('StoreConteudoEscrito.conteudo');
 });
+
+Route::controller(QuestoesFizacaoController::class)->group(function () {
+    Route::get('criarQuestaoFZ{dadosconteudo}', 'criarQuestaoFZ')->name('criarQuestaoFZ.conteudo');
+    Route::post('Store/QuestaoFizacaoME{dadosconteudo}', 'StoreQuestaoME')->name('StoreQuestaoFZME.conteudo');
+    Route::post('Store/QuestaoFizacaoRB{dadosconteudo}', 'StoreQuestaoRB')->name('StoreQuestaoFZRB.conteudo');
+    Route::post('Store/QuestaoFizacaoRN{dadosconteudo}', 'StoreQuestaoRN')->name('StoreQuestaoFZRN.conteudo');
+    Route::get('vizualixarAtividadesFizacao/{dadosconteudo}', 'vizualizarAtividadesfZ')->name('vizualizar.TodasAtividadesFZ');
+
+    Route::get('editarFZME{IDQuestao}', 'EditarQuestaoConteudoME')->name('editar.QuestaoFZME');
+    Route::get('editarFZRB{IDQuestao}', 'EditarQuestaoConteudoRB')->name('editar.QuestaoFZRB');
+    Route::get('editarFZRN{IDQuestao}', 'EditarQuestaoConteudoRN')->name('editar.QuestaoFZRN');
+
+    Route::put('updadeFZME{IDQuestao}', 'updadeQuestaoME')->name('update.QuestaoFZME');
+    Route::put('updadeFZRB{IDQuestao}', 'updadeQuestaoRB')->name('update.QuestaoFZRB');
+    Route::put('updadeFZRN{IDQuestao}', 'updadeQuestaoRN')->name('update.QuestaoFZRN');
+
+    Route::delete('deleteFZ/{IDQuestao}', 'DeleteQuestaoConteudosdsd')->name('delete.QuestaoFZ');
+});
+
+
+
+

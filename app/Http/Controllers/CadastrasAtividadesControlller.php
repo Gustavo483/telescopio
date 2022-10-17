@@ -106,7 +106,6 @@ class CadastrasAtividadesControlller extends Controller
         $questoes->st_respostaRN = $request->st_respostaRN;
         $questoes->st_pergunta = $request->st_pergunta;
         $questoes->st_resolusao = $request->st_resolusao;
-
         $questoes->save();
 
         return  redirect()->route('criarQuestaoRN.conteudo',['dadosconteudo'=>$dadosconteudo]);
@@ -162,8 +161,6 @@ class CadastrasAtividadesControlller extends Controller
     {
         return view('CadastrarAtividades.EditarQuestaoRN',['Questao'=>$IDQuestao]);
     }
-
-
 
     public function updadeQuestaoME(Request $request,QuestoesModel $IDQuestao)
     {

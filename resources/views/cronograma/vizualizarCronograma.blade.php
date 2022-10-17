@@ -8,7 +8,7 @@
     </div>
 
     <div class="mt-5 mb-5">
-        <h1 class="mt-5 mb-5">cronograma da Unidade</h1>
+        <h1 class="mt-5 mb-5">cronograma do conteudo</h1>
     </div>
     <div>
         <table class="mb-5">
@@ -74,7 +74,11 @@
         <h1 class="mt-5">Questões Cadastradas para o conteudo</h1>
 
         <a href="{{route('vizualizar.TodasAtividades',['dadosconteudo'=>$dadosconteudo])}}">
-            vizualizar todas as atividades cadastradas no curso
+            vizualizar questões do teste do conteudo
+        </a>
+        <br>
+        <a href="{{route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$dadosconteudo])}}">
+            vizualizar questões da atividade de fização
         </a>
 
         <table class="mb-5 mt-5">
@@ -82,7 +86,6 @@
                 <th class="border12">Tipo ativide</th>
                 <th class="border12">Total de questão do modelo</th>
                 <th class="border12">Adicionar nova atividade</th>
-
             </tr>
             <tr>
                 <td>Multipla escolha</td>
@@ -111,7 +114,15 @@
                         cadastrar questão RN
                     </a>
                 </td>
-
+            </tr>
+            <tr>
+                <td>Questão de fização</td>
+                <td class="text-center">{{$arayQuantidade[3]}}</td>
+                <td class="text-center">
+                    <a class="mt-5 mb-5" href="{{route('criarQuestaoFZ.conteudo',['dadosconteudo'=>$dadosconteudo])}}">
+                        Cadastrar questões FZ
+                    </a>
+                </td>
             </tr>
         </table>
     </div>

@@ -10,7 +10,19 @@ class CursoController extends Controller
 {
     public function inicioPágina()
     {
-        return view('curso.home');
+        if (auth()->user()->permision == 1 ){
+            dd('sou aluno');
+            return view('curso.home');
+        }
+        if (auth()->user()->permision == 2 ){
+            dd('sou professor');
+            return view('curso.home');
+        }
+        if (auth()->user()->permision == 3 ){
+            dd('sou o admin');
+            return view('curso.home');
+        }
+
     }
     public function index(Request $request)
     {

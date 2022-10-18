@@ -17,4 +17,8 @@ class CursoModel extends Model
     public function unidades(){
         return $this->belongsToMany('App\Models\UnidadeModel', 'tb_curso_unidade', 'fk_curso', 'fk_unidade');
     }
+
+    public function alunos(){
+        return $this->belongsToMany('App\Models\AlunoModel', 'tb_alunos_cursos', 'fk_curso', 'fk_aluno');
+    }
 }

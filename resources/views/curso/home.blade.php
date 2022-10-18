@@ -3,6 +3,8 @@
 @section('titulo', 'home')
 
 @section('conteudo')
+
+
     <div class="mt-5">
         <a href="{{route('curso.index')}}">
             cursos

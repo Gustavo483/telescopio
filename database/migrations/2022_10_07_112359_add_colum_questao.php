@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::table('tb_questoes', function (Blueprint $table) {
             $table->text('DadosBanca')->nullable();
-
         });
     }
 

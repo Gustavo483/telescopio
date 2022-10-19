@@ -11,7 +11,7 @@
 </head>
 <body class="container">
     <div class="d-flex justify-content-between">
-        {{auth()->user()->name}}
+        {{Auth::user()->name}}
 
         <form id="sdsd" method="post" action="{{route('logout')}}">
             @csrf
@@ -19,6 +19,12 @@
                 encerrar cessão
             </a>
         </form>
+    </div>
+
+    <div>
+        <a href="{{route('inicio.pagina')}}">
+            voltar
+        </a>
     </div>
 
 @yield('conteudo')

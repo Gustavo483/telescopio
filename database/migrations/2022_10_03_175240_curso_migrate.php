@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('tb_curso', function (Blueprint $table) {
             $table->id();
             $table->string('st_nome_curso')->unique();
-            $table->integer('in_total_unidades')->default(0);
             $table->timestamps();
         });
     }

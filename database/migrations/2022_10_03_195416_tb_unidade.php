@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('tb_unidade', function (Blueprint $table) {
             $table->id();
             $table->string('st_nome_unidade')->unique();
-            $table->integer('in_total_conteudo')->default('0');
             $table->timestamps();
         });
     }

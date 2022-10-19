@@ -8,7 +8,8 @@ use App\Http\Controllers\ConteudoController;
 use App\Http\Controllers\CronogramaController;
 use App\Http\Controllers\CadastrasAtividadesControlller;
 use App\Http\Controllers\QuestoesFizacaoController;
-
+use App\Http\Controllers\PermisionController;
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,11 +21,23 @@ use App\Http\Controllers\QuestoesFizacaoController;
 |
 */
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-    Route::controller(CursoController::class)->group(function () {
-        Route::get('/', 'inicioPágina')->name('inicio.página');
+    Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+    Route::controller(PermisionController::class)->group(function () {
+        Route::get('/', 'inicioPagina')->name('inicio.pagina');
     });
 
     Route::middleware(['admin'])->group(function (){
+        Route::controller(AdminController::class)->group(function () {
+            Route::get('/registerAluno', 'RegistrarAluno')->name('registerAluno');
+            Route::get('/registerProfessor', 'RegistrarProfessor')->name('registerProfessor');
+            Route::post('/SalvarAluno', 'RegistrarAlunoStore')->name('registerAlunoStore');
+            Route::post('/registroProfessor', 'RegistrarProfessorStore')->name('RegistrarProfessorStore');//ainda não implementado
+            Route::get('/AlunoCurso', 'VincularAlunoCursoCreate')->name('AlunoCursodf');
+            Route::post('/VincularAlunoCurso', 'VincularAlunoCursoStore')->name('VincularAlunoCurso');
+            Route::get('/listarAlunosCursos', 'listarAlunosCursos')->name('listarAlunosCursos');
+            Route::delete('/deleteAlunoCurso/{aluno}/{curso}', 'deleteAlunoCurso')->name('deleteAlunoCurso');
+        });
+
         Route::controller(CursoController::class)->group(function () {
             Route::get('/curso', 'index')->name('curso.index');
             Route::get('curso/create', 'create')->name('curso.create');
@@ -99,8 +112,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
             Route::delete('deleteFZ/{IDQuestao}', 'DeleteQuestaoConteudosdsd')->name('delete.QuestaoFZ');
         });
-        // route para registro de novas alunos e ou professores na plataforma
-        Route::get('/register', function () {return view('auth.register');})->name('register');
+
+
+
+
     });
 
 });

@@ -4,8 +4,9 @@
 
 @section('conteudo')
     <div>
-        {{$dadosconteudo->st_nome_conteudo}}
+        <h1>{{$dadosconteudo->st_nome_conteudo}}</h1>
     </div>
+
 
     <div class="mt-5 mb-5">
         <h1 class="mt-5 mb-5">cronograma do conteudo</h1>

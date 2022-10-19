@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             /*FKS*/
             $table->foreignId('fk_conteudo')->constrained('tb_conteudos', 'id');
+            $table->text('DadosBanca')->nullable();
             /*FKS*/
             $table->string('st_tipoDeQuestao');
             $table->longText('st_resolusao');

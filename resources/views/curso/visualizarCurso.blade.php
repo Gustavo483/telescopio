@@ -86,7 +86,6 @@
                     {{ $errors->has('st_nome_unidade') ? $errors->first('st_nome_unidade') : '' }}
                 </div>
                 <button type="submit">Cadastrar</button>
-
             </form>
         </div>
     </div>

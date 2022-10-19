@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('tb_alunos_cursos', function (Blueprint $table) {
             $table->foreignId('fk_aluno')->constrained('tb_alunos', 'id');
             $table->foreignId('fk_curso')->constrained('tb_curso', 'id');
-            $table->date('st_data_finalizar')->nullable();
         });
     }
 

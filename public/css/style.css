@@ -3,7 +3,6 @@
     border: 1px solid green;
     background: khaki;
 }
-
 .border12{
     border: 1px solid green;
     text-align: center;
@@ -12,4 +11,11 @@
 .none{
     display: none;
 }
-
+.tamanho1{
+    border: 1px solid red;
+    width: 20%;
+}
+.tamanho2{
+    border: 1px solid red;
+    width: 80%;
+}

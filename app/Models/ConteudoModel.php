@@ -13,6 +13,7 @@ class ConteudoModel extends Model
         'st_nome_conteudo',
         'fk_unidade',
     ];
+
     public function unidades(){
         return $this->belongsTo('App\Models\UnidadeModel','fk_unidade', 'id');
     }
@@ -20,4 +21,9 @@ class ConteudoModel extends Model
     public function cronogramas(){
         return $this->hasMany('App\Models\CronogramaModel','fk_conteudo', 'id');
     }
+
+    public function progressos(){
+        return $this->hasMany('App\Models\ProgressoModel','fk_conteudo', 'id');
+    }
+
 }

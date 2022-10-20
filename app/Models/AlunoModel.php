@@ -18,4 +18,9 @@ class AlunoModel extends Model
     public function users(){
         return $this->belongsTo('App\Models\User','fk_user', 'id');
     }
+
+    public function progressos(){
+        return $this->hasMany('App\Models\ProgressoModel','fk_aluno', 'id');
+    }
+
 }

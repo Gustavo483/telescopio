@@ -10,6 +10,8 @@ use App\Http\Controllers\CadastrasAtividadesControlller;
 use App\Http\Controllers\QuestoesFizacaoController;
 use App\Http\Controllers\PermisionController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AlunoController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -65,7 +67,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('conteudo/create{idUnidade}', 'store')->name('conteudo.store');
             Route::get('conteudo/visualizar{conteudo}', 'vizualizarConteudo')->name('vizualizar.conteudo');
             Route::delete('conteudo/deletar{conteudo}', 'delete')->name('delete.conteudo');
-
         });
 
         Route::controller(CronogramaController::class)->group(function () {
@@ -111,11 +112,16 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::put('updadeFZRN{IDQuestao}', 'updadeQuestaoRN')->name('update.QuestaoFZRN');
 
             Route::delete('deleteFZ/{IDQuestao}', 'DeleteQuestaoConteudosdsd')->name('delete.QuestaoFZ');
+
         });
+    });
 
+    Route::middleware(['aluno'])->group(function (){
+        Route::controller(AlunoController::class)->group(function () {
+            Route::get('/VizualizarCursoAluno{IdAluno}/{IdCurso}', 'vizualizarCurso')->name('Aluno.vizualizarCurso');
+            Route::get('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}{IdCronograma}/{tipoAtividade}', 'MostrarExercicioAluno')->name('Aluno.MostrarExercicio');
 
-
-
+        });
     });
 
 });

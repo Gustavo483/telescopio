@@ -26,5 +26,9 @@ class UnidadeModel extends Model
         return $this->hasMany('App\Models\CronogramaModel','fk_unidade', 'id');
     }
 
+    public function progressos(){
+        return $this->hasMany('App\Models\ProgressoModel','fk_unidade', 'id');
+    }
+
 
 }

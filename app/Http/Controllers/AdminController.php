@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Models\CursoModel;
-
+use App\Models\ConteudoModel;
+use App\Models\CronogramaModel;
+use App\Models\ProgressoModel;
 
 class AdminController extends Controller
 {
@@ -95,6 +97,7 @@ class AdminController extends Controller
 
     public function VincularAlunoCursoStore(Request $request)
     {
+        //código que esta funcionando para o cadastro de alunos nos cursos
         $validacao = [
             'id_aluno' => 'required',
             'cursos'=> 'required',
@@ -107,10 +110,35 @@ class AdminController extends Controller
 
         $dbAluno = AlunoModel::where('id', $request->id_aluno)->first();
 
-        foreach ($request->cursos as $items) {
-            $dbAluno->cursos()->attach($items);
+        foreach ($request->cursos as $curso) {
+            $dbAluno->cursos()->attach($curso);
         }
 
+        // Código para teste da tabela de cronograma
+
+        $Aluno = AlunoModel::find($request->id_aluno);
+
+        foreach ($request->cursos as $IDcurso) {
+            $curso = CursoModel::find($IDcurso);
+            foreach ($curso->unidades as $idUnidade){
+                $conteudos = ConteudoModel::where('fk_unidade',$idUnidade->id)->get();
+                foreach ( $conteudos as $conteudo) {
+                    $dadosCronograma = CronogramaModel::where('fk_conteudo',$conteudo->id)->get();
+                    $totalAtiviadesConteudo = count($dadosCronograma);
+                    $arrayIntermediatio = [$Aluno->id,$curso->id,$idUnidade->id,$conteudo->id,$totalAtiviadesConteudo];
+                    ProgressoModel::create([
+                        'fk_aluno' => $Aluno->id,
+                        'fk_unidade' => $idUnidade->id,
+                        'fk_curso' =>$curso->id ,
+                        'fk_conteudo' => $conteudo->id,
+                        'int_count_atividade' => $totalAtiviadesConteudo,
+                        'int_submit_atividades' => 0,
+                        'int_estrela_obtida' => 0
+                    ]);
+                }
+            }
+        }
+        //redirect para a roda de vincular aluno e curso
         $alunos = AlunoModel::all();
         $cursos = CursoModel::all();
         return view('Permisions.TelasAdmin.vincularCursoAluno', ['alunos'=>$alunos, 'cursos'=>$cursos]);
@@ -118,18 +146,14 @@ class AdminController extends Controller
     public function listarAlunosCursos()
     {
         $dados = AlunoModel::all();
-
         return view('Permisions.TelasAdmin.listarAlunosCursos', ['dados'=>$dados]);
         //var_dump($a->books);
     }
     public function deleteAlunoCurso($aluno, $curso)
     {
-
         $aluno = AlunoModel::where('id',$aluno )->first();
         $aluno->cursos()->detach($curso);
-
         $dados = AlunoModel::all();
-
         return view('Permisions.TelasAdmin.listarAlunosCursos', ['dados'=>$dados]);
     }
 }

@@ -94,6 +94,18 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('Store/QuestaoRB{dadosconteudo}', 'StoreQuestaoRB')->name('StoreQuestaoRB.conteudo');
             Route::post('Store/QuestaoRN{dadosconteudo}', 'StoreQuestaoRN')->name('StoreQuestaoRN.conteudo');
             Route::post('Store/Conteudo{dadosconteudo}', 'StoreConteudoEscrito')->name('StoreConteudoEscrito.conteudo');
+
+            Route::post('update/Testefinal{dadosconteudo}', 'UpdateTesteFina')->name('updateTesteFinalUnidade.conteudo');
+            Route::post('Store/Testefinal{dadosconteudo}', 'StoreTesteFina')->name('StoreTesteFinalUnidade.conteudo');
+            Route::get('vizualixarTesteFinalUnidade/{dadosconteudo}', 'vizualizarTesteFinalUnidade')->name('vizualizar.atividadeFinalUnidade');
+            Route::delete('DeletarConteudoFinal/{IDexclusao}/{dadosconteudo}', 'ExcluirUnidadeTesteFinal')->name('delete.ConteudoTesteFinal');
+            Route::get('editTesteFinal/{dadosconteudo}', 'EditarTesteFinal')->name('edit.ConteudoTesteFinal');
+
+            Route::post('update/Testeintermediario{dadosconteudo}', 'UpdateTesteIntermediario')->name('updateTesteIntermediarioUnidade.conteudo');
+            Route::post('Store/Testeintermediario{dadosconteudo}', 'StoreTesteIntermediario')->name('StoreTesteIntermediarioUnidade.conteudo');
+            Route::get('vizualixarTesteintermediarioUnidade/{dadosconteudo}', 'vizualizarTesteIntermediarioUnidade')->name('vizualizar.atividadeIntermediarioUnidade');
+            Route::delete('DeletarConteudointermediario/{IDexclusao}/{dadosconteudo}', 'ExcluirUnidadeTesteIntermediario')->name('delete.ConteudoTesteIntermediario');
+            Route::get('editTesteintermediario/{dadosconteudo}', 'EditarTesteIntermediario')->name('edit.ConteudoTesteIntermediario');
         });
 
         Route::controller(QuestoesFizacaoController::class)->group(function () {
@@ -119,8 +131,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::middleware(['aluno'])->group(function (){
         Route::controller(AlunoController::class)->group(function () {
             Route::get('/VizualizarCursoAluno{IdAluno}/{IdCurso}', 'vizualizarCurso')->name('Aluno.vizualizarCurso');
-            Route::get('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}{IdCronograma}/{tipoAtividade}', 'MostrarExercicioAluno')->name('Aluno.MostrarExercicio');
-
+            Route::get('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}/{IdCronograma}/{tipoAtividade}', 'MostrarExercicioAluno')->name('Aluno.MostrarExercicio');
+            Route::post('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}', 'Salvarprogresso')->name('Aluno.SalvarProgresso');
         });
     });
 

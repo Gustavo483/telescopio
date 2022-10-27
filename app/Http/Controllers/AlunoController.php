@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Collection;
 use App\Models\ConteudoModel;
 use Illuminate\Http\Request;
 use App\Models\ProgressoModel;
 use App\Models\CronogramaModel;
-
+use App\Models\ConteudoEscritoModel;
+use App\Models\QuestoesModel;
+use App\Models\QuestoesFizacaoModel;
+use App\Models\TesteFinalModel;
+use App\Models\TesteIntermediarioModel;
 
 class AlunoController extends Controller
 {
@@ -56,18 +61,74 @@ class AlunoController extends Controller
     public function MostrarExercicioAluno($IdAluno,$idConteudo,$IdCronograma,$tipoAtividade)
     {
         if($tipoAtividade == 'TEXTO'){
-            return view('Permisions.TelasAluno.ApresentarTextoConteudo');
+            $dados = ConteudoEscritoModel::where('fk_cronograma',$IdCronograma)->first();
+            return view('Permisions.TelasAluno.ApresentarTextoConteudo', ['texto'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo]);
         }
 
         if($tipoAtividade == 'AtividadeFixacao'){
-            return view('Permisions.TelasAluno.apresentarAtividadeFixacao');
+            $dados = QuestoesFizacaoModel::where('fk_conteudo',$idConteudo)->get();
+            return view('Permisions.TelasAluno.apresentarAtividadeFixacao', ['Atividades'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo]);
         }
-
         if($tipoAtividade == 'testeConteudo'){
-            return view('Permisions.TelasAluno.ApresentarTextoConteudo');
+            $dados = QuestoesModel::where('fk_conteudo', $idConteudo)->inRandomOrder()->limit(5)->get();
+            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo]);
         }
-
-        dd($IdAluno,$idConteudo,$IdCronograma,$tipoAtividade);
+        if ($tipoAtividade == 'Teste Final'){
+            $colect = new Collection();
+            $dados = TesteFinalModel::where('fk_conteudo_pertencente', $idConteudo)->get();
+            foreach ($dados as $dado){
+                $valorFkConteudo = $dado->fk_conteudo;
+                $QuantidadeQuestoes = $dado->totalQuestao;
+                $DadosQuestoes = QuestoesModel::where('fk_conteudo',$valorFkConteudo)->inRandomOrder()->limit($QuantidadeQuestoes)->get();
+                foreach ($DadosQuestoes as $questoes){
+                    $colect->push($questoes);
+                }
+            }
+            $dadosAtividadeIntermediaria = $colect->all();
+            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosAtividadeIntermediaria, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo]);
+        }
+        if ($tipoAtividade == 'Teste Intermediario'){
+            $colect = new Collection();
+            $dados = TesteIntermediarioModel::where('fk_conteudo_pertencente', $idConteudo)->get();
+            foreach ($dados as $dado){
+                $valorFkConteudo = $dado->fk_conteudo;
+                $QuantidadeQuestoes = $dado->totalQuestao;
+                $DadosQuestoes = QuestoesModel::where('fk_conteudo',$valorFkConteudo)->inRandomOrder()->limit($QuantidadeQuestoes)->get();
+                foreach ($DadosQuestoes as $questoes){
+                    $colect->push($questoes);
+                }
+            }
+            $dadosAtividadeIntermediaria = $colect->all();
+            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosAtividadeIntermediaria, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo]);
+        }
     }
+    public function Salvarprogresso(Request $request, $IdAluno, ConteudoModel $idConteudo)
+    {
+        $dadoCurso = ProgressoModel::where('fk_aluno',$IdAluno)->where('fk_unidade',$idConteudo->fk_unidade)->get();
+        $dado = ProgressoModel::where('fk_aluno',$IdAluno)->where('fk_conteudo',$idConteudo->id)->first();
+        $dado->update(
+            [
+                'int_submit_atividades'=>2,
+                'int_estrela_obtida'=>2
+            ]
+        );
+        $contador = 0;
 
+        foreach ($dadoCurso as $dado){
+            if($contador == 1){
+                $dado->update(
+                    [
+                        'int_submit_atividades'=>1,
+                    ]
+                );
+                break;
+            }
+            if($contador == 0){
+                if ($dado->int_submit_atividades == 2){
+                    $contador = $contador + 1;
+                }
+            }
+
+        }
+    }
 }

@@ -42,7 +42,6 @@
 
     <div>
         <h1>Adicionar novo tópico ao cronograma do curso</h1>
-
         <form class="mt-5" method="post" action="{{route('cronograma.store',['dadosconteudo'=>$dadosconteudo])}}">
             @csrf
             <div class="d-flex justify-content-start">
@@ -54,6 +53,8 @@
                         <option value="ConteudoEscrito">Conteúdo Escrito</option>
                         <option value="AtividadeFixacao">Atividade de Fixação</option>
                         <option value="testeConteudo">teste do conteudo</option>
+                        <option value="TesteIntermediario">teste Intermediarios da unidade</option>
+                        <option value="testeFinalUnidade">teste Final da unidade</option>
                     </select>
                 </div>
             </div>
@@ -80,6 +81,15 @@
         <br>
         <a href="{{route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$dadosconteudo])}}">
             vizualizar questões da atividade de fização
+        </a>
+        <br>
+
+        <a href="{{route('vizualizar.atividadeFinalUnidade',['dadosconteudo'=>$dadosconteudo])}}">
+            vizualizar teste Final da Unidade
+        </a>
+
+        <a href="{{route('vizualizar.atividadeIntermediarioUnidade',['dadosconteudo'=>$dadosconteudo])}}">
+            vizualizar teste intermediario da Unidade
         </a>
 
         <table class="mb-5 mt-5">

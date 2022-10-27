@@ -23,6 +23,12 @@
 </div>
 <form method="post" action="{{route('StoreQuestaoRN.conteudo', ['dadosconteudo'=>$dadosconteudo])}}">
     @csrf
+    <label class="mt-2">Datos da banca:</label>
+
+    <input type="text" name="DadosBanca" value="{{ $Questao->DadosBanca?? old('DadosBanca') }}" placeholder="Dados da banca">
+    <div>
+        {{ $errors->has('DadosBanca') ? $errors->first('DadosBanca') : '' }}
+    </div>
 
     <label class="mt-5" for="">Pergunta:</label>
     <textarea name="st_pergunta" id="st_pergunta_RN" cols="30" rows="10">
@@ -34,9 +40,9 @@
 
 
     <label class="mt-5" for="">Resposta da atividade:</label>
-    <input type="text" name="st_respostaRN">
+    <input type="text" name="st_gabarito">
     <div>
-        {{ $errors->has('st_respostaRN') ? $errors->first('st_respostaRN') : '' }}
+        {{ $errors->has('st_gabarito') ? $errors->first('st_gabarito') : '' }}
     </div>
 
 

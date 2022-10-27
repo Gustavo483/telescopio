@@ -151,8 +151,15 @@ class AdminController extends Controller
     }
     public function deleteAlunoCurso($aluno, $curso)
     {
+        $dadosProgresso = ProgressoModel::where('fk_aluno', $aluno)->where('fk_curso', $curso)->get();
+        //excluir dados da tabela de progresso quando o curso é excluido da base de dados.
+        foreach ($dadosProgresso as $progresso){
+            $progresso->delete();
+        }
         $aluno = AlunoModel::where('id',$aluno )->first();
         $aluno->cursos()->detach($curso);
+
+
         $dados = AlunoModel::all();
         return view('Permisions.TelasAdmin.listarAlunosCursos', ['dados'=>$dados]);
     }

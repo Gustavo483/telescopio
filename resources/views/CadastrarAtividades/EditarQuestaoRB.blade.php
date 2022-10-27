@@ -42,9 +42,9 @@
 
 
     <label class="mt-5" for="">Resposta da atividade:</label>
-    <input type="text" name="st_respostaRB" value="{{ $Questao->st_respostaRB?? old('st_respostaRB') }}">
+    <input type="text" name="st_gabarito" value="{{ $Questao->st_gabarito?? old('st_gabarito') }}">
     <div>
-        {{ $errors->has('st_respostaRB') ? $errors->first('st_respostaRB') : '' }}
+        {{ $errors->has('st_gabarito') ? $errors->first('st_gabarito') : '' }}
     </div>
 
 

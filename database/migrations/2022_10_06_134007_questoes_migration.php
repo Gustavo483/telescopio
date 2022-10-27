@@ -23,8 +23,6 @@ return new class extends Migration
             $table->longText('st_resolusao');
             $table->longText('st_pergunta');
             $table->text('st_gabarito')->nullable();
-            $table->text('st_respostaRB')->nullable();
-            $table->text('st_respostaRN')->nullable();
             $table->longText('st_alternativa1')->nullable();
             $table->longText('st_alternativa2')->nullable();
             $table->longText('st_alternativa3')->nullable();

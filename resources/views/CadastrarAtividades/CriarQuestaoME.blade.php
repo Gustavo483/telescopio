@@ -23,6 +23,13 @@
         </div>
         <form method="post" action="{{route('StoreQuestaoME.conteudo', ['dadosconteudo'=>$dadosconteudo])}}">
             @csrf
+            <label class="mt-2">Datos da banca:</label>
+
+            <input type="text" name="DadosBanca" value="{{ $Questao->DadosBanca?? old('DadosBanca') }}" placeholder="Dados da banca">
+            <div>
+                {{ $errors->has('DadosBanca') ? $errors->first('DadosBanca') : '' }}
+            </div>
+
 
             <label class="mt-5" for="">Pergunta:</label>
             <textarea name="st_pergunta" id="st_pergunta_ME" cols="30" rows="10">

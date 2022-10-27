@@ -3,5 +3,7 @@
 @section('titulo', 'HomeAluno')
 
 @section('conteudo')
-    Aqui ficará o texto do conteúdo cadastrado.
+    <div class="container mt-5 text-center">
+        {{$texto->st_texto}}
+    </div>
 @endsection

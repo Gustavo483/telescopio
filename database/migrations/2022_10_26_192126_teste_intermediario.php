@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tb_progresso', function (Blueprint $table) {
+        Schema::create('tb_Teste_Intermediario', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fk_aluno')->constrained('tb_alunos', 'id');
-            $table->foreignId('fk_unidade')->constrained('tb_unidade', 'id');
-            $table->foreignId('fk_curso')->constrained('tb_curso', 'id');
+            $table->integer('fk_conteudo_pertencente');
+            /*FKS*/
             $table->foreignId('fk_conteudo')->constrained('tb_conteudos', 'id');
-            $table->integer('int_count_atividade')->default(0);
-            $table->integer('int_submit_atividades')->default(0);
-            $table->integer('int_estrela_obtida')->default(0);
+            /*FKS*/
+            $table->integer('totalQuestao');
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_progresso');
+        Schema::dropIfExists('tb_Teste_Intermediario');
     }
 };

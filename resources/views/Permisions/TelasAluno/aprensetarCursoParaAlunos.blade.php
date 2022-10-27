@@ -35,7 +35,7 @@
                                 @endif
                                 @if($dados[7] != 0)
                                     <div class="ms-5">
-                                        <a href="{{route('Aluno.MostrarExercicio',['IdAluno'=>$dados[0],'IdCronograma'=>$dados[6]])}}">
+                                        <a href="{{route('Aluno.MostrarExercicio',['IdAluno'=>$dados[0],'idConteudo'=>$dados[1],'IdCronograma'=>$dados[6],'tipoAtividade'=>$dados[5]])}}">
                                             {{$dados[5]}}
                                         </a>
                                     </div>

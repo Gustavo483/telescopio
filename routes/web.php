@@ -11,6 +11,7 @@ use App\Http\Controllers\QuestoesFizacaoController;
 use App\Http\Controllers\PermisionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlunoController;
+use App\Http\Controllers\ProfessorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('/VincularAlunoCurso', 'VincularAlunoCursoStore')->name('VincularAlunoCurso');
             Route::get('/listarAlunosCursos', 'listarAlunosCursos')->name('listarAlunosCursos');
             Route::delete('/deleteAlunoCurso/{aluno}/{curso}', 'deleteAlunoCurso')->name('deleteAlunoCurso');
+
+            //rotas para cadastrar professor
+            Route::get('VincularCursoProfessor', 'VincularProfessorCursoCreate')->name('ProfessorCurso');
+            Route::post('/VincularProfessorCurso', 'VincularProfessorCursoStore')->name('VincularProfessorCurso');
+            Route::get('/listarprofessorCursos', 'listarprofessoresCursos')->name('listarprofessoresCursos');
+            Route::delete('/deleteProfessorCurso/{professor}/{curso}', 'deleteProfessorCurso')->name('deleteProfessorCurso');
         });
 
         Route::controller(CursoController::class)->group(function () {
@@ -142,6 +149,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/VizualizarCursoAluno{IdAluno}/{IdCurso}', 'vizualizarCurso')->name('Aluno.vizualizarCurso');
             Route::get('/VizualizarAtividadeAluno/sdcsdc{IdAluno}/{idConteudo}/{IdCronograma}/{tipoAtividade}/{IdCurso}', 'MostrarExercicioAluno')->name('Aluno.MostrarExercicio');
             Route::post('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}/{IdCurso}', 'Salvarprogresso')->name('Aluno.SalvarProgresso');
+        });
+    });
+
+    Route::middleware(['professor'])->group(function (){
+        Route::controller(ProfessorController::class)->group(function () {
+            Route::get('/VizualizarCursoAluno{IDProfessor}', 'vizualizarCurso')->name('vizualizarCursos.Professor');
+            Route::get('/VizualizarAlunosCadastradosCurso{IDCurso}', 'vizualizarAlunosCadastradosCurso')->name('vizualizarAlunosCadastradosNoCurso.Professor');
         });
     });
 

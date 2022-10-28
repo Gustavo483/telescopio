@@ -22,6 +22,10 @@ class CursoModel extends Model
         return $this->belongsToMany('App\Models\AlunoModel', 'tb_alunos_cursos', 'fk_curso', 'fk_aluno');
     }
 
+    public function professores(){
+        return $this->belongsToMany('App\Models\ProfessorModel', 'tb_professores_cursos', 'fk_curso', 'fk_professor');
+    }
+
     public function progressos(){
         return $this->hasMany('App\Models\ProgressoModel','fk_curso', 'id');
     }

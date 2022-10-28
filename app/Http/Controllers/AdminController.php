@@ -10,6 +10,7 @@ use App\Models\CursoModel;
 use App\Models\ConteudoModel;
 use App\Models\CronogramaModel;
 use App\Models\ProgressoModel;
+use App\Models\ProfessorModel;
 
 class AdminController extends Controller
 {
@@ -71,22 +72,18 @@ class AdminController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'permision' => 1,
+            'permision' => 2,
         ]);
-
         $DadosUser = User::orderBy('id', 'desc')->first();
 
         $arrayValues = [ $DadosUser->name,$DadosUser->id];
 
-        AlunoModel::create([
-            'st_nome_aluno' => $arrayValues[0],
+        ProfessorModel::create([
+            'st_nome_professor' => $arrayValues[0],
             'fk_user' => $arrayValues[1] ,
-            'st_estrelas_obtidas' => 0,
-            'img_pet_selecionado' => 'Null'
         ]);
         return  redirect()->route('inicio.pagina');
     }
-
 
     public function VincularAlunoCursoCreate()
     {
@@ -162,6 +159,49 @@ class AdminController extends Controller
 
         $dados = AlunoModel::all();
         return view('Permisions.TelasAdmin.listarAlunosCursos', ['dados'=>$dados]);
+    }
+
+    public function VincularProfessorCursoCreate()
+    {
+        $professores = ProfessorModel::all();
+        $cursos = CursoModel::all();
+        return view('Permisions.TelasAdmin.vincularCursoProfessor', ['professores'=>$professores, 'cursos'=>$cursos]);
+    }
+    public function VincularProfessorCursoStore(Request $request)
+    {
+        //código que esta funcionando para o cadastro de alunos nos cursos
+        $validacao = [
+            'id_professor' => 'required',
+            'cursos'=> 'required',
+        ];
+        $feedback =[
+            'id_professor.required'=> 'O aluno deve ser preenchido.',
+            'cursos.required'=> 'Pelo meno um curso deve ser preenchido.',
+        ];
+        $request->validate($validacao, $feedback);
+
+        $dbProfessor = ProfessorModel::where('id', $request->id_professor)->first();
+
+        foreach ($request->cursos as $curso) {
+            $dbProfessor->cursos()->attach($curso);
+        }
+        //redirect para a roda de vincular aluno e curso
+        $professores = ProfessorModel::all();
+        $cursos = CursoModel::all();
+        return view('Permisions.TelasAdmin.vincularCursoProfessor', ['professores'=>$professores, 'cursos'=>$cursos]);
+    }
+    public function listarprofessoresCursos()
+    {
+        $dados = ProfessorModel::all();
+        return view('Permisions.TelasAdmin.listarProfessorCursos', ['dados'=>$dados]);
+        //var_dump($a->books);
+    }
+    public function deleteProfessorCurso($professor, $curso)
+    {
+        $professor = ProfessorModel::where('id',$professor )->first();
+        $professor->cursos()->detach($curso);
+        $dados = ProfessorModel::all();
+        return view('Permisions.TelasAdmin.listarProfessorCursos', ['dados'=>$dados]);
     }
 }
 

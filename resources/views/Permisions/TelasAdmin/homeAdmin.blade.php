@@ -17,13 +17,19 @@
             vincular aluno e curso
         </a>
 
+        <a class="me-5" href="{{route('ProfessorCurso')}}">
+            vincular Professor e curso
+        </a>
+
         <a class="me-5" href="{{route('listarAlunosCursos')}}">
             listarAlunosCursos
         </a>
 
+        <a class="me-5" href="{{route('listarprofessoresCursos')}}">
+            listarProfessorCursos
+        </a>
 
     </div>
-
 
     <div class="mt-5">
         <a href="{{route('curso.index')}}">

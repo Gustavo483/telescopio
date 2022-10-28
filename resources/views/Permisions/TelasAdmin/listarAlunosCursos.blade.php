@@ -8,8 +8,8 @@
            <thead>
                <tr>
                    <th class="p-4">#</th>
-                   <th class="p-4">Nome do curso</th>
                    <th class="p-4">Nome aluno</th>
+                   <th class="p-4">Nome do curso</th>
                    <th class="p-4">Excluir curso do aluno</th>
                </tr>
            </thead>
@@ -40,9 +40,5 @@
                @endforeach
            </tbody>
        </table>
-
-
-
-
    </div>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlunoModel;
+use App\Models\ProfessorModel;
 
 use Illuminate\Http\Request;
 
@@ -18,7 +19,9 @@ class PermisionController extends Controller
             return view('Permisions.TelasAluno.homeAluno',['dadosAlunosCursos' => $dadosAlunosCursos, 'IdAluno'=>$IdAluno->id]);
         }
         if (auth()->user()->permision == 2 ){
-            return view('Permisions.TelasProfessor.homeProfessor');
+            $IdUsuario = auth()->user()->id;
+            $Professor = ProfessorModel::where('fk_user',$IdUsuario)->first();
+            return view('Permisions.TelasProfessor.homeProfessor',['professor'=>$Professor]);
         }
         if (auth()->user()->permision == 3 ){
             return view('Permisions.TelasAdmin.homeAdmin');

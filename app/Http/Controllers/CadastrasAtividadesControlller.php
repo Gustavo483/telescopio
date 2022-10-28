@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ConteudoModel;
+use App\Models\CursoModel;
 use App\Models\QuestoesModel;
 use App\Models\CronogramaModel;
 use App\Models\ConteudoEscritoModel;
+use App\Models\TesteCursoModel;
 use App\Models\TesteIntermediarioModel;
 use App\Models\TesteFinalModel;
 use Illuminate\Http\Request;
@@ -373,5 +375,112 @@ class CadastrasAtividadesControlller extends Controller
         }
         $dadosAtividades = TesteIntermediarioModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
         return view('CadastrarAtividades.VizualizarTesteIntermediarioUnidade', ['dados'=>$dadosAtividades]);
+    }
+
+    public function TesteFinalCursoIndex(Request $request,$dadosconteudo)
+    {
+        $validacao = [
+            'dado' =>'required',
+        ];
+
+        $feedback =[
+            'required'=> 'O campo deve ser preenchido,',
+        ];
+
+        $request->validate($validacao, $feedback);
+        $IDCurso = $request->dado;
+        $dadosCurso = CursoModel::where('id',$IDCurso)->first();
+        $dados = $dadosCurso->unidades;
+        $ArrayIDUnidades = [];
+        foreach ($dados as $dado){
+            array_push($ArrayIDUnidades,$dado->id);
+        }
+        $Conteudos = ConteudoModel::wherein('fk_unidade', $ArrayIDUnidades)->where('id','!=', $dadosconteudo)->get();
+
+       return view('CadastrarAtividades.CadastrarConteudosTesteCurso', ['dadosconteudo'=>$dadosconteudo,'Conteudos'=>$Conteudos, 'IDCurso'=> $IDCurso]);
+    }
+    public function StoreTesteFinalCurso(Request $request,ConteudoModel $dadosconteudo, $IDCurso)
+    {
+        //Criando o cronogroma para apresentar a atividade
+        $cronograma = new CronogramaModel();
+        $cronograma->st_tipo_atividade = 'Teste Final Conteudo';
+        $cronograma->st_ordem_apresentacao = 1;
+        $cronograma->fk_conteudo = $dadosconteudo->id;
+        $cronograma->fk_unidade = $dadosconteudo->fk_unidade;
+        $cronograma->save();
+
+        $SubmitTotal = count($request->conteudos);
+        $contador = 0;
+        while (true){
+            if ($contador != $SubmitTotal ){
+                if ($request->valores[$contador] != null){
+                    $testeFinal = new TesteCursoModel();
+                    $testeFinal->fk_conteudo_pertencente = $dadosconteudo->id;
+                    $testeFinal->fk_curso  = $IDCurso;
+                    $testeFinal->fk_conteudo = $request->conteudos[$contador];
+                    $testeFinal->totalQuestao = $request->valores[$contador];
+                    $testeFinal->save();
+                }
+                $contador = $contador + 1;
+            }else{
+                break;
+            }
+        }
+        $dadosAtividades = TesteCursoModel::where('fk_curso',$IDCurso)->get();
+        return view('CadastrarAtividades.VizualizarTesteFinalCurso', ['dados'=>$dadosAtividades]);
+    }
+    public function ExcluirUnidadeTesteFinalCurso(TesteCursoModel $IDexclusao)
+    {
+        $IDCurso = $IDexclusao->fk_curso;
+        $IDexclusao->delete();
+        $dadosAtividades = TesteCursoModel::where('fk_curso',$IDCurso)->get();
+        return view('CadastrarAtividades.VizualizarTesteFinalCurso', ['dados'=>$dadosAtividades]);
+    }
+
+    public function vizualizarTesteFinalCurso($dadosconteudo)
+    {
+        $dadosAtividades = TesteCursoModel::where('fk_conteudo_pertencente',$dadosconteudo)->get();
+        return view('CadastrarAtividades.VizualizarTesteFinalCurso', ['dados'=>$dadosAtividades]);
+    }
+
+    public function EditarTesteFinalCurso(ConteudoModel $dadosconteudo, $fkCurso)
+    {
+        $dadosCurso = CursoModel::where('id',$fkCurso)->first();
+        $dados = $dadosCurso->unidades;
+        $ArrayIDUnidades = [];
+        foreach ($dados as $dado){
+            array_push($ArrayIDUnidades,$dado->id);
+        }
+
+        $todosConteudo = ConteudoModel::wherein('fk_unidade', $ArrayIDUnidades)->where('id','!=', $dadosconteudo)->get();
+        $dadosPreenchidos = TesteCursoModel::where('fk_conteudo_pertencente', $dadosconteudo->id)->get();
+
+        return view('CadastrarAtividades.EditarTesteFinalCurso', ['dadosconteudo'=>$dadosconteudo,'todosConteudo'=>$todosConteudo,'dadosPreenchidos'=>$dadosPreenchidos,'IDCurso'=>$fkCurso]);
+
+    }
+    public function updateTesteFinalCurso(Request $request,ConteudoModel $dadosconteudo, $IDCurso)
+    {
+        $dados = TesteCursoModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->delete();
+
+        $SubmitTotal = count($request->cursos);
+        $contador = 0;
+
+        while (true){
+            if ($contador != $SubmitTotal ){
+                if ($request->valores[$contador] != null){
+                    $testeFinal = new TesteCursoModel();
+                    $testeFinal->fk_curso = $IDCurso;
+                    $testeFinal->fk_conteudo_pertencente = $dadosconteudo->id;
+                    $testeFinal->fk_conteudo = $request->cursos[$contador];
+                    $testeFinal->totalQuestao = $request->valores[$contador];
+                    $testeFinal->save();
+                }
+                $contador = $contador + 1;
+            }else{
+                break;
+            }
+        }
+        //$dadosAtividades = TesteFinalModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
+        return  redirect()->route('vizualizar.TesteFinalCurso',['dadosconteudo'=>$dadosconteudo->id]);
     }
 }

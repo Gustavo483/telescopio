@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\ConteudoModel;
 use App\Models\CronogramaModel;
 use App\Models\ConteudoEscritoModel;
+use App\Models\CursoModel;
 use App\Models\TesteFinalModel;
+use App\Models\TesteCursoModel;
 use App\Models\TesteIntermediarioModel;
 use App\Models\QuestoesFizacaoModel;
 use Illuminate\Http\Request;
@@ -29,6 +31,12 @@ class CronogramaController extends Controller
             $todosConteudos = ConteudoModel::where('fk_unidade', $idUnidade)->where('id','!=',$dadosconteudo->id)->get();
             return  view('CadastrarAtividades.CriartesteFinalUnidade',['todosConteudo'=>$todosConteudos,'dadosconteudo'=>$dadosconteudo]);
         }
+
+        if($request->TipoAtividade == "testeFinalCurso"){
+            $todosCursos = CursoModel::all();
+            return  view('CadastrarAtividades.CriartesteFinalCurso',['todosCursos'=>$todosCursos,'dadosconteudo'=>$dadosconteudo]);
+        }
+
         else{
             $validacao = [
                 'st_ordem_apresentacao' =>'required|max:2',
@@ -74,7 +82,16 @@ class CronogramaController extends Controller
             $idConteudo = $cronograma->fk_conteudo;
             $cronograma->delete();
             return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo]);
-        }else{
+        }
+
+        if($cronograma->st_tipo_atividade == 'Teste Final Conteudo'){
+            $dados = TesteCursoModel::where('fk_conteudo_pertencente',$cronograma->fk_conteudo)->delete();
+            $idConteudo = $cronograma->fk_conteudo;
+            $cronograma->delete();
+            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo]);
+        }
+
+        else{
             $idConteudo = $cronograma->fk_conteudo;
             $cronograma->delete();
             return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo]);

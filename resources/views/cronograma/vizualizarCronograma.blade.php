@@ -55,6 +55,7 @@
                         <option value="testeConteudo">teste do conteudo</option>
                         <option value="TesteIntermediario">teste Intermediarios da unidade</option>
                         <option value="testeFinalUnidade">teste Final da unidade</option>
+                        <option value="testeFinalCurso">teste Final do curso</option>
                     </select>
                 </div>
             </div>
@@ -87,11 +88,14 @@
         <a href="{{route('vizualizar.atividadeFinalUnidade',['dadosconteudo'=>$dadosconteudo])}}">
             vizualizar teste Final da Unidade
         </a>
-
+        <br>
         <a href="{{route('vizualizar.atividadeIntermediarioUnidade',['dadosconteudo'=>$dadosconteudo])}}">
             vizualizar teste intermediario da Unidade
         </a>
-
+        <br>
+        <a href="{{route('vizualizar.TesteFinalCurso',['dadosconteudo'=>$dadosconteudo])}}">
+            vizualizar teste Final Curso
+        </a>
         <table class="mb-5 mt-5">
             <tr class="border12">
                 <th class="border12">Tipo ativide</th>

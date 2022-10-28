@@ -35,7 +35,7 @@
         @endif
     @endforeach
 
-    <form method="post" action="{{ route('Aluno.SalvarProgresso',['IdAluno'=>$IdAluno, 'idConteudo'=>$IdConteudo])}}">
+    <form method="post" action="{{ route('Aluno.SalvarProgresso',['IdAluno'=>$IdAluno, 'idConteudo'=>$IdConteudo, 'IdCurso'=>$IdCurso])}}">
         @csrf
         <label for="">digite algo para testar a funcionalidade:</label>
         <input type="text" class="form-control" name="int_submit_atividades" value="3">

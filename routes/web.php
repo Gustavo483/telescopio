@@ -106,6 +106,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('vizualixarTesteintermediarioUnidade/{dadosconteudo}', 'vizualizarTesteIntermediarioUnidade')->name('vizualizar.atividadeIntermediarioUnidade');
             Route::delete('DeletarConteudointermediario/{IDexclusao}/{dadosconteudo}', 'ExcluirUnidadeTesteIntermediario')->name('delete.ConteudoTesteIntermediario');
             Route::get('editTesteintermediario/{dadosconteudo}', 'EditarTesteIntermediario')->name('edit.ConteudoTesteIntermediario');
+
+            Route::post('SelecionarConteudosParaTesteFinalCurso/{dadosconteudo}', 'TesteFinalCursoIndex')->name('SelecionarConteudos.testeFinalCurso');
+            Route::post('Store/TestefinalCurso/{dadosconteudo}/{IDCurso}', 'StoreTesteFinalCurso')->name('StoreTesteFinalCursocdhj.conteudo');
+            Route::delete('DeletarConteudoFinalCurso/{IDexclusao}/{dadosconteudo}', 'ExcluirUnidadeTesteFinalCurso')->name('delete.ConteudoTesteFinalCurso');
+            Route::get('editTesteFinalCurso/{dadosconteudo}/{fkCurso}', 'EditarTesteFinalCurso')->name('edit.ConteudoTesteFinalCurso');
+            Route::get('vizualixarTesteFinalCurso/{dadosconteudo}', 'vizualizarTesteFinalCurso')->name('vizualizar.TesteFinalCurso');
+            Route::post('updateTesteFinalCurso/{dadosconteudo}/{IDCurso}', 'updateTesteFinalCurso')->name('update.ConteudoTesteFinalCurso');
+
+
         });
 
         Route::controller(QuestoesFizacaoController::class)->group(function () {
@@ -131,8 +140,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::middleware(['aluno'])->group(function (){
         Route::controller(AlunoController::class)->group(function () {
             Route::get('/VizualizarCursoAluno{IdAluno}/{IdCurso}', 'vizualizarCurso')->name('Aluno.vizualizarCurso');
-            Route::get('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}/{IdCronograma}/{tipoAtividade}', 'MostrarExercicioAluno')->name('Aluno.MostrarExercicio');
-            Route::post('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}', 'Salvarprogresso')->name('Aluno.SalvarProgresso');
+            Route::get('/VizualizarAtividadeAluno/sdcsdc{IdAluno}/{idConteudo}/{IdCronograma}/{tipoAtividade}/{IdCurso}', 'MostrarExercicioAluno')->name('Aluno.MostrarExercicio');
+            Route::post('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}/{IdCurso}', 'Salvarprogresso')->name('Aluno.SalvarProgresso');
         });
     });
 

@@ -8,6 +8,10 @@
         <a class="me-5" href="{{route('vizualizarCursos.Professor',['IDProfessor'=>$professor->id])}}">
             vizualizar cursos
         </a>
+        <br>
+        <a class="me-5" href="{{route('vizualizarCursos.Professor',['IDProfessor'=>$professor->id])}}">
+            vizualizar todos os alunos
+        </a>
     </div>
 
     <div>

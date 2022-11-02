@@ -8,14 +8,10 @@
     <div class="d-flex justify-content-center">
         @foreach($dadosCursos as $curso)
             <div class="p-5">
-                <a href="{{route('vizualizarAlunosCadastradosNoCurso.Professor', ['IDCurso'=>$curso->id])}}">
+                <a href="{{route('vizualizarAlunosCadastradosNoCurso.Professor', ['IDCurso'=>$curso->id, 'IDProfessor'=>$IDProfessor])}}">
                     {{$curso->st_nome_curso}}
                 </a>
             </div>
         @endforeach
     </div>
-
-
-
-
 @endsection

@@ -155,7 +155,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::middleware(['professor'])->group(function (){
         Route::controller(ProfessorController::class)->group(function () {
             Route::get('/VizualizarCursoAluno{IDProfessor}', 'vizualizarCurso')->name('vizualizarCursos.Professor');
-            Route::get('/VizualizarAlunosCadastradosCurso{IDCurso}', 'vizualizarAlunosCadastradosCurso')->name('vizualizarAlunosCadastradosNoCurso.Professor');
+            Route::get('/VizualizarAlunosCadastradosCurso{IDCurso}/{IDProfessor}', 'vizualizarAlunosCadastradosCurso')->name('vizualizarAlunosCadastradosNoCurso.Professor');
+            Route::get('/VizualizarprogressoAluno/{IDCurso}/{IDProfessor}/{alunos}', 'vizualizarProgressoAluno')->name('vizualizarProgressoAluno.Professor');
+
+            Route::get('/AtividadesAluno/{Aluno}/{IDCurso}/{IDProfessor}', 'atividadesAluno')->name('atividadesAluno.professor');
+            Route::get('/CursosAluno/{Aluno}/{IDCurso}/{IDProfessor}', 'CursosAluno')->name('CursosAluno.professor');
+            Route::get('/ProgressoAluno/{Aluno}/{IDCurso}/{IDProfessor}', 'ProgressoAluno')->name('ProgressoAluno.professor');
+            Route::get('/TarefasAluno/{Aluno}/{IDCurso}/{IDProfessor}', 'TarefasAluno')->name('TarefasAluno.professor');
+
+            Route::post('/VincularAlunoCursoPeloProfessor/{Aluno}/{IDCurso}/{IDProfessor}', 'VincularAlunoCurso')->name('VincularAlunoCurso.professor');
         });
     });
 

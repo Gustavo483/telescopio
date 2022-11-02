@@ -18,4 +18,8 @@ class ProfessorModel extends Model
     public function cursos(){
         return $this->belongsToMany('App\Models\CursoModel', 'tb_professores_cursos', 'fk_professor', 'fk_curso');
     }
+
+    public function TarefasRevisao(){
+        return $this->hasMany('App\Models\TarefasRevisaoModel','fk_professor', 'id');
+    }
 }

@@ -26,4 +26,12 @@ class ConteudoModel extends Model
         return $this->hasMany('App\Models\ProgressoModel','fk_conteudo', 'id');
     }
 
+    public function TarefasRevisao(){
+        return $this->hasMany('App\Models\TarefasRevisaoModel','fk_conteudo', 'id');
+    }
+
+    public function HistoricoNotas(){
+        return $this->hasMany('App\Models\HistoricoNotasAluno','fk_conteudo', 'id');
+    }
+
 }

@@ -30,5 +30,13 @@ class UnidadeModel extends Model
         return $this->hasMany('App\Models\ProgressoModel','fk_unidade', 'id');
     }
 
+    public function TarefasRevisao(){
+        return $this->hasMany('App\Models\TarefasRevisaoModel','fk_unidade', 'id');
+    }
+
+    public function HistoricoNotas(){
+        return $this->hasMany('App\Models\HistoricoNotasAluno','fk_unidade', 'id');
+    }
+
 
 }

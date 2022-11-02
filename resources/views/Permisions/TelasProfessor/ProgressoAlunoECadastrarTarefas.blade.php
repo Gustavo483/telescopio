@@ -3,7 +3,7 @@
 @section('titulo', 'HomeProfessor')
 
 @section('conteudo')
-    <h3 class="mt-5">Painel do professor> Curso > Alunos </h3>
+    <h3 class="mt-5">Painel do professor> {{$porcentagemCurso[0][0]}} > {{$dadosAluno->st_nome_aluno}} </h3>
     <div>
         <h6 class="text-center mt-4">Aqui vai ficar os dados do aluno(Criar a tabela e relacionamento)</h6>
     </div>
@@ -30,7 +30,16 @@
         </div>
     </div>
 
-    <h5 class="text-center mt-5">Progresso do aluno no curso</h5>
+    <h5 class="text-center mt-5">Progresso do aluno no curso "{{$porcentagemCurso[0][0]}}"</h5>
+
+    <div class="fdvdd">
+        <div>
+            {{ $errors->has('QuantidadeAtividades') ? $errors->first('QuantidadeAtividades') : '' }}
+        </div>
+        <div>
+            {{ $errors->has('data') ? $errors->first('data') : '' }}
+        </div>
+    </div>
 
     <div>
         <table class="w-100 mt-4">
@@ -71,8 +80,17 @@
                                             </td>
                                             <td class="text-center">
                                                 @if($d[4] == 1)
-                                                    +
+                                                    <form method="post" action="{{route('CadastrarAtividadeAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor,'IDUnidade'=>$PorcentagemUnidade[3],'IDConteudo'=>$d[7]])}}">
+                                                        @csrf
+                                                        <div class="d-flex justify-content-center">
+                                                            <input class="p-2" name="data" type="date">
+                                                            <button type="submit" class="btn btn-primary">
+                                                                +
+                                                            </button>
+                                                        </div>
+                                                    </form>
                                                 @endif
+
                                                 @if($d[4] == 0)
 
                                                 @endif

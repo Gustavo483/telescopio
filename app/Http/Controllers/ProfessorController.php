@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\AlunoModel;
 use App\Models\CursoModel;
+use App\Models\HistoricoNotasAluno;
 use App\Models\ProgressoModel;
 use Illuminate\Http\Request;
 use App\Models\ProfessorModel;
 use App\Models\ConteudoModel;
 use App\Models\CronogramaModel;
+use App\Models\TarefasRevisaoModel;
 
 class ProfessorController extends Controller
 {
@@ -27,19 +29,20 @@ class ProfessorController extends Controller
     }
 
 
-    public function vizualizarProgressoAluno($IDCurso,$IDProfessor,$alunos)
+    public function vizualizarProgressoAluno(CursoModel $IDCurso,$IDProfessor,AlunoModel $alunos)
     {
-        $array = [1,2,3,4];
-        return view('Permisions.TelasProfessor.DesempenhoAlunoCurso',['alunos'=>$array, 'IDCurso'=>$IDCurso,'Aluno'=>$alunos,'IDProfessor'=>$IDProfessor]);
+        $historico = HistoricoNotasAluno::where('fk_curso',$IDCurso->id)->where('fk_aluno',$alunos->id)->get();
+        return view('Permisions.TelasProfessor.DesempenhoAlunoCurso',['historicos'=>$historico, 'IDCurso'=>$IDCurso,'Aluno'=>$alunos,'IDProfessor'=>$IDProfessor]);
     }
 
-    public function atividadesAluno($Aluno,$IDCurso,$IDProfessor)
+    public function atividadesAluno(AlunoModel $Aluno,CursoModel $IDCurso,$IDProfessor)
     {
-        $array = [1,2,3,4];
-        return view('Permisions.TelasProfessor.DesempenhoAlunoCurso',['alunos'=>$array, 'IDCurso'=>$IDCurso,'Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor]);
+        $historico = HistoricoNotasAluno::where('fk_curso',$IDCurso->id)->where('fk_aluno',$Aluno->id)->get();
+
+        return view('Permisions.TelasProfessor.DesempenhoAlunoCurso',['historicos'=>$historico, 'IDCurso'=>$IDCurso,'Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor]);
     }
 
-    public function CursosAluno(AlunoModel $Aluno,$IDCurso,$IDProfessor)
+    public function CursosAluno(AlunoModel $Aluno,CursoModel $IDCurso,$IDProfessor)
     {
         $CursoParaCadastrarAluno = CursoModel::orderBy('st_nome_curso', 'asc')->get();
         $cursosCadastrados = $Aluno->cursos;
@@ -134,18 +137,18 @@ class ProfessorController extends Controller
                     $ExisteOuNaoAtividadeAvaliativa = [0];
                     foreach ($dadosCronograma as $dadoCronograma){
                         $nomeConteudo = ConteudoModel::where('id',$dadoCronograma->fk_conteudo)->first();
-                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'){
+                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final Conteudo' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
                             $ExisteOuNaoAtividadeAvaliativa[0] = 1;
                         }else{
                             $ExisteOuNaoAtividadeAvaliativa[0] = 0;
                         }
                     }
                     if ($ExisteOuNaoAtividadeAvaliativa[0] == 1){
-                        $dados = [$IDCurso->st_nome_curso,$Unidade->st_nome_unidade, $nomeConteudo->st_nome_conteudo,100,1,$atividade->updated_at,$atividade->int_estrela_obtida];
+                        $dados = [$IDCurso->st_nome_curso,$Unidade->st_nome_unidade, $nomeConteudo->st_nome_conteudo,100,1,$atividade->updated_at,$atividade->int_estrela_obtida,$nomeConteudo->id];
                         array_push($dadosConteudos,$dados);
                         array_push($AtividadesRealizadas, 1);
                     }else{
-                        $dados = [$IDCurso->st_nome_curso,$Unidade->st_nome_unidade, $nomeConteudo->st_nome_conteudo,100,0,$atividade->updated_at,$atividade->int_estrela_obtida];
+                        $dados = [$IDCurso->st_nome_curso,$Unidade->st_nome_unidade, $nomeConteudo->st_nome_conteudo,100,0,$atividade->updated_at,$atividade->int_estrela_obtida,$nomeConteudo->id];
                         array_push($dadosConteudos,$dados );
                         array_push($AtividadesRealizadas, 1);
                     }
@@ -155,18 +158,18 @@ class ProfessorController extends Controller
                     $ExisteOuNaoAtividadeAvaliativa = [0];
                     foreach ($dadosCronograma as $dadoCronograma){
                         $nomeConteudo = ConteudoModel::where('id',$dadoCronograma->fk_conteudo)->first();
-                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'){
+                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final Conteudo' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
                             $ExisteOuNaoAtividadeAvaliativa[0] = 1;
                         }else{
                             $ExisteOuNaoAtividadeAvaliativa[0] = 0;
                         }
                     }
                     if ($ExisteOuNaoAtividadeAvaliativa[0] == 1){
-                        $dados = [$IDCurso->st_nome_curso,$Unidade->st_nome_unidade, $nomeConteudo->st_nome_conteudo,0,1,'-','-'];
+                        $dados = [$IDCurso->st_nome_curso,$Unidade->st_nome_unidade, $nomeConteudo->st_nome_conteudo,0,1,'-','-',$nomeConteudo->id];
                         array_push($dadosConteudos,$dados);
                         array_push($NaoRespondeuNenhumaAtiviade, 1);
                     }else{
-                        $dados = [$IDCurso->st_nome_curso,$Unidade->st_nome_unidade, $nomeConteudo->st_nome_conteudo,0,0,'-','-'];
+                        $dados = [$IDCurso->st_nome_curso,$Unidade->st_nome_unidade, $nomeConteudo->st_nome_conteudo,0,0,'-','-',$nomeConteudo->id];
                         array_push($dadosConteudos,$dados );
                         array_push($NaoRespondeuNenhumaAtiviade, 1);
                     }
@@ -177,22 +180,25 @@ class ProfessorController extends Controller
 
             if(count($NaoRespondeuNenhumaAtiviade) == 1){
                 $value = $IDCurso->st_nome_curso;
-                $dad = [$value,$Unidade->st_nome_unidade, 0];
+                $dad = [$value,$Unidade->st_nome_unidade, 0,$Unidade->id];
                 array_push($PorcentagensUnidadeApresentar, $dad);
             }
             else{
                 $dado =intval((count($AtividadesRealizadas) * 100)/$totalAtiviades);
                 $value = $IDCurso->st_nome_curso;
-                $dad = [$value,$Unidade->st_nome_unidade, $dado];
+                $dad = [$value,$Unidade->st_nome_unidade, $dado,$Unidade->id];
                 array_push($PorcentagensUnidadeApresentar,$dad);
             }
         }
-        return view('Permisions.TelasProfessor.ProgressoAlunoECadastrarTarefas',['porcentagemCurso'=>$porcentagemCurso,'PorcentagensUnidadeApresentar'=>$PorcentagensUnidadeApresentar,'porcentagemConteudos'=>$porcentagemConteudo,'IDCurso'=>$IDCurso->id,'Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor]);
+        $dadosAluno = AlunoModel::where('id',$Aluno)->first();
+        return view('Permisions.TelasProfessor.ProgressoAlunoECadastrarTarefas',['porcentagemCurso'=>$porcentagemCurso,'PorcentagensUnidadeApresentar'=>$PorcentagensUnidadeApresentar,'porcentagemConteudos'=>$porcentagemConteudo,'IDCurso'=>$IDCurso->id,'Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor,'dadosAluno'=>$dadosAluno]);
     }
 
-    public function TarefasAluno($Aluno,$IDCurso, $IDProfessor)
+    public function TarefasAluno(AlunoModel $Aluno, CursoModel $IDCurso,ProfessorModel $IDProfessor)
     {
-        dd($Aluno,$IDCurso);
+        $dadosTarefas = TarefasRevisaoModel::where('fk_aluno',$Aluno->id)->where('fk_curso',$IDCurso->id)->where('fk_professor',$IDProfessor->id)->orderBy('created_at')->get();
+
+        return view('Permisions.TelasProfessor.TarefasAlunoStatus',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor,'dadosTarefas'=>$dadosTarefas]);
     }
 
     public function VincularAlunoCurso(Request $request, AlunoModel $Aluno ,$IDCurso, $IDProfessor)
@@ -229,6 +235,37 @@ class ProfessorController extends Controller
                 }
             }
         }
+
         return redirect()->route('CursosAluno.professor', ['Aluno'=>$Aluno->id,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor]);
+    }
+    public function CadastrarAtividadeAluno(Request $request,  $Aluno ,$IDCurso, $IDProfessor,$IDUnidade,$IDConteudo)
+    {
+        $validacao = [
+            'data' => 'required',
+
+        ];
+        $feedback =[
+            'data.required'=> 'O campo da data é obrigatório.',
+        ];
+        $request->validate($validacao, $feedback);
+
+        TarefasRevisaoModel::create([
+            'int_estrelas_obtidas'=>0,
+            'submit_atividade'=>0,
+            'data'=> $request->data,
+            'fk_aluno'=> $Aluno,
+            'fk_curso'=> $IDCurso,
+            'fk_professor'=> $IDProfessor,
+            'fk_unidade'=>$IDUnidade,
+            'fk_conteudo'=>$IDConteudo,
+        ]);
+
+        return redirect(route('ProgressoAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor]));
+
+    }
+    public function deleteTarefaAluno($Aluno,$IDCurso,$IDProfessor,TarefasRevisaoModel $IDTarefa)
+    {
+        $IDTarefa->delete();
+        return redirect()->route('TarefasAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor]);
     }
 }

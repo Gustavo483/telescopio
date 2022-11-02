@@ -148,7 +148,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::controller(AlunoController::class)->group(function () {
             Route::get('/VizualizarCursoAluno{IdAluno}/{IdCurso}', 'vizualizarCurso')->name('Aluno.vizualizarCurso');
             Route::get('/VizualizarAtividadeAluno/sdcsdc{IdAluno}/{idConteudo}/{IdCronograma}/{tipoAtividade}/{IdCurso}', 'MostrarExercicioAluno')->name('Aluno.MostrarExercicio');
-            Route::post('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}/{IdCurso}', 'Salvarprogresso')->name('Aluno.SalvarProgresso');
+            Route::post('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}/{IdCurso}/{tipoAtividade}', 'Salvarprogresso')->name('Aluno.SalvarProgresso');
         });
     });
 
@@ -164,6 +164,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/TarefasAluno/{Aluno}/{IDCurso}/{IDProfessor}', 'TarefasAluno')->name('TarefasAluno.professor');
 
             Route::post('/VincularAlunoCursoPeloProfessor/{Aluno}/{IDCurso}/{IDProfessor}', 'VincularAlunoCurso')->name('VincularAlunoCurso.professor');
+            Route::post('dfvdfvdfd/{Aluno}/{IDCurso}/{IDProfessor}/{IDUnidade}/{IDConteudo}', 'CadastrarAtividadeAluno')->name('CadastrarAtividadeAluno.professor');
+
+            Route::delete('deleteTarefaAluno/{Aluno}/{IDCurso}/{IDProfessor}/{IDTarefa}', 'deleteTarefaAluno')->name('deleteTarefaAluno.professor');
+
         });
     });
 

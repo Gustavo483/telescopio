@@ -23,4 +23,12 @@ class AlunoModel extends Model
         return $this->hasMany('App\Models\ProgressoModel','fk_aluno', 'id');
     }
 
+    public function TarefasRevisao(){
+        return $this->hasMany('App\Models\TarefasRevisaoModel','fk_aluno', 'id');
+    }
+
+    public function HistoricoNotas(){
+        return $this->hasMany('App\Models\HistoricoNotasAluno','fk_aluno', 'id');
+    }
+
 }

@@ -3,7 +3,7 @@
 @section('titulo', 'HomeProfessor')
 
 @section('conteudo')
-    <h3 class="mt-5">Painel do professor> Curso > Alunos </h3>
+    <h3 class="mt-5">Painel do professor> {{$IDCurso->st_nome_curso}} > {{$Aluno->st_nome_aluno}} </h3>
     <div>
         <h6 class="text-center mt-4">Aqui vai ficar os dados do aluno(Criar a tabela e relacionamento)</h6>
     </div>

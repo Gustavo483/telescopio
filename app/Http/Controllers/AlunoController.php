@@ -15,6 +15,7 @@ use App\Models\QuestoesModel;
 use App\Models\QuestoesFizacaoModel;
 use App\Models\TesteFinalModel;
 use App\Models\TesteIntermediarioModel;
+use App\Models\HistoricoNotasAluno;
 
 class AlunoController extends Controller
 {
@@ -74,17 +75,18 @@ class AlunoController extends Controller
     }
     public function MostrarExercicioAluno($IdAluno,$idConteudo,$IdCronograma,$tipoAtividade,$IdCurso)
     {
+
         if($tipoAtividade == 'TEXTO'){
             $dados = ConteudoEscritoModel::where('fk_cronograma',$IdCronograma)->first();
-            return view('Permisions.TelasAluno.ApresentarTextoConteudo', ['texto'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso]);
+            return view('Permisions.TelasAluno.ApresentarTextoConteudo', ['texto'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
         }
         if($tipoAtividade == 'AtividadeFixacao'){
             $dados = QuestoesFizacaoModel::where('fk_conteudo',$idConteudo)->get();
-            return view('Permisions.TelasAluno.apresentarAtividadeFixacao', ['Atividades'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso]);
+            return view('Permisions.TelasAluno.apresentarAtividadeFixacao', ['Atividades'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
         }
         if($tipoAtividade == 'testeConteudo'){
             $dados = QuestoesModel::where('fk_conteudo', $idConteudo)->inRandomOrder()->limit(5)->get();
-            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo , 'IdCurso'=>$IdCurso]);
+            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo , 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
         }
         if ($tipoAtividade == 'Teste Final'){
             $colect = new Collection();
@@ -98,7 +100,7 @@ class AlunoController extends Controller
                 }
             }
             $dadosAtividadeIntermediaria = $colect->all();
-            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosAtividadeIntermediaria, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso]);
+            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosAtividadeIntermediaria, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
         }
         if ($tipoAtividade == 'Teste Intermediario'){
             $colect = new Collection();
@@ -112,7 +114,7 @@ class AlunoController extends Controller
                 }
             }
             $dadosAtividadeIntermediaria = $colect->all();
-            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosAtividadeIntermediaria, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso]);
+            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosAtividadeIntermediaria, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
         }
         if ($tipoAtividade == 'Teste Final Conteudo'){
             $colect = new Collection();
@@ -126,19 +128,40 @@ class AlunoController extends Controller
                 }
             }
             $dadosTesteFinal = $colect->all();
-            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosTesteFinal, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso]);
+            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosTesteFinal, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
         }
     }
 
-    public function Salvarprogresso(Request $request, $IdAluno, ConteudoModel $idConteudo, $IdCurso)
+    public function Salvarprogresso(Request $request, $IdAluno, ConteudoModel $idConteudo, $IdCurso, $tipoAtividade)
     {
 
-
+        if($tipoAtividade == 'testeConteudo'){
+            $tipo_atividade = 'TC';
+        }
+        if($tipoAtividade == 'Teste Intermediario'){
+            $tipo_atividade = 'TI';
+        }
+        if($tipoAtividade == 'Teste Final Conteudo'){
+            $tipo_atividade = 'TF';
+        }
         $dado = ProgressoModel::where('fk_aluno',$IdAluno)->where('fk_conteudo',$idConteudo->id)->where('fk_curso',$IdCurso)->first();
+
+
+        HistoricoNotasAluno::create([
+            'st_nome_disciplina' =>Null,
+            'fk_aluno'=> $dado->fk_aluno,
+            'fk_curso'=> $dado->fk_curso,
+            'fk_unidade'=> $dado->fk_unidade,
+            'fk_conteudo'=> $dado->fk_conteudo,
+            'st_tipo_atividade'=>$tipo_atividade,
+            'int_acertos'=>$request->int_acertos,
+            'int_tempo_execucao'=>$request->int_tempo_execucao,
+        ]);
+
         $dado->update(
             [
                 'int_submit_atividades'=>2,
-                'int_estrela_obtida'=>2
+                'int_estrela_obtida'=> $request->int_submit_atividades,
             ]
         );
 

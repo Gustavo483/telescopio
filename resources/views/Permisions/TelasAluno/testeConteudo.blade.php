@@ -35,10 +35,12 @@
         @endif
     @endforeach
 
-    <form method="post" action="{{ route('Aluno.SalvarProgresso',['IdAluno'=>$IdAluno, 'idConteudo'=>$IdConteudo, 'IdCurso'=>$IdCurso])}}">
+    <form method="post" action="{{ route('Aluno.SalvarProgresso',['IdAluno'=>$IdAluno, 'idConteudo'=>$IdConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade])}}">
         @csrf
         <label for="">digite algo para testar a funcionalidade:</label>
         <input type="text" class="form-control" name="int_submit_atividades" value="3">
+        <input type="text" class="form-control" name="int_acertos" value="100">
+        <input type="text" class="form-control" name="int_tempo_execucao" value="12">
 
         <button type="submit" class="btn btn-lg btn-primary"> Submit </button>
     </form>

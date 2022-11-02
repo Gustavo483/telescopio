@@ -29,4 +29,11 @@ class CursoModel extends Model
     public function progressos(){
         return $this->hasMany('App\Models\ProgressoModel','fk_curso', 'id');
     }
+
+    public function TarefasRevisao(){
+        return $this->hasMany('App\Models\TarefasRevisaoModel','fk_curso', 'id');
+    }
+    public function HistoricoNotas(){
+        return $this->hasMany('App\Models\HistoricoNotasAluno','fk_curso', 'id');
+    }
 }

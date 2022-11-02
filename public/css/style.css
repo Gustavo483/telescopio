@@ -34,3 +34,15 @@
     padding-left: 70px;
 }
 
+.none{
+    display: none;
+}
+.tamanho{
+    width: 100px;
+}
+
+.fdvdd{
+    background: red;
+    text-align: center;
+}
+

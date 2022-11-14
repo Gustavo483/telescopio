@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CursoModel;
 use App\Models\UnidadeModel;
+use App\Models\DisciplinaModel;
 use Illuminate\Http\Request;
 
 class CursoController extends Controller
@@ -12,16 +13,32 @@ class CursoController extends Controller
     public function index(Request $request)
     {
         $cursos = CursoModel::all();
-        return view('curso.index',['cursos'=>$cursos,'request'=>$request->all()]);
+        $DisciplinasCadastradas = DisciplinaModel::all();
+        return view('curso.index',['DisciplinasCadastradas'=>$DisciplinasCadastradas,'cursos'=>$cursos,'request'=>$request->all()]);
+    }
+    public function SalvarNovaDisciplina(Request $request)
+    {
+        $validacao = [
+            'st_nome_disciplinas' =>'required',
+        ];
+        $feedback =[
+            'st_nome_disciplinas.required'=> 'O campo do nome da disciplina deve ser preenchido',
+        ];
+        $request->validate($validacao, $feedback);
+        $curso = $request->all();
+        CursoModel::create($curso);
+        return  redirect()->route('curso.index');
     }
     public function store(Request $request)
     {
         $validacao = [
             'st_nome_curso' =>'required|unique:tb_curso',
+            'st_nome_disciplinas' =>'required',
         ];
         $feedback =[
             'st_nome_curso.unique'=>'Este nome de curso já consta no banco de dados',
-            'required'=> 'O campo deve ser preenchido,',
+            'st_nome_curso.required'=> 'O campo do nome do curso deve ser preenchido',
+            'st_nome_disciplinas.required'=> 'O campo do nome da disciplina deve ser preenchido',
         ];
         $request->validate($validacao, $feedback);
         $curso = $request->all();

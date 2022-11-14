@@ -54,6 +54,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('relacioamento/{curso}/{unidade}', 'CriarUnidadeDiretoParaCurso')->name('CriarUnidade.Curso');
             Route::get('Curso/{curso}','vizualizarCurso')->name('vizualizar.Curso');
             Route::get('/excluir{UnidadeId}{CursoId}/{UnidadeNome}', 'excluirUnidadeDoCurso')->name('excluir.unidadeDoCurso');
+            Route::post('SalvarNovaDisciplina/store', 'SalvarNovaDisciplina')->name('SalvarNovaDisciplina.Curso');
         });
 
         Route::controller(SummernoteController::class)->group(function () {
@@ -120,8 +121,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('editTesteFinalCurso/{dadosconteudo}/{fkCurso}', 'EditarTesteFinalCurso')->name('edit.ConteudoTesteFinalCurso');
             Route::get('vizualixarTesteFinalCurso/{dadosconteudo}', 'vizualizarTesteFinalCurso')->name('vizualizar.TesteFinalCurso');
             Route::post('updateTesteFinalCurso/{dadosconteudo}/{IDCurso}', 'updateTesteFinalCurso')->name('update.ConteudoTesteFinalCurso');
-
-
         });
 
         Route::controller(QuestoesFizacaoController::class)->group(function () {
@@ -167,6 +166,20 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('dfvdfvdfd/{Aluno}/{IDCurso}/{IDProfessor}/{IDUnidade}/{IDConteudo}', 'CadastrarAtividadeAluno')->name('CadastrarAtividadeAluno.professor');
 
             Route::delete('deleteTarefaAluno/{Aluno}/{IDCurso}/{IDProfessor}/{IDTarefa}', 'deleteTarefaAluno')->name('deleteTarefaAluno.professor');
+
+            //Rotas para ver todos os alunos e suas funcionalidades
+            Route::get('/vizualizarTodosAlunos/{IDProfessor}', 'vizualizarTodosAlunos')->name('vizualizarTodosAlunos.Professor');
+
+            Route::get('/AtividadesAluno2/{Aluno}/{IDProfessor}', 'atividadesAluno2')->name('atividadesAluno2.professor');
+            Route::get('/CursosAluno2/{Aluno}/{IDProfessor}', 'CursosAluno2')->name('CursosAluno2.professor');
+            Route::get('/ProgressoAluno2/{Aluno}/{IDProfessor}', 'ProgressoAluno2')->name('ProgressoAluno2.professor');
+            Route::get('/TarefasAluno2/{Aluno}/{IDProfessor}', 'TarefasAluno2')->name('TarefasAluno2.professor');
+
+            Route::post('/VincularAlunoCursoPeloProfessor2/{Aluno}/{IDProfessor}', 'VincularAlunoCurso2')->name('VincularAlunoCurso2.professor');
+
+            Route::post('fsdvdsfvsdfvd/{Aluno}/{IDCurso}/{IDProfessor}/{IDUnidade}/{IDConteudo}', 'CadastrarAtividadeAluno2')->name('CadastrarAtividadeAluno2.professor');
+
+            Route::delete('deleteTarefaAluno2/{Aluno}/{IDProfessor}/{IDTarefa}', 'deleteTarefaAluno2')->name('deleteTarefaAluno2.professor');
 
         });
     });

@@ -3,6 +3,7 @@
 @section('titulo', 'HomeAluno')
 
 @section('conteudo')
+
     <div class="d-flex justify-content-center">
         <div class="tamanho1">
             <div>

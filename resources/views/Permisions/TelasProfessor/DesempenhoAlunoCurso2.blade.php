@@ -3,7 +3,7 @@
 @section('titulo', 'HomeProfessor')
 
 @section('conteudo')
-    <h3 class="mt-5">Painel do professor> {{$IDCurso->st_nome_curso}}  > {{$Aluno->st_nome_aluno}} </h3>
+    <h3 class="mt-5">Painel do professor > desempenho aluno</h3>
     <div class="d-flex justify-content-between">
         <div>
             <div>
@@ -48,22 +48,22 @@
     </div>
     <div class="d-flex justify-content-between mt-5">
         <div>
-            <a href="{{route('atividadesAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
+            <a href="{{route('atividadesAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
                 Atividades
             </a>
         </div>
         <div>
-            <a href="{{route('CursosAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
+            <a href="{{route('CursosAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
                 Cursos
             </a>
         </div>
         <div>
-            <a href="{{route('ProgressoAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
+            <a href="{{route('ProgressoAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
                 Progresso
             </a>
         </div>
         <div>
-            <a href="{{route('TarefasAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
+            <a href="{{route('TarefasAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
                 Tarefas
             </a>
         </div>

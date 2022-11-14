@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AlunoModel;
 use App\Models\ProfessorModel;
+use App\Models\ConquistasAlunoModel;
+use App\Models\CursosConcluidosModel;
 
 use Illuminate\Http\Request;
 
@@ -16,7 +18,8 @@ class PermisionController extends Controller
             $IdAluno = AlunoModel::where('fk_user',$IdUsuario)->first();
             $Aluno = AlunoModel::find($IdAluno->id);
             $dadosAlunosCursos = $Aluno->cursos;
-            return view('Permisions.TelasAluno.homeAluno',['dadosAlunosCursos' => $dadosAlunosCursos, 'IdAluno'=>$IdAluno->id]);
+            $ConquitasAlunos = ConquistasAlunoModel::where('fk_aluno',$IdAluno->id)->first();
+            return view('Permisions.TelasAluno.homeAluno',['ConquitasAlunos'=>$ConquitasAlunos,'dadosAlunosCursos' => $dadosAlunosCursos, 'IdAluno'=>$IdAluno]);
         }
         if (auth()->user()->permision == 2 ){
             $IdUsuario = auth()->user()->id;

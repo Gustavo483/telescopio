@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlunoModel;
+use App\Models\HistoricoNotasAluno;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -148,6 +149,13 @@ class AdminController extends Controller
     }
     public function deleteAlunoCurso($aluno, $curso)
     {
+
+        $dadosHistorico = HistoricoNotasAluno::where('fk_aluno',$aluno)->where('fk_curso',$curso)->get();
+        foreach ($dadosHistorico as $dado){
+            $dado->delete();
+        }
+
+
         $dadosProgresso = ProgressoModel::where('fk_aluno', $aluno)->where('fk_curso', $curso)->get();
         //excluir dados da tabela de progresso quando o curso é excluido da base de dados.
         foreach ($dadosProgresso as $progresso){
@@ -155,6 +163,7 @@ class AdminController extends Controller
         }
         $aluno = AlunoModel::where('id',$aluno )->first();
         $aluno->cursos()->detach($curso);
+
 
 
         $dados = AlunoModel::all();

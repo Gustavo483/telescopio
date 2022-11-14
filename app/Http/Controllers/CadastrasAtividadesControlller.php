@@ -403,7 +403,7 @@ class CadastrasAtividadesControlller extends Controller
     {
         //Criando o cronogroma para apresentar a atividade
         $cronograma = new CronogramaModel();
-        $cronograma->st_tipo_atividade = 'Teste Final Conteudo';
+        $cronograma->st_tipo_atividade = 'Teste Final Curso';
         $cronograma->st_ordem_apresentacao = 1;
         $cronograma->fk_conteudo = $dadosconteudo->id;
         $cronograma->fk_unidade = $dadosconteudo->fk_unidade;

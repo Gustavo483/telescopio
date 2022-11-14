@@ -3,7 +3,7 @@
 @section('titulo', 'HomeProfessor')
 
 @section('conteudo')
-    <h3 class="mt-5">Painel do professor> {{$IDCurso->st_nome_curso}} > {{$Aluno->st_nome_aluno}} </h3>
+    <h3 class="mt-5">Painel do professor> Tarefas > {{$Aluno->st_nome_aluno}} </h3>
     <div class="d-flex justify-content-between">
         <div>
             <div>
@@ -48,28 +48,28 @@
     </div>
     <div class="d-flex justify-content-between mt-5">
         <div>
-            <a href="{{route('atividadesAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
+            <a href="{{route('atividadesAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
                 Atividades
             </a>
         </div>
         <div>
-            <a href="{{route('CursosAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
+            <a href="{{route('CursosAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
                 Cursos
             </a>
         </div>
         <div>
-            <a href="{{route('ProgressoAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
+            <a href="{{route('ProgressoAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
                 Progresso
             </a>
         </div>
         <div>
-            <a href="{{route('TarefasAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
+            <a href="{{route('TarefasAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
                 Tarefas
             </a>
         </div>
     </div>
 
-    <h5 class="text-center mt-5">Tarefas do aluno no curso "{{$IDCurso->st_nome_curso}}"</h5>
+    <h5 class="text-center mt-5">Tarefas do aluno nos cursos cadastrados"</h5>
 
     <div class="fdvdd">
         <div>
@@ -108,7 +108,7 @@
                     </td>
                     <td class="text-center">{{$tarefa->int_estrelas_obtidas}}</td>
                     <td class="text-center">
-                        <form id="form_{{$tarefa->id}}" method="post" action="{{route('deleteTarefaAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor,'IDTarefa'=>$tarefa->id])}}">
+                        <form id="form_{{$tarefa->id}}" method="post" action="{{route('deleteTarefaAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor,'IDTarefa'=>$tarefa->id])}}">
                             @method('DELETE')
                             @csrf
                             <a class="linkedel" href="#" onclick="document.getElementById('form_{{$tarefa->id}}').submit()">
@@ -121,5 +121,4 @@
             </thead>
         </table>
     </div>
-
 @endsection

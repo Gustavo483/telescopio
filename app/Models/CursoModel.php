@@ -13,6 +13,7 @@ class CursoModel extends Model
     protected $fillable=[
         'st_nome_curso',
         'in_total_unidades',
+        'st_nome_disciplinas'
     ];
     public function unidades(){
         return $this->belongsToMany('App\Models\UnidadeModel', 'tb_curso_unidade', 'fk_curso', 'fk_unidade');

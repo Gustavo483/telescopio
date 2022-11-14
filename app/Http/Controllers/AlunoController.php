@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConquistasAlunoModel;
 use App\Models\CursoModel;
 use App\Models\TesteCursoModel;
 use App\Models\UnidadeModel;
@@ -16,11 +17,13 @@ use App\Models\QuestoesFizacaoModel;
 use App\Models\TesteFinalModel;
 use App\Models\TesteIntermediarioModel;
 use App\Models\HistoricoNotasAluno;
+use App\Models\CursosConcluidosModel;
 
 class AlunoController extends Controller
 {
     public function vizualizarCurso($IdAluno, $IdCurso)
     {
+
         $arrayIdUnidades = [];
         $dadoscurso = CursoModel::where('id',$IdCurso )->get();
         foreach ($dadoscurso as $cursos){
@@ -116,7 +119,7 @@ class AlunoController extends Controller
             $dadosAtividadeIntermediaria = $colect->all();
             return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosAtividadeIntermediaria, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
         }
-        if ($tipoAtividade == 'Teste Final Conteudo'){
+        if ($tipoAtividade == 'Teste Final Curso'){
             $colect = new Collection();
             $dados = TesteCursoModel::where('fk_conteudo_pertencente', $idConteudo)->get();
             foreach ($dados as $dado){
@@ -134,18 +137,22 @@ class AlunoController extends Controller
 
     public function Salvarprogresso(Request $request, $IdAluno, ConteudoModel $idConteudo, $IdCurso, $tipoAtividade)
     {
-
         if($tipoAtividade == 'testeConteudo'){
             $tipo_atividade = 'TC';
         }
         if($tipoAtividade == 'Teste Intermediario'){
             $tipo_atividade = 'TI';
         }
-        if($tipoAtividade == 'Teste Final Conteudo'){
-            $tipo_atividade = 'TF';
+        if( $tipoAtividade=='Teste Final'){
+            $tipo_atividade = 'TFU';
         }
+        if($tipoAtividade=='Teste Final Curso'){
+            $tipo_atividade = 'TFC';
+        }
+
         $dado = ProgressoModel::where('fk_aluno',$IdAluno)->where('fk_conteudo',$idConteudo->id)->where('fk_curso',$IdCurso)->first();
 
+        $conquistas = ConquistasAlunoModel::where('fk_aluno',$IdAluno)->first();
 
         HistoricoNotasAluno::create([
             'st_nome_disciplina' =>Null,
@@ -158,31 +165,81 @@ class AlunoController extends Controller
             'int_tempo_execucao'=>$request->int_tempo_execucao,
         ]);
 
-        $dado->update(
-            [
-                'int_submit_atividades'=>2,
-                'int_estrela_obtida'=> $request->int_submit_atividades,
-            ]
-        );
+        if($dado->int_submit_atividades == 2 and $dado->int_estrela_obtida < $request->int_estrela_obtida){
+            $estrelasExtras = $request->int_estrela_obtida - $dado->int_estrela_obtida;
+            $totalEstrelas = $conquistas->int_total_estrelas + $estrelasExtras;
+            $conquistas->update(
+                [
+                    'int_total_estrelas'=> $totalEstrelas,
+                ]
+            );
+
+            $dado->update(
+                [
+                    'int_submit_atividades'=>2,
+                    'int_estrela_obtida'=> $request->int_estrela_obtida,
+                ]
+            );
+        }
+        if ($dado->int_submit_atividades == 1 or $dado->int_submit_atividades == 0){
+            $totalEstrelas = $conquistas->int_total_estrelas + $request->int_estrela_obtida;
+
+            $conquistas->update(
+                [
+                    'int_total_estrelas'=> $totalEstrelas,
+                ]
+            );
+            $dado->update(
+                [
+                    'int_submit_atividades'=> 2,
+                    'int_estrela_obtida'=> $request->int_estrela_obtida,
+                ]
+            );
+        }
+
+
 
         $QuantosDados2 = count(ProgressoModel::where('fk_aluno',$IdAluno)->where('fk_curso',$IdCurso)->where('int_submit_atividades', 2)->get());
-        $contador = 0;
+
         $contadorFinal = 0;
 
         $dadoCurso2 = ProgressoModel::where('fk_aluno',$IdAluno)->where('fk_curso',$IdCurso)->get();
-        foreach ($dadoCurso2 as $dado){
-            if($contadorFinal == 1){
-                $dado->update(
+        $totalSubmits = count($dadoCurso2);
+        $contador = 0;
+
+        if ($QuantosDados2 ==$totalSubmits){
+            $verificarSubmit = count(CursosConcluidosModel::where('fk_curso',$IdCurso)->where('fk_aluno',$IdAluno)->get());
+            $TotalCursos = count(CursosConcluidosModel::where('fk_aluno',$IdAluno)->get());
+
+            if ($verificarSubmit != 1){
+                CursosConcluidosModel::create([
+                    'fk_curso' =>$IdCurso,
+                    'fk_aluno'=> $IdAluno,
+
+                ]);
+                $conquistas->update(
                     [
-                        'int_submit_atividades'=>1,
+                        'int_total_cursos_concluidos'=> $TotalCursos + 1,
                     ]
                 );
-                break;
             }
-            if ($dado->int_submit_atividades == 2){
-                $contador = $contador + 1;
-                if ($contador == $QuantosDados2 ){
-                    $contadorFinal = $contadorFinal + 1;
+
+
+        }else{
+            foreach ($dadoCurso2 as $dado){
+                if($contadorFinal == 1){
+                    $dado->update(
+                        [
+                            'int_submit_atividades'=>1,
+                        ]
+                    );
+                    break;
+                }
+                if ($dado->int_submit_atividades == 2){
+                    $contador = $contador + 1;
+                    if ($contador == $QuantosDados2 ){
+                        $contadorFinal = $contadorFinal + 1;
+                    }
                 }
             }
         }

@@ -33,6 +33,7 @@ class CronogramaController extends Controller
         }
 
         if($request->TipoAtividade == "testeFinalCurso"){
+
             $todosCursos = CursoModel::all();
             return  view('CadastrarAtividades.CriartesteFinalCurso',['todosCursos'=>$todosCursos,'dadosconteudo'=>$dadosconteudo]);
         }
@@ -57,6 +58,7 @@ class CronogramaController extends Controller
             return  redirect()->route('vizualizar.conteudo',['conteudo'=>$dadosconteudo->id]);
         }
     }
+
     public function deleteatividadeCronograma(CronogramaModel $cronograma)
     {
         if($cronograma->st_tipo_atividade == 'TEXTO'){

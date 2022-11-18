@@ -3,18 +3,31 @@
 @section('titulo', 'HomeAluno')
 
 @section('conteudo')
-    <div class="text-center mt-5">
-        olá, {{$IdAluno->st_nome_aluno}}
+    <div class="fsdcs mt-5">
+        <div>
+            olá, {{$IdAluno->st_nome_aluno}}
+        </div>
+        <div>
+            <a href="{{route('VizualizarTarefasAluno',['IdAluno'=>$IdAluno->id])}}" class="link ">
+                Tarefas
+            </a>
+        </div>
+
     </div>
     <div class="d-flex justify-content-between mt-5">
 
         <div>
-            <div>
-                img. Pets
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_pets}}
-            </div>
+            <a href="{{route('VizualizarPetsAluno',['IdAluno'=>$IdAluno->id])}}" class="">
+                <div class="linkPetsAluno">
+                    <div class="text-center">
+                        img. Pets
+                    </div>
+                    <div class="text-center">
+                        {{$ConquitasAlunos->int_total_pets}}
+                    </div>
+                </div>
+            </a>
+
         </div>
         <div>
             <div>
@@ -24,14 +37,21 @@
                 {{$ConquitasAlunos->int_total_cursos_concluidos}}
             </div>
         </div>
+
         <div>
-            <div>
-                img.troveu
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_trofeus}}
-            </div>
+            <a href="{{route('VizualizarTrofeusAluno',['IdAluno'=>$IdAluno->id])}}" class="">
+                <div class="linkPetsAluno">
+                    <div class="text-center">
+                        img.troveu
+                    </div>
+                    <div class="text-center">
+                        {{$totalTrofeus}}
+                    </div>
+                </div>
+            </a>
+
         </div>
+
         <div>
             <div>
                 img. revisao
@@ -49,7 +69,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="d-flex justify-content-center mt-5">
         @foreach($dadosAlunosCursos as $dadoAlunoCurso)

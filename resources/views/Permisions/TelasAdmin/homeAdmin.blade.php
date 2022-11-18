@@ -31,6 +31,18 @@
 
     </div>
 
+    <div class="mt-4">
+        <a href="{{route('CadastrarTrofeus')}}">
+            trofeus Cadastrados
+        </a>
+    </div>
+
+    <div>
+        <a href="{{route('vizualizarPets')}}">
+            Pets Cadastrados
+        </a>
+    </div>
+
     <div class="mt-5">
         <a href="{{route('curso.index')}}">
             cursos
@@ -41,5 +53,7 @@
             unidade
         </a>
     </div>
+
+
 
 @endsection

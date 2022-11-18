@@ -143,7 +143,8 @@ class ProfessorController extends Controller
                     $ExisteOuNaoAtividadeAvaliativa = [0];
                     foreach ($dadosCronograma as $dadoCronograma){
                         $nomeConteudo = ConteudoModel::where('id',$dadoCronograma->fk_conteudo)->first();
-                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final Conteudo' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
+
+                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
                             $ExisteOuNaoAtividadeAvaliativa[0] = 1;
                         }else{
                             $ExisteOuNaoAtividadeAvaliativa[0] = 0;
@@ -164,7 +165,7 @@ class ProfessorController extends Controller
                     $ExisteOuNaoAtividadeAvaliativa = [0];
                     foreach ($dadosCronograma as $dadoCronograma){
                         $nomeConteudo = ConteudoModel::where('id',$dadoCronograma->fk_conteudo)->first();
-                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final Conteudo' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
+                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
                             $ExisteOuNaoAtividadeAvaliativa[0] = 1;
                         }else{
                             $ExisteOuNaoAtividadeAvaliativa[0] = 0;
@@ -402,7 +403,7 @@ class ProfessorController extends Controller
                         $ExisteOuNaoAtividadeAvaliativa = [0];
                         foreach ($dadosCronograma as $dadoCronograma){
                             $nomeConteudo = ConteudoModel::where('id',$dadoCronograma->fk_conteudo)->first();
-                            if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final Conteudo' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
+                            if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
                                 $ExisteOuNaoAtividadeAvaliativa[0] = 1;
                             }else{
                                 $ExisteOuNaoAtividadeAvaliativa[0] = 0;
@@ -423,7 +424,7 @@ class ProfessorController extends Controller
                         $ExisteOuNaoAtividadeAvaliativa = [0];
                         foreach ($dadosCronograma as $dadoCronograma){
                             $nomeConteudo = ConteudoModel::where('id',$dadoCronograma->fk_conteudo)->first();
-                            if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final Conteudo' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
+                            if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
                                 $ExisteOuNaoAtividadeAvaliativa[0] = 1;
                             }else{
                                 $ExisteOuNaoAtividadeAvaliativa[0] = 0;

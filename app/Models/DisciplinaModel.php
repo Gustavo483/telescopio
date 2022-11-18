@@ -12,4 +12,8 @@ class DisciplinaModel extends Model
     protected $fillable = [
         'st_nome_disciplina'
     ];
+
+    public function disciplinas(){
+        return $this->hasMany('App\Models\TrofeusModel','fk_disciplina', 'id');
+    }
 }

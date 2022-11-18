@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\ConquistasAlunoModel;
 use App\Models\CursoModel;
+use App\Models\PetsModel;
+use App\Models\TarefasRevisaoModel;
 use App\Models\TesteCursoModel;
 use App\Models\UnidadeModel;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Support\Collection;
 use App\Models\ConteudoModel;
 use Illuminate\Http\Request;
@@ -18,9 +21,145 @@ use App\Models\TesteFinalModel;
 use App\Models\TesteIntermediarioModel;
 use App\Models\HistoricoNotasAluno;
 use App\Models\CursosConcluidosModel;
+use App\Models\AlunoModel;
+use App\Models\TrofeusModel;
 
 class AlunoController extends Controller
 {
+    public function direcionarAlunoParaTarefa(TarefasRevisaoModel $DatosTarefa)
+    {
+        dd('Começar daqui semana que vem. Bom descanso!');
+    }
+    public function VizualizarTarefasAluno( $IdAluno)
+    {
+        $TarefasCadastras = TarefasRevisaoModel::where('fk_aluno',$IdAluno)->get();
+        return view('Permisions.TelasAluno.VizualizarTarefasAluno',['TarefasCadastras'=>$TarefasCadastras] );
+    }
+
+    public function VizualizarTrofeusAluno(AlunoModel $IdAluno)
+    {
+        $CursosTerminados = CursosConcluidosModel::where('fk_aluno', $IdAluno->id)->orderBy('fk_curso', 'asc')->get();
+
+        $verificarTrofeus = TrofeusModel::all();
+        if (count($CursosTerminados) > 0) {
+            $disciplinasValorConcluido = [];
+            $nomeDisciplina = ['df'];
+            $TotalAtividades = [0];
+            $count = 1;
+            foreach ($CursosTerminados as $CursoTerminado) {
+                if ($count == 1 and count($CursosTerminados) == 1) {
+                    $nomeDisciplina[0] = $CursoTerminado->cursos->st_nome_disciplinas;
+                    $TotalAtividades[0] = 1;
+                    $valoresAcrescentarCurso = [$nomeDisciplina[0], $TotalAtividades[0]];
+                    array_push($disciplinasValorConcluido, $valoresAcrescentarCurso);
+                }
+                if ($count == 1 and count($CursosTerminados) > 1) {
+                    $nomeDisciplina[0] = $CursoTerminado->cursos->st_nome_disciplinas;
+                    $TotalAtividades[0] = 1;
+                }
+                if ($count > 1) {
+                    if ($CursoTerminado->cursos->st_nome_disciplinas == $nomeDisciplina[0]) {
+                        $TotalAtividades[0] = $TotalAtividades[0] + 1;
+                        if (count($CursosTerminados) == $count) {
+                            $valoresAcrescentarCurso = [$nomeDisciplina[0], $TotalAtividades[0]];
+                            array_push($disciplinasValorConcluido, $valoresAcrescentarCurso);
+                        }
+                    }
+                    if ($CursoTerminado->cursos->st_nome_disciplinas != $nomeDisciplina[0]) {
+                        $valoresAcrescentarCurso = [$nomeDisciplina[0], $TotalAtividades[0]];
+                        array_push($disciplinasValorConcluido, $valoresAcrescentarCurso);
+                        $nomeDisciplina[0] = $CursoTerminado->cursos->st_nome_disciplinas;
+                        $TotalAtividades[0] = 1;
+                        if (count($CursosTerminados) == $count) {
+                            $valoresAcrescentarCurso = [$nomeDisciplina[0], $TotalAtividades[0]];
+                            array_push($disciplinasValorConcluido, $valoresAcrescentarCurso);
+                        }
+                    }
+                }
+                $count = $count + 1;
+            }
+            $totalTrofeus = 0;
+
+            $trofeusConquistados = [];
+            $trofeusEmAbertosComPorcentagem = [];
+            $TrofeusSemProgresso = [];
+            $idCursosConquistados = [];
+            $idCursosNaoConquistados = [];
+
+            //Verificar se aluno tem algum trofel
+
+            foreach ($verificarTrofeus as $verificarTrofeu) {
+                $count = 0;
+                foreach ($disciplinasValorConcluido as $disciplinasConcluidas) {
+                    if ($disciplinasConcluidas[0] == $verificarTrofeu->disciplinas->st_nome_disciplina) {
+                        if ($disciplinasConcluidas[1] >= $verificarTrofeu->int_total_atividades) {
+                            $data = [$disciplinasConcluidas[0], $disciplinasConcluidas[1],$verificarTrofeu->int_total_atividades, $verificarTrofeu->st_caminho_img, '100%',$verificarTrofeu->st_nome_trofeu];
+                            array_push($idCursosConquistados, $verificarTrofeu->id);
+                            array_push($trofeusConquistados, $data);
+                            $totalTrofeus = $totalTrofeus + 1;
+                        }
+                        if ($disciplinasConcluidas[1] < $verificarTrofeu->int_total_atividades) {
+                            $porcentagem = ($disciplinasConcluidas[1] /$verificarTrofeu->int_total_atividades) * 100;
+                            $data = [$disciplinasConcluidas[0], $disciplinasConcluidas[1],$verificarTrofeu->int_total_atividades, $verificarTrofeu->st_caminho_img, $porcentagem."%",$verificarTrofeu->st_nome_trofeu];
+                            array_push($idCursosNaoConquistados, $verificarTrofeu->id);
+                            array_push($trofeusEmAbertosComPorcentagem, $data);
+                        }
+                    }
+                }
+            }
+            $verificador = 0;
+            //dd($idCursosConquistados,$idCursosNaoConquistados);
+            return view('Permisions.TelasAluno.VizualizarTrofeusPeloAluno',['verificador'=>$verificador,'idTrofeusConquistados'=>$idCursosConquistados,'idTrofeusNaoConquistados'=>$idCursosNaoConquistados,'trofeusConquistados'=>$trofeusConquistados,'trofeusEmAbertosComPorcentagem'=>$trofeusEmAbertosComPorcentagem,'TodosTrofeus'=>$verificarTrofeus] );
+        }
+
+        if (count($CursosTerminados) == 0) {
+            $verificador = 1;
+            return view('Permisions.TelasAluno.VizualizarTrofeusPeloAluno',['verificador'=>$verificador,'TodosTrofeus'=>$verificarTrofeus] );
+        }
+
+    }
+
+    public function ComprarPet(AlunoModel $IDAluno,PetsModel $IDPet)
+    {
+        $ConquistasAluno = ConquistasAlunoModel::where('fk_aluno',$IDAluno->id)->first();
+        if ($ConquistasAluno->int_total_estrelas >= $IDPet->int_estrelas_paraComprar){
+            $valorEstrelasAtualizado = $ConquistasAluno->int_total_estrelas - $IDPet->int_estrelas_paraComprar ;
+            $totalPets = $ConquistasAluno->int_total_pets + 1;
+            $ConquistasAluno->update([
+                    'int_total_estrelas' => $valorEstrelasAtualizado,
+                    'int_total_pets' => $totalPets,
+                ]);
+            $IDAluno->pets()->attach($IDPet);
+            return back()
+                ->with('success','Compra efetuada com sucesso');
+        }else{
+            return back()
+                ->with('Erro','Você não tem estrelas suficientes para efetuar a compra do pet');
+        }
+    }
+    public function VizualizarPetsAluno($IdAluno)
+    {
+        $dbAluno = AlunoModel::where('id', $IdAluno)->first();
+        $PetsComprados = $dbAluno->pets;
+        $IDPetsComprados = [];
+        foreach ($PetsComprados as $Pets){
+            array_push($IDPetsComprados,$Pets->id);
+        }
+        $PetsParaComprar = new Collection();
+        $todosPets = PetsModel::all();
+        foreach ($todosPets as $Pet){
+            if (! in_array("$Pet->id", $IDPetsComprados)) {
+                $PetsParaComprar->push($Pet);
+            }
+        }
+
+        //foreach ($request->cursos as $curso) {
+        //    $dbAluno->cursos()->attach($curso);
+        //}
+
+        return view('Permisions.TelasAluno.VizualizarPetsPeloAluno',['IdAluno'=>$IdAluno,'PetsParaComprar'=>$PetsParaComprar,'PetsComprados'=>$PetsComprados]);
+    }
+
     public function vizualizarCurso($IdAluno, $IdCurso)
     {
 
@@ -196,8 +335,6 @@ class AlunoController extends Controller
                 ]
             );
         }
-
-
 
         $QuantosDados2 = count(ProgressoModel::where('fk_aluno',$IdAluno)->where('fk_curso',$IdCurso)->where('int_submit_atividades', 2)->get());
 

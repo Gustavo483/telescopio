@@ -14,6 +14,9 @@ class AlunoModel extends Model
     public function cursos(){
         return $this->belongsToMany('App\Models\CursoModel', 'tb_alunos_cursos', 'fk_aluno', 'fk_curso');
     }
+    public function pets(){
+        return $this->belongsToMany('App\Models\PetsModel', 'tb_alunos_pets', 'fk_aluno', 'fk_pets');
+    }
 
     public function users(){
         return $this->belongsTo('App\Models\User','fk_user', 'id');

@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tb_alunos', function (Blueprint $table) {
+        Schema::create('tb_pets', function (Blueprint $table) {
             $table->id();
-            $table->string('st_nome_aluno')->nullable();
-            $table->foreignId('fk_user')->constrained('users', 'id');
+            $table->string('st_nome_pet');
+            $table->integer('int_estrelas_paraComprar');
+            $table->longText('image');
             $table->timestamps();
-
         });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_alunos');
+        Schema::dropIfExists('tb_pets');
     }
 };

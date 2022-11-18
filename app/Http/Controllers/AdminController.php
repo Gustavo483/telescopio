@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlunoModel;
+use App\Models\ConquistasAlunoModel;
 use App\Models\HistoricoNotasAluno;
+use App\Models\PetsModel;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -12,9 +14,159 @@ use App\Models\ConteudoModel;
 use App\Models\CronogramaModel;
 use App\Models\ProgressoModel;
 use App\Models\ProfessorModel;
+use App\Models\TrofeusModel;
+use App\Models\DisciplinaModel;
 
 class AdminController extends Controller
 {
+    public function UpdadePet(Request $request, PetsModel $Pet)
+    {
+
+        if(isset($request->image)){
+            $imageName = time().'.'.$request->image->extension();
+
+            $request->image->move(public_path('images'), $imageName);
+
+            $Pet->update(
+                [
+                    'st_nome_pet'=>$request->st_nome_pet,
+                    'int_estrelas_paraComprar'=>$request->int_estrelas_paraComprar,
+                    'image'=>$imageName,
+                ]
+            );
+        }
+        if (!isset($request->image)){
+            $Pet->update($request->all());
+        }
+        return redirect()->route('vizualizarPets');
+    }
+    public function EditarPet(PetsModel $Pet)
+    {
+        return view('Permisions.TelasAdmin.EditarPets',['Pet'=>$Pet]);
+    }
+
+    public function DeletePet(PetsModel $Pet)
+    {
+
+        $alunosComEssePet = $Pet->alunos;
+        foreach ($alunosComEssePet as $dado){
+            $Pet->alunos()->detach($dado->id);
+        }
+
+        $Pet->delete();
+        return redirect()->route('vizualizarPets');
+    }
+    public function vizualizarPets()
+    {
+        $Pets = PetsModel::all();
+        return view('Permisions.TelasAdmin.VizualizarPets',['Pets'=>$Pets]);
+    }
+
+    public function CadastrarPet(Request $request)
+    {
+        $validacao = [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'st_nome_pet' => 'required',
+            'int_estrelas_paraComprar'=> 'required',
+        ];
+        $feedback =[
+            'required'=> 'O campo deve ser preenchido',
+        ];
+        $request->validate($validacao, $feedback);
+
+        $imageName = time().'.'.$request->image->extension();
+
+        $request->image->move(public_path('images'), $imageName);
+
+        PetsModel::create(
+            [
+                'st_nome_pet'=>$request->st_nome_pet,
+                'int_estrelas_paraComprar'=>$request->int_estrelas_paraComprar,
+                'image'=>$imageName,
+            ]
+        );
+        /*
+            Write Code Here for
+            Store $imageName name in DATABASE from HERE
+        */
+
+        return back()
+            ->with('success','Arquivos Salvos com Sucesso');
+
+    }
+
+
+    public function UpdadeTroveu(Request $request,TrofeusModel $trofeu )
+    {
+        if(isset($request->image)){
+            $imageName = time().'.'.$request->image->extension();
+
+            $request->image->move(public_path('images'), $imageName);
+
+            $trofeu->update(
+                [
+                    'fk_disciplina'=>$request->fk_disciplina,
+                    'st_nome_trofeu'=>$request->st_nome_trofeu,
+                    'int_total_atividades'=>$request->int_total_atividades,
+                    'st_caminho_img'=>$imageName,
+                ]
+            );
+        }
+        if (!isset($request->image)){
+            $trofeu->update($request->all());
+        }
+        return redirect()->route('CadastrarTrofeus');
+    }
+
+    public function EditarTroveu(TrofeusModel $trofeu)
+    {
+        $disciplinas = DisciplinaModel::all();
+        return view('Permisions.TelasAdmin.editarTrofeu',['trofeu'=>$trofeu,'disciplinas'=>$disciplinas]);
+    }
+
+    public function DeleteTrofeu(TrofeusModel $trofeu)
+    {
+        $trofeu->delete();
+        return redirect()->route('CadastrarTrofeus');
+    }
+    public function CadastrarTrofeuStore(Request $request)
+    {
+        $validacao = [
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'st_nome_trofeu' => 'required',
+            'int_total_atividades'=> 'required',
+        ];
+        $feedback =[
+            'required'=> 'O campo deve ser preenchido',
+        ];
+        $request->validate($validacao, $feedback);
+
+        $imageName = time().'.'.$request->image->extension();
+
+        $request->image->move(public_path('images'), $imageName);
+
+        TrofeusModel::create(
+            [
+                'fk_disciplina'=>$request->fk_disciplina,
+                'st_nome_trofeu'=>$request->st_nome_trofeu,
+                'int_total_atividades'=>$request->int_total_atividades,
+                'st_caminho_img'=>$imageName,
+            ]
+        );
+
+        return back()
+            ->with('success','Arquivos Salvos com Sucesso.')
+            ->with('image',$imageName);
+    }
+
+    public function CadastrarTrofeusIndex()
+    {
+        $disciplinas = DisciplinaModel::all();
+        $todosTrofeus = TrofeusModel::all();
+        return view('Permisions.TelasAdmin.CadastrarTrofeus',['todosTrofeus'=>$todosTrofeus,'disciplinas'=>$disciplinas]);
+    }
+
+
     public function RegistrarAluno()
     {
         return view('Permisions.TelasAdmin.registrarAluno');
@@ -51,9 +203,16 @@ class AdminController extends Controller
         AlunoModel::create([
             'st_nome_aluno' => $arrayValues[0],
             'fk_user' => $arrayValues[1] ,
-            'st_estrelas_obtidas' => 0,
-            'img_pet_selecionado' => 'Null'
         ]);
+
+        $idaluno = AlunoModel::orderBy('id', 'DESC')->first();
+        $conquistasAluno = new ConquistasAlunoModel();
+        $conquistasAluno->fk_aluno = $idaluno->id;
+        $conquistasAluno->int_total_pets = 0;
+        $conquistasAluno->int_total_cursos_concluidos = 0;
+        $conquistasAluno->int_total_estrelas = 0;
+        $conquistasAluno->int_total_trofeus = 0;
+        $conquistasAluno->save();
         return  redirect()->route('inicio.pagina');
     }
 

@@ -7,6 +7,7 @@ use App\Models\ProfessorModel;
 use App\Models\ConquistasAlunoModel;
 use App\Models\CursosConcluidosModel;
 
+use App\Models\TrofeusModel;
 use Illuminate\Http\Request;
 
 class PermisionController extends Controller
@@ -19,8 +20,74 @@ class PermisionController extends Controller
             $Aluno = AlunoModel::find($IdAluno->id);
             $dadosAlunosCursos = $Aluno->cursos;
             $ConquitasAlunos = ConquistasAlunoModel::where('fk_aluno',$IdAluno->id)->first();
-            return view('Permisions.TelasAluno.homeAluno',['ConquitasAlunos'=>$ConquitasAlunos,'dadosAlunosCursos' => $dadosAlunosCursos, 'IdAluno'=>$IdAluno]);
+            $CursosTerminados = CursosConcluidosModel::where('fk_aluno', $IdAluno->id)->orderBy('fk_curso', 'asc')->get();
+            if (count($CursosTerminados) > 0){
+
+                $verificarTrofeus = TrofeusModel::all();
+                $disciplinasValorConcluido = [];
+                $nomeDisciplina = ['df'];
+                $TotalAtividades = [0];
+                $count = 1;
+                foreach ($CursosTerminados as $CursoTerminado){
+                    if ($count == 1 and count($CursosTerminados) == 1){
+                        $nomeDisciplina[0] = $CursoTerminado->cursos->st_nome_disciplinas;
+                        $TotalAtividades[0] = 1;
+                        $valoresAcrescentarCurso = [$nomeDisciplina[0],$TotalAtividades[0]];
+                        array_push($disciplinasValorConcluido,$valoresAcrescentarCurso);
+                    }
+                    if($count == 1 and count($CursosTerminados) > 1){
+                        $nomeDisciplina[0] = $CursoTerminado->cursos->st_nome_disciplinas;
+                        $TotalAtividades[0] = 1;
+                    }
+                    if ($count > 1){
+                        if ($CursoTerminado->cursos->st_nome_disciplinas == $nomeDisciplina[0]){
+                            $TotalAtividades[0] = $TotalAtividades[0] + 1;
+                            if (count($CursosTerminados) == $count){
+                                $valoresAcrescentarCurso = [$nomeDisciplina[0],$TotalAtividades[0]];
+                                array_push($disciplinasValorConcluido,$valoresAcrescentarCurso);
+                            }
+                        }
+                        if ($CursoTerminado->cursos->st_nome_disciplinas != $nomeDisciplina[0]){
+                            $valoresAcrescentarCurso = [$nomeDisciplina[0],$TotalAtividades[0]];
+                            array_push($disciplinasValorConcluido,$valoresAcrescentarCurso);
+                            $nomeDisciplina[0] = $CursoTerminado->cursos->st_nome_disciplinas;
+                            $TotalAtividades[0] = 1;
+                            if (count($CursosTerminados) == $count){
+                                $valoresAcrescentarCurso = [$nomeDisciplina[0],$TotalAtividades[0]];
+                                array_push($disciplinasValorConcluido,$valoresAcrescentarCurso);
+                            }
+                        }
+                    }
+                    $count = $count + 1 ;
+                }
+                $totalTrofeus = 0;
+                //Verificar se aluno tem algum trofel
+                foreach ($verificarTrofeus as $verificarTrofeu){
+                    foreach ($disciplinasValorConcluido as $disciplinasConcluidas){
+                        if ($disciplinasConcluidas[0] == $verificarTrofeu->disciplinas->st_nome_disciplina){
+                            if ($disciplinasConcluidas[1] >= $verificarTrofeu->int_total_atividades){
+                                $totalTrofeus = $totalTrofeus + 1;
+                            }
+                        }
+
+                    }
+
+                }
+
+                $ConquitasAlunos->update([
+                    'int_total_trofeus'=>$totalTrofeus,
+                ]);
+
+            }
+            if (count($CursosTerminados) == 0){
+                $ConquitasAlunos->update([
+                    'int_total_trofeus'=>0,
+                ]);
+                $totalTrofeus = 0;
+            }
+            return view('Permisions.TelasAluno.homeAluno',['totalTrofeus'=>$totalTrofeus,'ConquitasAlunos'=>$ConquitasAlunos,'dadosAlunosCursos' => $dadosAlunosCursos, 'IdAluno'=>$IdAluno]);
         }
+
         if (auth()->user()->permision == 2 ){
             $IdUsuario = auth()->user()->id;
             $Professor = ProfessorModel::where('fk_user',$IdUsuario)->first();

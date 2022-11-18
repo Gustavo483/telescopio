@@ -19,30 +19,38 @@ class CursoController extends Controller
     public function SalvarNovaDisciplina(Request $request)
     {
         $validacao = [
-            'st_nome_disciplinas' =>'required',
+            'st_nome_disciplina' =>'required',
         ];
         $feedback =[
-            'st_nome_disciplinas.required'=> 'O campo do nome da disciplina deve ser preenchido',
+            'st_nome_disciplina.required'=> 'O campo do nome da disciplina deve ser preenchido',
         ];
         $request->validate($validacao, $feedback);
         $curso = $request->all();
-        CursoModel::create($curso);
+
+        DisciplinaModel::create($curso);
+
         return  redirect()->route('curso.index');
     }
+
     public function store(Request $request)
     {
         $validacao = [
             'st_nome_curso' =>'required|unique:tb_curso',
-            'st_nome_disciplinas' =>'required',
+            'st_nome_disciplina' =>'required',
         ];
         $feedback =[
             'st_nome_curso.unique'=>'Este nome de curso já consta no banco de dados',
             'st_nome_curso.required'=> 'O campo do nome do curso deve ser preenchido',
-            'st_nome_disciplinas.required'=> 'O campo do nome da disciplina deve ser preenchido',
+            'st_nome_disciplina.required'=> 'O campo do nome da disciplina deve ser preenchido',
         ];
         $request->validate($validacao, $feedback);
-        $curso = $request->all();
-        CursoModel::create($curso);
+
+        $curso = new CursoModel;
+        $curso->st_nome_curso = $request->st_nome_curso;
+        $curso->st_nome_disciplinas = $request->st_nome_disciplina;
+        $curso->save();
+
+
         return  redirect()->route('curso.index');
     }
 

@@ -53,3 +53,53 @@
     background: green;
 }
 
+.tamanhoDiv{
+    width: 220px;
+    padding: 10px;
+    background: greenyellow;
+}
+
+.sdfsd{
+    background: gray;
+}
+.tamanhoDiv2{
+    width: 150px;
+    padding: 10px;
+    background: darkgray;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+.sdsd{
+    border: 1px solid red;
+}
+.linkPetsAluno{
+    width: 100px;
+    border-radius: 10px;
+    background: #9ca3af;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.linkPetsAluno:hover{
+    background: #e2e8f0;
+}
+
+.aprendeser{
+    width: 120px;
+    height: 150px;
+    background: #9ca3af;
+    border-radius: 10px;
+}
+.dsdsdccc{
+    display: flex;
+    justify-content: space-between;
+
+}
+.fsdcs{
+    display: flex;
+    justify-content: space-between;
+}

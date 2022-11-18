@@ -12,7 +12,7 @@ use App\Http\Controllers\PermisionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlunoController;
 use App\Http\Controllers\ProfessorController;
-
+use App\Http\Controllers\ImageUploadController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,7 +30,24 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     });
 
     Route::middleware(['admin'])->group(function (){
+        Route::get('upload-image', [ ImageUploadController::class, 'index' ]);
+        Route::post('upload-image', [ ImageUploadController::class, 'store' ])->name('image.store');
+
         Route::controller(AdminController::class)->group(function () {
+            //Páginas de trofeu
+            Route::get('/CadastrarTrofeus', 'CadastrarTrofeusIndex')->name('CadastrarTrofeus');
+            Route::post('/CadastrarTrofeusStore', 'CadastrarTrofeuStore')->name('CadastrarTrofeu.store');
+            Route::delete('/deleteTrofeu/{trofeu}', 'DeleteTrofeu')->name('delete.Trofeu');
+            Route::get('/EditarTrofeu/{trofeu}', 'EditarTroveu')->name('Editar.Troveu');
+            Route::put('/UpdadeTrofeu/{trofeu}', 'UpdadeTroveu')->name('UpdadeTroveu');
+
+            // Páginas de petz
+            Route::get('/vizualizarPets', 'vizualizarPets')->name('vizualizarPets');
+            Route::post('/CadastrarPet', 'CadastrarPet')->name('CadastrarPet.store');
+            Route::delete('/deletePet/{Pet}', 'DeletePet')->name('delete.pet');
+            Route::get('/EditarPet/{Pet}', 'EditarPet')->name('Editar.Pets');
+            Route::put('/UpdadePet/{Pet}', 'UpdadePet')->name('UpdadePet');
+
             Route::get('/registerAluno', 'RegistrarAluno')->name('registerAluno');
             Route::get('/registerProfessor', 'RegistrarProfessor')->name('registerProfessor');
             Route::post('/SalvarAluno', 'RegistrarAlunoStore')->name('registerAlunoStore');
@@ -45,6 +62,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('/VincularProfessorCurso', 'VincularProfessorCursoStore')->name('VincularProfessorCurso');
             Route::get('/listarprofessorCursos', 'listarprofessoresCursos')->name('listarprofessoresCursos');
             Route::delete('/deleteProfessorCurso/{professor}/{curso}', 'deleteProfessorCurso')->name('deleteProfessorCurso');
+
         });
 
         Route::controller(CursoController::class)->group(function () {
@@ -148,6 +166,20 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::get('/VizualizarCursoAluno{IdAluno}/{IdCurso}', 'vizualizarCurso')->name('Aluno.vizualizarCurso');
             Route::get('/VizualizarAtividadeAluno/sdcsdc{IdAluno}/{idConteudo}/{IdCronograma}/{tipoAtividade}/{IdCurso}', 'MostrarExercicioAluno')->name('Aluno.MostrarExercicio');
             Route::post('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}/{IdCurso}/{tipoAtividade}', 'Salvarprogresso')->name('Aluno.SalvarProgresso');
+
+            Route::get('/VizualizarPetsAluno{IdAluno}', 'VizualizarPetsAluno')->name('VizualizarPetsAluno');
+            Route::post('/ComprarPet{IDAluno}/{IDPet}', 'ComprarPet')->name('ComprarPet');
+
+            Route::get('/VizualizarTrofeusAluno{IdAluno}', 'VizualizarTrofeusAluno')->name('VizualizarTrofeusAluno');
+
+            Route::get('/VizualizarTarefasAluno{IdAluno}', 'VizualizarTarefasAluno')->name('VizualizarTarefasAluno');
+
+
+            Route::get('/direcionarAlunoParaTarefa{DatosTarefa}', 'direcionarAlunoParaTarefa')->name('direcionarAlunoParaTarefa');
+
+
+
+
         });
     });
 

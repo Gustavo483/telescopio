@@ -34,6 +34,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::post('upload-image', [ ImageUploadController::class, 'store' ])->name('image.store');
 
         Route::controller(AdminController::class)->group(function () {
+            Route::get('/revisaoForma', 'revisaoForma')->name('revisaoForma');
+            Route::post('/CadastrarFormaDeRevisao/{revisao}', 'CadastrarFormadeRevisao')->name('CadastrarFormadeRevisao');
             //Páginas de trofeu
             Route::get('/CadastrarTrofeus', 'CadastrarTrofeusIndex')->name('CadastrarTrofeus');
             Route::post('/CadastrarTrofeusStore', 'CadastrarTrofeuStore')->name('CadastrarTrofeu.store');
@@ -56,6 +58,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::post('/VincularAlunoCurso', 'VincularAlunoCursoStore')->name('VincularAlunoCurso');
             Route::get('/listarAlunosCursos', 'listarAlunosCursos')->name('listarAlunosCursos');
             Route::delete('/deleteAlunoCurso/{aluno}/{curso}', 'deleteAlunoCurso')->name('deleteAlunoCurso');
+
+            Route::get('CadastrarFormatodeRevisão', 'CadastrarFormatodeRevisao')->name('CadastrarFormatodeRevisão');
+
 
             //rotas para cadastrar professor
             Route::get('VincularCursoProfessor', 'VincularProfessorCursoCreate')->name('ProfessorCurso');
@@ -164,8 +169,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::middleware(['aluno'])->group(function (){
         Route::controller(AlunoController::class)->group(function () {
             Route::get('/VizualizarCursoAluno{IdAluno}/{IdCurso}', 'vizualizarCurso')->name('Aluno.vizualizarCurso');
+            Route::get('/VizualizarCursoAluzxzczxczno2/{IdAluno}/{IdCurso}/{fkConteudo}', 'vizualizarCurso2')->name('Aluno.vizualizarCurso2');
             Route::get('/VizualizarAtividadeAluno/sdcsdc{IdAluno}/{idConteudo}/{IdCronograma}/{tipoAtividade}/{IdCurso}', 'MostrarExercicioAluno')->name('Aluno.MostrarExercicio');
-            Route::post('/VizualizarAtividadeAluno{IdAluno}/{idConteudo}/{IdCurso}/{tipoAtividade}', 'Salvarprogresso')->name('Aluno.SalvarProgresso');
+            Route::post('/SalvarProgresso{IdAluno}/{idConteudo}/{IdCurso}/{tipoAtividade}', 'Salvarprogresso')->name('Aluno.SalvarProgresso');
 
             Route::get('/VizualizarPetsAluno{IdAluno}', 'VizualizarPetsAluno')->name('VizualizarPetsAluno');
             Route::post('/ComprarPet{IDAluno}/{IDPet}', 'ComprarPet')->name('ComprarPet');
@@ -177,8 +183,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
             Route::get('/direcionarAlunoParaTarefa{DatosTarefa}', 'direcionarAlunoParaTarefa')->name('direcionarAlunoParaTarefa');
 
-
-
+            Route::post('/SalvarProgressoMedianteTarefa/{DatosTarefa}', 'SalvarProgressoMedianteTarefa')->name('SalvarProgressoMedianteTarefa');
 
         });
     });

@@ -103,3 +103,10 @@
     display: flex;
     justify-content: space-between;
 }
+.class1{
+    display: none;
+}
+
+.class2{
+    display: block;
+}

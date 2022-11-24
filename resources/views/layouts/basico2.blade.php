@@ -18,7 +18,6 @@
                 @foreach($nomeConteudo0 as $NomeConteudo)
                     @if($i == 0)
                         <div class="iocn-link">
-                            {{$IDsUnidades[$i]->st_nome_unidade}}
                             <a href="#">
                                 <i class='bx bx-collection' ></i>
                                 <span class="link_name">{{$NomeConteudo}}</span>
@@ -26,10 +25,9 @@
                             <i class='bx bxs-chevron-down arrow' ></i>
                         </div>
                         <ul class="sub-menu">
-                            <li><a class="link_name" href="#">{{$NomeConteudo}}</a></li>
                             @foreach($PrimeiroDadoParaApresentar as $dados)
                                 <li>
-                                    <a class="" href="{{route('Aluno.MostrarExercicio',['IdAluno'=>$dados[0],'idConteudo'=>$dados[1],'IdCronograma'=>$dados[6],'tipoAtividade'=>$dados[5], 'IdCurso'=>$IdCurso ])}}">
+                                    <a class="link_name" href="{{route('Aluno.MostrarExercicio',['IdAluno'=>$dados[0],'idConteudo'=>$dados[1],'IdCronograma'=>$dados[6],'tipoAtividade'=>$dados[5], 'IdCurso'=>$IdCurso ])}}">
                                         {{$dados[5]}}
                                     </a>
                                 </li>
@@ -170,3 +168,4 @@
 </script>
 </body>
 </html>
+

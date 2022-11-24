@@ -7,6 +7,7 @@ use App\Models\ProfessorModel;
 use App\Models\ConquistasAlunoModel;
 use App\Models\CursosConcluidosModel;
 
+use App\Models\TarefasRevisaoModel;
 use App\Models\TrofeusModel;
 use Illuminate\Http\Request;
 
@@ -85,7 +86,31 @@ class PermisionController extends Controller
                 ]);
                 $totalTrofeus = 0;
             }
-            return view('Permisions.TelasAluno.homeAluno',['totalTrofeus'=>$totalTrofeus,'ConquitasAlunos'=>$ConquitasAlunos,'dadosAlunosCursos' => $dadosAlunosCursos, 'IdAluno'=>$IdAluno]);
+            $totalTarefas = TarefasRevisaoModel::where('fk_aluno',$IdAluno->id)->where('submit_atividade',0)->get();
+
+            $contadorAtividades = 0;
+            foreach ($totalTarefas as $tarefa){
+                $data = $tarefa->data;
+                $DataSalvaSistema = explode('-',$data);
+                $hoje = date('d/m/Y');
+                $Datahoje = explode('/',$hoje);
+
+                $totalminutosSistema =($DataSalvaSistema[0] * 525600) + ($DataSalvaSistema[1] * 43800) + ($DataSalvaSistema[2] *1440 );
+                $totalminutosHoje = ($Datahoje[2] * 525600) + ($Datahoje[1] * 43800) + ($Datahoje[0] * 1440 );
+
+                if($totalminutosSistema > $totalminutosHoje){
+                    $contadorAtividades = $contadorAtividades + 1;
+                }
+                if($totalminutosSistema < $totalminutosHoje){
+                    $tarefa->update([
+                        'submit_atividade' => 3
+                    ]);
+                }
+
+            }
+
+
+            return view('Permisions.TelasAluno.homeAluno',['totalTarefas'=>$contadorAtividades,'totalTrofeus'=>$totalTrofeus,'ConquitasAlunos'=>$ConquitasAlunos,'dadosAlunosCursos' => $dadosAlunosCursos, 'IdAluno'=>$IdAluno]);
         }
 
         if (auth()->user()->permision == 2 ){

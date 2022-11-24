@@ -3,6 +3,12 @@
 @section('titulo', 'HomeAdmin')
 
 @section('conteudo')
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-2" role="alert">
+            {{ $message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     <div>
         <a class="me-5" href="{{route('registerAluno')}}">
@@ -34,6 +40,11 @@
     <div class="mt-4">
         <a href="{{route('CadastrarTrofeus')}}">
             trofeus Cadastrados
+        </a>
+    </div>
+    <div class="mt-4">
+        <a href="{{route('revisaoForma')}}">
+            forma de revisao
         </a>
     </div>
 

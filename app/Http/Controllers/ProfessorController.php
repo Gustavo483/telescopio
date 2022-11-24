@@ -144,7 +144,7 @@ class ProfessorController extends Controller
                     foreach ($dadosCronograma as $dadoCronograma){
                         $nomeConteudo = ConteudoModel::where('id',$dadoCronograma->fk_conteudo)->first();
 
-                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
+                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario' or $dadoCronograma->st_tipo_atividade == 'Teste Final Curso'){
                             $ExisteOuNaoAtividadeAvaliativa[0] = 1;
                         }else{
                             $ExisteOuNaoAtividadeAvaliativa[0] = 0;
@@ -165,7 +165,7 @@ class ProfessorController extends Controller
                     $ExisteOuNaoAtividadeAvaliativa = [0];
                     foreach ($dadosCronograma as $dadoCronograma){
                         $nomeConteudo = ConteudoModel::where('id',$dadoCronograma->fk_conteudo)->first();
-                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
+                        if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario' or $dadoCronograma->st_tipo_atividade == 'Teste Final Curso'){
                             $ExisteOuNaoAtividadeAvaliativa[0] = 1;
                         }else{
                             $ExisteOuNaoAtividadeAvaliativa[0] = 0;
@@ -403,7 +403,7 @@ class ProfessorController extends Controller
                         $ExisteOuNaoAtividadeAvaliativa = [0];
                         foreach ($dadosCronograma as $dadoCronograma){
                             $nomeConteudo = ConteudoModel::where('id',$dadoCronograma->fk_conteudo)->first();
-                            if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
+                            if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario' or $dadoCronograma->st_tipo_atividade == 'Teste Final Curso'){
                                 $ExisteOuNaoAtividadeAvaliativa[0] = 1;
                             }else{
                                 $ExisteOuNaoAtividadeAvaliativa[0] = 0;
@@ -424,7 +424,7 @@ class ProfessorController extends Controller
                         $ExisteOuNaoAtividadeAvaliativa = [0];
                         foreach ($dadosCronograma as $dadoCronograma){
                             $nomeConteudo = ConteudoModel::where('id',$dadoCronograma->fk_conteudo)->first();
-                            if ($dadoCronograma->st_tipo_atividade == 'testeConteudo'or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario'){
+                            if ($dadoCronograma->st_tipo_atividade == 'testeConteudo' or $dadoCronograma->st_tipo_atividade == 'Teste Final' or $dadoCronograma->st_tipo_atividade == 'Teste Intermediario' or $dadoCronograma->st_tipo_atividade == 'Teste Final Curso'){
                                 $ExisteOuNaoAtividadeAvaliativa[0] = 1;
                             }else{
                                 $ExisteOuNaoAtividadeAvaliativa[0] = 0;
@@ -458,6 +458,7 @@ class ProfessorController extends Controller
             }
 
         }
+
         return view('Permisions.TelasProfessor.ProgressoAlunoECadastrarTarefas2',['ConquitasAlunos'=>$ConquitasAlunos,'porcentagemCurso'=>$porcentagemCurso,'PorcentagensUnidadeApresentar'=>$PorcentagensUnidadeApresentar,'porcentagemConteudos'=>$porcentagemConteudo,'Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor]);
     }
 

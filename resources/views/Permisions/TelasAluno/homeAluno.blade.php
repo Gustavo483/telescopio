@@ -3,19 +3,27 @@
 @section('titulo', 'HomeAluno')
 
 @section('conteudo')
+
     <div class="fsdcs mt-5">
         <div>
             olá, {{$IdAluno->st_nome_aluno}}
         </div>
         <div>
-            <a href="{{route('VizualizarTarefasAluno',['IdAluno'=>$IdAluno->id])}}" class="link ">
-                Tarefas
-            </a>
+            @if($totalTarefas == 0)
+                <a class="disabled link">
+                    {{$totalTarefas}}
+                    Tarefas
+                </a>
+            @endif
+            @if($totalTarefas != 0)
+                <a href="{{route('VizualizarTarefasAluno',['IdAluno'=>$IdAluno->id])}}" class="link ">
+                    {{$totalTarefas}}
+                    Tarefas
+                </a>
+            @endif
         </div>
-
     </div>
     <div class="d-flex justify-content-between mt-5">
-
         <div>
             <a href="{{route('VizualizarPetsAluno',['IdAluno'=>$IdAluno->id])}}" class="">
                 <div class="linkPetsAluno">
@@ -27,7 +35,6 @@
                     </div>
                 </div>
             </a>
-
         </div>
         <div>
             <div>

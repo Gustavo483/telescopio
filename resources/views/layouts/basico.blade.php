@@ -36,6 +36,28 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 <script src="{{asset('js.script.js')}}"></script>
+<script>
+    var btn233 = document.getElementById('btn233')
+    var div233 = document.getElementById('div233')
+    var btn234 = document.getElementById('btn234')
+
+    btn233.addEventListener("click", function (){
+        div233.classList.remove('class1')
+        div233.classList.add('class2')
+    });
+
+    btn234.addEventListener("click", function (){
+        div233.classList.add('class1')
+        div233.classList.remove('class2')
+    });
+
+    var btnasdas = document.getElementById('btnasdas')
+    btnasdas.addEventListener("click", function (){
+        btnasdas.type = "submit"
+        btnasdas.click()
+    })
+
+</script>
 
 </body>
 

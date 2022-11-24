@@ -102,8 +102,11 @@
                         @if($tarefa->submit_atividade == 0)
                             Não realizou
                         @endif
-                        @if($tarefa->submit_atividade != 0)
+                        @if($tarefa->submit_atividade == 1)
                             realizou
+                        @endif
+                        @if($tarefa->submit_atividade == 3)
+                            Data excedida
                         @endif
                     </td>
                     <td class="text-center">{{$tarefa->int_estrelas_obtidas}}</td>

@@ -6,6 +6,7 @@ use App\Models\AlunoModel;
 use App\Models\ConquistasAlunoModel;
 use App\Models\HistoricoNotasAluno;
 use App\Models\PetsModel;
+use App\Models\RevisaoModel;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -19,6 +20,31 @@ use App\Models\DisciplinaModel;
 
 class AdminController extends Controller
 {
+    public function revisaoForma()
+    {
+        $Revisao = RevisaoModel::first();
+        return view('Permisions.TelasAdmin.AuterarRevisao', ['Revisao'=>$Revisao]);
+    }
+    public function CadastrarFormadeRevisao(Request $request,RevisaoModel $revisao)
+    {
+        $validacao = [
+            'ordemCursoApresentar' => 'required',
+            'NumerosQuestao' => 'required',
+        ];
+        $feedback =[
+            'required'=> 'O campo deve ser preenchido',
+        ];
+        $request->validate($validacao, $feedback);
+        $revisao->update(
+            [
+                'ordemCursoApresentar'=>$request->ordemCursoApresentar,
+                'NumerosQuestao'=>$request->NumerosQuestao,
+            ]
+        );
+        return back()
+            ->with('success','Dados Salvos com Sucesso');
+    }
+
     public function UpdadePet(Request $request, PetsModel $Pet)
     {
 

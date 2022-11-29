@@ -1,9 +1,9 @@
-@extends('layouts.basico')
+@extends('layouts.basico2')
 
 @section('titulo', 'HomeAluno')
 
-@section('conteudo')
+@section('conteudo2')
     <div class="container mt-5 text-center">
-        {{$texto->st_texto}}
+        {!!$texto->st_texto!!}
     </div>
 @endsection

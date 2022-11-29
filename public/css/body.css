@@ -132,3 +132,41 @@ hesd{
     background:green ;
     border-radius: 10px;
 }
+.container3232{
+    width: 99%;
+    margin: 0 auto;
+    background:  #3574cf;
+    color: white;
+
+}
+.linkedel{
+    color: white;
+    text-decoration: none;
+}
+
+.linkedel:hover{
+    color: #00bfe3;
+}
+
+.flex32{
+
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.dccdc{
+    margin: 0 auto;
+    width: 95%;
+}
+.conteiner2{
+    width: 95%;
+    margin: 0 auto;
+}
+
+.flex45{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+}

@@ -11,8 +11,8 @@
     top: 0;
     left: 0;
     height: 100%;
-    width: 260px;
-    background: #11101d;
+    width: 325px;
+    background: #3574cf;
     z-index: 100;
     transition: all 0.5s ease;
 }
@@ -25,10 +25,27 @@
     display: flex;
     align-items: center;
 }
+.sidebar .logo-details2{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.sidebar .logo-details2 .logo_name{
+
+    color: #fff;
+    font-weight: 600;
+    transition: 0.3s ease;
+    transition-delay: 0.1s;
+}
+.sidebar.close .logo-details2 .logo_name{
+    transition-delay: 0s;
+    opacity: 0;
+    pointer-events: none;
+}
 .sidebar .logo-details i{
     font-size: 30px;
     color: #fff;
-    height: 50px;
+
     min-width: 78px;
     text-align: center;
     line-height: 50px;
@@ -62,7 +79,7 @@
     transition: all 0.4s ease;
 }
 .sidebar .nav-links li:hover{
-    background: #1d1b31;
+    background: rgba(0, 170, 237, 1);
 }
 .sidebar .nav-links li .iocn-link{
     display: flex;
@@ -93,21 +110,26 @@
     align-items: center;
     text-decoration: none;
 }
+
 .sidebar .nav-links li a .link_name{
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 400;
     color: #fff;
     transition: all 0.4s ease;
+
 }
+
 .sidebar.close .nav-links li a .link_name{
     opacity: 0;
     pointer-events: none;
 }
 .sidebar .nav-links li .sub-menu{
-    padding: 6px 6px 14px 80px;
+    padding: 10px;
     margin-top: -10px;
-    background: #1d1b31;
+    background:  rgba(0, 170, 237, 1);
     display: none;
+    text-align: center;
+
 }
 .sidebar .nav-links li.showMenu .sub-menu{
     display: block;
@@ -163,7 +185,7 @@
 .sidebar .profile-details{
     position: fixed;
     bottom: 0;
-    width: 260px;
+    width: 325px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -211,23 +233,26 @@
 .home-section{
     position: relative;
     background: #E4E9F7;
-    height: 100vh;
-    left: 260px;
-    width: calc(100% - 260px);
+    left: 320px;
+    width: calc(100% - 320px);
     transition: all 0.5s ease;
 }
+
 .sidebar.close ~ .home-section{
     left: 78px;
     width: calc(100% - 78px);
 }
+
 .home-section .home-content{
     height: 60px;
 }
+
 .home-section .home-content .bx-menu,
 .home-section .home-content .text{
     color: #11101d;
     font-size: 35px;
 }
+
 .home-section .home-content .bx-menu{
     margin: 0 15px;
     cursor: pointer;
@@ -256,4 +281,73 @@
         left: 0;
     }
 }
+.sdsdsdsd{
+    width: 100%;
+    color: red;
+    padding: 10px;
+
+}
+
+.sidebar .nav-links li a .link{
+    font-size: 14px;
+    font-weight: 400;
+    color: white;
+    transition: all 0.4s ease;
+}
+.sidebar.close .nav-links li a .link{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.badf{
+    margin: 5px;
+    background: rgba(151, 151, 151, 1);
+}
+.testre{
+    margin: 5px;
+    background: rgba(151, 151, 151, 1);
+}
+.sidebar .nav-links .testre:hover{
+    background: rgba(151, 151, 151, 1);
+}
+.testre2{
+
+    background:  #3574cf;
+}
+.sidebar .nav-links .testre2:hover{
+    background: #3574cf;
+}
+.sdsd{
+    margin: 10px;
+    width: 100%;
+    background: white;
+}
+
+.sidebar .nav-links li a .link_name2{
+    font-size: 14px;
+    font-weight: 400;
+    color: white;
+
+    transition: all 0.4s ease;
+}
+.sidebar.close .nav-links li a .link_name2{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.dcdcd{
+    background: red;
+}
+.sidebar .nav-links li a .link_name3{
+    font-size: 14px;
+    font-weight: 400;
+    color: gray;
+
+    transition: all 0.4s ease;
+}
+.sidebar.close .nav-links li a .link_name3{
+    opacity: 0;
+    pointer-events: none;
+}
+
 

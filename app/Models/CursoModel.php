@@ -13,7 +13,8 @@ class CursoModel extends Model
     protected $fillable=[
         'st_nome_curso',
         'in_total_unidades',
-        'st_nome_disciplinas'
+        'st_nome_disciplinas',
+        'image'
     ];
     public function unidades(){
         return $this->belongsToMany('App\Models\UnidadeModel', 'tb_curso_unidade', 'fk_curso', 'fk_unidade');
@@ -34,6 +35,7 @@ class CursoModel extends Model
     public function TarefasRevisao(){
         return $this->hasMany('App\Models\TarefasRevisaoModel','fk_curso', 'id');
     }
+
     public function HistoricoNotas(){
         return $this->hasMany('App\Models\HistoricoNotasAluno','fk_curso', 'id');
     }

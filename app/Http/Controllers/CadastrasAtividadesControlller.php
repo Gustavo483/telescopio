@@ -31,17 +31,31 @@ class CadastrasAtividadesControlller extends Controller
         return view('CadastrarAtividades.CriarQuestaoRN',['dadosconteudo'=>$dadosconteudo]);
     }
 
-
-    public function StoreConteudoEscrito(Request $request, ConteudoModel $dadosconteudo)
+    public function updateConteudoEscrito(Request $request, ConteudoModel $dadosconteudo, ConteudoEscritoModel $textoEscrito)
     {
         $validacao = [
             'st_texto' =>'required',
-
         ];
 
         $feedback =[
             'required'=> 'O campo deve ser preenchido',
         ];
+        $request->validate($validacao, $feedback);
+        $textoEscrito->update($request->all());
+        return redirect()->route('vizualizar.conteudo',['conteudo'=>$dadosconteudo])->with('success','Alterações salvas com sucesso');
+
+    }
+
+    public function StoreConteudoEscrito(Request $request, ConteudoModel $dadosconteudo)
+    {
+        $validacao = [
+            'st_texto' =>'required',
+        ];
+
+        $feedback =[
+            'required'=> 'O campo deve ser preenchido',
+        ];
+
         $request->validate($validacao, $feedback);
 
         $cronograma = new CronogramaModel();
@@ -57,9 +71,9 @@ class CadastrasAtividadesControlller extends Controller
         $NovoTexto->fk_cronograma =$IDCronograma->id;
         $NovoTexto->st_texto = $request->st_texto;
         $NovoTexto->save();
-        return  redirect()->route('vizualizar.conteudo',['conteudo'=>$dadosconteudo->id]);
-
+        return  redirect()->route('vizualizar.conteudo',['conteudo'=>$dadosconteudo->id])->with('success','Atividade cadastrada com sucesso');
     }
+
     public function StoreQuestaoME(Request $request, ConteudoModel $dadosconteudo)
     {
         $validacao = [
@@ -88,7 +102,7 @@ class CadastrasAtividadesControlller extends Controller
         $questoes->st_alternativa4 = $request->st_alternativa4;
         $questoes->st_alternativa5 = $request->st_alternativa5;
         $questoes->save();
-        return  redirect()->route('criarQuestaoME.conteudo',['dadosconteudo'=>$dadosconteudo]);
+        return  back()->with('success', 'Questão cadastrada com sucesso');
     }
 
     public function StoreQuestaoRN(Request $request, ConteudoModel $dadosconteudo)
@@ -113,7 +127,7 @@ class CadastrasAtividadesControlller extends Controller
         $questoes->st_resolusao = $request->st_resolusao;
         $questoes->save();
 
-        return  redirect()->route('criarQuestaoRN.conteudo',['dadosconteudo'=>$dadosconteudo]);
+        return  back()->with('success', 'Questão cadastrada com sucesso');
     }
 
     public function StoreQuestaoRB(Request $request, ConteudoModel $dadosconteudo)
@@ -138,13 +152,26 @@ class CadastrasAtividadesControlller extends Controller
 
         $questoes->save();
 
-        return  redirect()->route('criarQuestaoRB.conteudo',['dadosconteudo'=>$dadosconteudo]);
+        return  back()->with('success', 'Questão cadastrada com sucesso');
     }
-    public function vizualizarAtividadesCurso( $dadosconteudo)
+
+    public function vizualizarAtividadesCurso(ConteudoModel $dadosconteudo)
     {
-        $todasQuestoesConteudo = QuestoesModel::where('fk_conteudo',$dadosconteudo)->get();
+        $todasQuestoesConteudo = QuestoesModel::where('fk_conteudo',$dadosconteudo->id)->get();
         return view('CadastrarAtividades.VizualizarQuestoesConteudo',['todasQuestoesConteudo'=>$todasQuestoesConteudo,'dadosconteudo'=>$dadosconteudo]);
     }
+
+    public function vizualixarTextoEscrito( ConteudoModel $dadosconteudo, $idCronograma)
+    {
+        $textoEscrito = ConteudoEscritoModel::where('fk_cronograma',$idCronograma)->first();
+        return view('CadastrarAtividades.VizualizarConteudoEscrito',['idCronograma'=>$idCronograma,'textoEscrito'=>$textoEscrito,'dadosconteudo'=>$dadosconteudo]);
+    }
+
+    public function EditarTextoAtividade( ConteudoEscritoModel $textoEscrito,ConteudoModel $dadosconteudo)
+    {
+        return view('CadastrarAtividades.EditarTextoAtividade',['textoEscrito'=>$textoEscrito,'dadosconteudo'=>$dadosconteudo]);
+    }
+
     public function DeleteQuestaoConteudo(QuestoesModel $IDQuestao)
     {
         $dadosconteudo = $IDQuestao->fk_conteudo;
@@ -154,17 +181,23 @@ class CadastrasAtividadesControlller extends Controller
 
     public function EditarQuestaoConteudoME(QuestoesModel $IDQuestao)
     {
-        return view('CadastrarAtividades.EditarQuestaoME',['Questao'=>$IDQuestao]);
+        $idConteudo =$IDQuestao->fk_conteudo ;
+        $conteudo = ConteudoModel::where('id',$idConteudo)->first();
+        return view('CadastrarAtividades.EditarQuestaoME',['Questao'=>$IDQuestao,'conteudo'=>$conteudo]);
     }
 
     public function EditarQuestaoConteudoRB(QuestoesModel $IDQuestao)
     {
-        return view('CadastrarAtividades.EditarQuestaoRB',['Questao'=>$IDQuestao]);
+        $idConteudo =$IDQuestao->fk_conteudo ;
+        $conteudo = ConteudoModel::where('id',$idConteudo)->first();
+        return view('CadastrarAtividades.EditarQuestaoRB',['Questao'=>$IDQuestao,'conteudo'=>$conteudo]);
     }
 
     public function EditarQuestaoConteudoRN(QuestoesModel $IDQuestao)
     {
-        return view('CadastrarAtividades.EditarQuestaoRN',['Questao'=>$IDQuestao]);
+        $idConteudo =$IDQuestao->fk_conteudo ;
+        $conteudo = ConteudoModel::where('id',$idConteudo)->first();
+        return view('CadastrarAtividades.EditarQuestaoRN',['Questao'=>$IDQuestao,'conteudo'=>$conteudo]);
     }
 
     public function updadeQuestaoME(Request $request,QuestoesModel $IDQuestao)
@@ -182,7 +215,7 @@ class CadastrasAtividadesControlller extends Controller
         ];
         $request->validate($validacao, $feedback);
         $IDQuestao->update($request->all());
-        return  redirect()->route('vizualizar.TodasAtividades',['dadosconteudo'=>$idConteudo]);
+        return  redirect()->route('vizualizar.TodasAtividades',['dadosconteudo'=>$idConteudo])->with('success','Questão atualizada com sucesso');
     }
 
     public function updadeQuestaoRB(Request $request,QuestoesModel $IDQuestao)
@@ -223,6 +256,17 @@ class CadastrasAtividadesControlller extends Controller
 
     public function StoreTesteFina(Request $request, ConteudoModel $dadosconteudo)
     {
+        $contador = 0;
+        foreach ($request->valores as $valores){
+            if ($valores == null){
+                $contador = $contador + 1;
+            }
+        }
+
+        if ($contador == count($request->valores) ){
+            return redirect()->route('vizualizar.conteudo',['conteudo'=>$dadosconteudo])->with('error', 'Não foi possivel cadastradar o teste Final da unidade. Verifique os dados e tente novamente');
+        }
+
         //Criando o cronogroma para apresentar a atividade
         $cronograma = new CronogramaModel();
         $cronograma->st_tipo_atividade = 'Teste Final';
@@ -233,6 +277,7 @@ class CadastrasAtividadesControlller extends Controller
 
         $SubmitTotal = count($request->cursos);
         $contador = 0;
+
         while (true){
            if ($contador != $SubmitTotal ){
                if ($request->valores[$contador] != null){
@@ -248,27 +293,32 @@ class CadastrasAtividadesControlller extends Controller
            }
         }
         $dadosAtividades = TesteFinalModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
-        return view('CadastrarAtividades.VizualizarTesteFinalUnidade', ['dados'=>$dadosAtividades]);
+        return view('CadastrarAtividades.VizualizarTesteFinalUnidade', ['dados'=>$dadosAtividades,'dadosconteudo'=>$dadosconteudo]);
 
     }
     public function vizualizarTesteFinalUnidade(ConteudoModel $dadosconteudo)
     {
+
         $dadosAtividades = TesteFinalModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
-        return view('CadastrarAtividades.VizualizarTesteFinalUnidade', ['dados'=>$dadosAtividades]);
+
+        return view('CadastrarAtividades.VizualizarTesteFinalUnidade', ['dados'=>$dadosAtividades,'dadosconteudo'=>$dadosconteudo]);
     }
 
-    public function ExcluirUnidadeTesteFinal(TesteFinalModel $IDexclusao, $dadosconteudo)
+    public function ExcluirUnidadeTesteFinal(TesteFinalModel $IDexclusao, ConteudoModel $dadosconteudo)
     {
         $IDexclusao->delete();
-        $dadosAtividades = TesteFinalModel::where('fk_conteudo_pertencente',$dadosconteudo)->get();
-        return view('CadastrarAtividades.VizualizarTesteFinalUnidade', ['dados'=>$dadosAtividades]);
+        $dadosAtividades = TesteFinalModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
+        return view('CadastrarAtividades.VizualizarTesteFinalUnidade', ['dados'=>$dadosAtividades,'dadosconteudo'=>$dadosconteudo])->with('success','Conteudo excluida do teste com sucesso');
     }
     public function EditarTesteFinal(ConteudoModel $dadosconteudo)
     {
-
         $dadosPreenchidos = TesteFinalModel::where('fk_conteudo_pertencente', $dadosconteudo->id)->get();
         $todosConteudo = ConteudoModel::where('fk_unidade',$dadosconteudo->fk_unidade )->where('id','!=',$dadosconteudo->id)->get();
-        return view('CadastrarAtividades.EditarTesteFinalUnidade', ['todosConteudo'=>$todosConteudo, 'DadosPreenchidos'=>$dadosPreenchidos, 'dadosconteudo'=>$dadosconteudo]);
+        $array = [];
+        foreach ($dadosPreenchidos as $item){
+          array_push($array,$item->fk_conteudo);
+        }
+        return view('CadastrarAtividades.EditarTesteFinalUnidade', ['array'=>$array,'todosConteudo'=>$todosConteudo, 'DadosPreenchidos'=>$dadosPreenchidos, 'dadosconteudo'=>$dadosconteudo]);
     }
     public function UpdateTesteFina(Request $request, ConteudoModel $dadosconteudo)
     {
@@ -294,7 +344,7 @@ class CadastrasAtividadesControlller extends Controller
             }
         }
         $dadosAtividades = TesteFinalModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
-        return view('CadastrarAtividades.VizualizarTesteFinalUnidade', ['dados'=>$dadosAtividades]);
+        return view('CadastrarAtividades.VizualizarTesteFinalUnidade', ['dados'=>$dadosAtividades,'dadosconteudo'=>$dadosconteudo]);
     }
 
 
@@ -302,7 +352,16 @@ class CadastrasAtividadesControlller extends Controller
 
     public function StoreTesteIntermediario(Request $request, ConteudoModel $dadosconteudo)
     {
+        $contador = 0;
+        foreach ($request->valores as $curso){
+            if ($curso == null ){
+                $contador = $contador + 1;
+            }
+        }
 
+        if ($contador == count($request->cursos)){
+            return redirect()->route('vizualizar.conteudo',['conteudo'=>$dadosconteudo])->with('error', 'Não foi possivel cadastradar o teste intermediario da unidade. Verifique os dados e tente novamente');
+        }
         //Criando o cronogroma para apresentar a atividade
         $cronograma = new CronogramaModel();
         $cronograma->st_tipo_atividade = 'Teste Intermediario';
@@ -313,6 +372,7 @@ class CadastrasAtividadesControlller extends Controller
 
         $SubmitTotal = count($request->cursos);
         $contador = 0;
+
         while (true){
             if ($contador != $SubmitTotal ){
                 if ($request->valores[$contador] != null){
@@ -327,28 +387,33 @@ class CadastrasAtividadesControlller extends Controller
                 break;
             }
         }
+
         $dadosAtividades = TesteIntermediarioModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
-        return view('CadastrarAtividades.VizualizarTesteIntermediarioUnidade', ['dados'=>$dadosAtividades]);
+        return view('CadastrarAtividades.VizualizarTesteIntermediarioUnidade', ['dados'=>$dadosAtividades,'dadosconteudo'=>$dadosconteudo]);
 
     }
     public function vizualizarTesteIntermediarioUnidade(ConteudoModel $dadosconteudo)
     {
         $dadosAtividades = TesteIntermediarioModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
-        return view('CadastrarAtividades.VizualizarTesteIntermediarioUnidade', ['dados'=>$dadosAtividades]);
+        return view('CadastrarAtividades.VizualizarTesteIntermediarioUnidade', ['dados'=>$dadosAtividades,'dadosconteudo'=>$dadosconteudo]);
     }
 
-    public function ExcluirUnidadeTesteIntermediario(TesteIntermediarioModel $IDexclusao, $dadosconteudo)
+    public function ExcluirUnidadeTesteIntermediario(TesteIntermediarioModel $IDexclusao,ConteudoModel $dadosconteudo)
     {
         $IDexclusao->delete();
-        $dadosAtividades = TesteIntermediarioModel::where('fk_conteudo_pertencente',$dadosconteudo)->get();
-        return view('CadastrarAtividades.VizualizarTesteIntermediarioUnidade', ['dados'=>$dadosAtividades]);
+        $dadosAtividades = TesteIntermediarioModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
+        return view('CadastrarAtividades.VizualizarTesteIntermediarioUnidade', ['dados'=>$dadosAtividades,'dadosconteudo'=>$dadosconteudo]);
     }
     public function EditarTesteIntermediario(ConteudoModel $dadosconteudo)
     {
 
         $dadosPreenchidos = TesteIntermediarioModel::where('fk_conteudo_pertencente', $dadosconteudo->id)->get();
+        $IdPreenchidos = [];
+        foreach ($dadosPreenchidos as $dado){
+            array_push($IdPreenchidos,$dado->fk_conteudo);
+        }
         $todosConteudo = ConteudoModel::where('fk_unidade',$dadosconteudo->fk_unidade )->where('id','!=',$dadosconteudo->id)->get();
-        return view('CadastrarAtividades.EditarTesteIntermediarioUnidade', ['todosConteudo'=>$todosConteudo, 'DadosPreenchidos'=>$dadosPreenchidos, 'dadosconteudo'=>$dadosconteudo]);
+        return view('CadastrarAtividades.EditarTesteIntermediarioUnidade', ['IdPreenchidos'=>$IdPreenchidos,'todosConteudo'=>$todosConteudo, 'DadosPreenchidos'=>$dadosPreenchidos, 'dadosconteudo'=>$dadosconteudo]);
     }
     public function UpdateTesteIntermediario(Request $request, ConteudoModel $dadosconteudo)
     {
@@ -374,7 +439,7 @@ class CadastrasAtividadesControlller extends Controller
             }
         }
         $dadosAtividades = TesteIntermediarioModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
-        return view('CadastrarAtividades.VizualizarTesteIntermediarioUnidade', ['dados'=>$dadosAtividades]);
+        return view('CadastrarAtividades.VizualizarTesteIntermediarioUnidade', ['dados'=>$dadosAtividades,'dadosconteudo'=>$dadosconteudo]);
     }
 
     public function TesteFinalCursoIndex(Request $request,$dadosconteudo)
@@ -397,10 +462,20 @@ class CadastrasAtividadesControlller extends Controller
         }
         $Conteudos = ConteudoModel::wherein('fk_unidade', $ArrayIDUnidades)->where('id','!=', $dadosconteudo)->get();
 
-       return view('CadastrarAtividades.CadastrarConteudosTesteCurso', ['dadosconteudo'=>$dadosconteudo,'Conteudos'=>$Conteudos, 'IDCurso'=> $IDCurso]);
+       return view('CadastrarAtividades.CadastrarConteudosTesteCurso', ['dadosconteudo'=>$dadosconteudo,'Conteudos'=>$Conteudos, 'IDCurso'=> $dadosCurso,]);
     }
     public function StoreTesteFinalCurso(Request $request,ConteudoModel $dadosconteudo, $IDCurso)
     {
+        $contador = 0;
+        foreach ($request->valores as $curso){
+            if ($curso == null ){
+                $contador = $contador + 1;
+            }
+        }
+        if ($contador == count($request->conteudos)){
+            return redirect()->route('vizualizar.conteudo',['conteudo'=>$dadosconteudo])->with('error', 'Não foi possivel cadastradar o Teste final do curso. Verifique os dados e tente novamente');
+        }
+
         //Criando o cronogroma para apresentar a atividade
         $cronograma = new CronogramaModel();
         $cronograma->st_tipo_atividade = 'Teste Final Curso';
@@ -427,20 +502,21 @@ class CadastrasAtividadesControlller extends Controller
             }
         }
         $dadosAtividades = TesteCursoModel::where('fk_curso',$IDCurso)->get();
-        return view('CadastrarAtividades.VizualizarTesteFinalCurso', ['dados'=>$dadosAtividades]);
+        return view('CadastrarAtividades.VizualizarTesteFinalCurso', ['dados'=>$dadosAtividades,'dadosconteudo'=>$dadosconteudo]);
     }
     public function ExcluirUnidadeTesteFinalCurso(TesteCursoModel $IDexclusao)
     {
         $IDCurso = $IDexclusao->fk_curso;
+        $conteudo = $IDexclusao->conteudos;
         $IDexclusao->delete();
         $dadosAtividades = TesteCursoModel::where('fk_curso',$IDCurso)->get();
-        return view('CadastrarAtividades.VizualizarTesteFinalCurso', ['dados'=>$dadosAtividades]);
+        return view('CadastrarAtividades.VizualizarTesteFinalCurso',['dados'=>$dadosAtividades,'dadosconteudo'=>$conteudo]);
     }
 
-    public function vizualizarTesteFinalCurso($dadosconteudo)
+    public function vizualizarTesteFinalCurso(ConteudoModel $dadosconteudo)
     {
-        $dadosAtividades = TesteCursoModel::where('fk_conteudo_pertencente',$dadosconteudo)->get();
-        return view('CadastrarAtividades.VizualizarTesteFinalCurso', ['dados'=>$dadosAtividades]);
+        $dadosAtividades = TesteCursoModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->get();
+        return view('CadastrarAtividades.VizualizarTesteFinalCurso', ['dados'=>$dadosAtividades,'dadosconteudo'=>$dadosconteudo]);
     }
 
     public function EditarTesteFinalCurso(ConteudoModel $dadosconteudo, $fkCurso)
@@ -454,13 +530,18 @@ class CadastrasAtividadesControlller extends Controller
 
         $todosConteudo = ConteudoModel::wherein('fk_unidade', $ArrayIDUnidades)->where('id','!=', $dadosconteudo)->get();
         $dadosPreenchidos = TesteCursoModel::where('fk_conteudo_pertencente', $dadosconteudo->id)->get();
+        $IdsConteudo = [];
+        foreach ($dadosPreenchidos as $dado){
+            $dad = $dado->fk_conteudo;
+            array_push($IdsConteudo,$dad);
+        }
 
-        return view('CadastrarAtividades.EditarTesteFinalCurso', ['dadosconteudo'=>$dadosconteudo,'todosConteudo'=>$todosConteudo,'dadosPreenchidos'=>$dadosPreenchidos,'IDCurso'=>$fkCurso]);
+        return view('CadastrarAtividades.EditarTesteFinalCurso', ['dadosCurso'=>$dadosCurso,'IdsConteudo'=>$IdsConteudo,'dadosconteudo'=>$dadosconteudo,'todosConteudo'=>$todosConteudo,'dadosPreenchidos'=>$dadosPreenchidos,'IDCurso'=>$fkCurso]);
 
     }
     public function updateTesteFinalCurso(Request $request,ConteudoModel $dadosconteudo, $IDCurso)
     {
-        $dados = TesteCursoModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->delete();
+        TesteCursoModel::where('fk_conteudo_pertencente',$dadosconteudo->id)->delete();
 
         $SubmitTotal = count($request->cursos);
         $contador = 0;

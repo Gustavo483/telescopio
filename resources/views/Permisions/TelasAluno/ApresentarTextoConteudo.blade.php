@@ -6,4 +6,5 @@
     <div class="container mt-5 text-center">
         {!!$texto->st_texto!!}
     </div>
+    <div class="divEspacamento"></div>
 @endsection

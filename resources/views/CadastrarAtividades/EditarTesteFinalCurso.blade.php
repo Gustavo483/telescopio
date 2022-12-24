@@ -3,47 +3,55 @@
 @section('titulo', 'vizualizar questões')
 
 @section('conteudo')
-    <div>
-        <a href="{{route('vizualizar.conteudo',['conteudo'=>$dadosconteudo])}}">
-            Voltar para o cronograma do curso
+    <div class="flexPAluno mt-3 ">
+        <h4 class="h4Pets">
+            Painal do Administrador > Unidades > Conteudos > Cadastrar teste Final do curso
+        </h4>
+        <a class="btnVoltar" href="{{route('vizualizar.conteudo',['conteudo'=>$dadosconteudo])}}">
+            Voltar
         </a>
     </div>
+
     <div>
         <h4 class="mt-5 mb-2">
-            Cadrastro de teste final para a unidade {{$dadosconteudo->unidades->st_nome_unidade}}
+            Cadrastro de teste final do curso  {{$dadosCurso->st_nome_curso}}
         </h4>
     </div>
-    <form method="post" action="{{route('update.ConteudoTesteFinalCurso', ['dadosconteudo'=>$dadosconteudo, 'IDCurso'=>$IDCurso])}}">
-        @csrf
-        <div class="mb-5">
-            <h6 class="mb-3 mt-3 text-center">dados já cadastradados</h6>
-            @foreach($dadosPreenchidos as $conteudo)
-                <div class="d-flex justify-content-around">
-                    <div >
-                        {{ $conteudo->conteudos->st_nome_conteudo}}
-                    </div>
-                    <div>
-                        <input class="d-none" name="cursos[]" placeholder="Digite Algo" value="{{$conteudo->conteudos->id}}">
-                        <input class="form-control w-100" name="valores[]" value="{{$conteudo->totalQuestao}}" placeholder="Digite a quantidade de atividades do módulo">
-                    </div>
+    <div class="flexRegisterAluno2 mb-5">
+        <div class="FormCadastro">
+            <form method="post" action="{{route('update.ConteudoTesteFinalCurso', ['dadosconteudo'=>$dadosconteudo, 'IDCurso'=>$IDCurso])}}">
+                @csrf
+                <div class="hsd2">
+                    <h4>Editar teste final de curso: {{$dadosCurso->st_nome_curso}}</h4>
                 </div>
-            @endforeach
+                <div class="p-2">
+                    @foreach($dadosPreenchidos as $conteudo)
+                        <div class="my-2">
+                            <label class="form-label">
+                                {{ $conteudo->conteudos->st_nome_conteudo}}:
+                            </label>
+                            <input class="d-none" name="cursos[]" placeholder="Digite Algo" value="{{$conteudo->conteudos->id}}">
+                            <input class="form-control w-100" name="valores[]" value="{{$conteudo->totalQuestao}}" placeholder="Digite a quantidade de atividades do módulo">
+                        </div>
+                    @endforeach
 
+                    @foreach($todosConteudo as $conteudo)
+                        @if(!in_array($conteudo->id,$IdsConteudo))
+                            <div class="my-2">
+                                <label class="form-label">
+                                    {{ $conteudo->st_nome_conteudo}}:
+                                </label>
+                                <input class="d-none" name="cursos[]" placeholder="Digite Algo" value="{{$conteudo->id}}">
+                                <input class="form-control w-100" name="valores[]" placeholder="Digite a quantidade de atividades do módulo">
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+                <div class="d-flex justify-content-center align-items-center mt-4 mb-4">
+                    <button class="btnVoltar4" type="submit">Atualizar </button>
+                </div>
+            </form>
         </div>
-
-        <h6 class="mb-3 mt-3 text-center">Novos dados para salvamento</h6>
-        @foreach($todosConteudo as $conteudo)
-            <div class="d-flex justify-content-around">
-                <div >
-                    {{ $conteudo->st_nome_conteudo}}
-                </div>
-                <div>
-                    <input class="d-none" name="cursos[]" placeholder="Digite Algo" value="{{$conteudo->id}}">
-                    <input class="form-control w-100" name="valores[]" placeholder="Digite a quantidade de atividades do módulo">
-                </div>
-            </div>
-        @endforeach
-        <button type="submit">enviar</button>
-    </form>
+    </div>
 
 @endsection

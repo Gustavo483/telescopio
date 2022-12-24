@@ -1,0 +1,703 @@
+.conteinerBasico{
+    background:  #3574cf;
+    color: white;
+}
+.conteiner2Basico{
+    margin: 0 auto;
+    width: 90%;
+}
+.imgLogoBasico{
+    width: 200px;
+}
+.encerrar{
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+}
+.encerrar:hover{
+    background: #edf5fb;
+    border-radius: 10px;
+}
+.flexBasico{
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.colorBackgroud{
+    background:  #edf5fb;
+}
+.fsdcs{
+    display: flex;
+    justify-content: space-between;
+}
+.nomeAluno{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.linkPetsAluno{
+    width: 130px;
+    border-radius: 10px;
+    height: 80px;
+    background: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.flexProgresso{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 80px;
+}
+
+.linkPetsAluno:hover{
+    background: #edf5fb;
+    box-shadow: 0 3px 10px #3574cf;
+    border: none;
+}
+.tamanhoDivProgresso2{
+    width: 130px;
+    height: 80px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tamanhoDivProgresso{
+    width: 130px;
+    height: 80px;
+    background: white;
+    border-radius: 15px;
+}
+
+.editLink{
+    text-decoration: none;
+    color: black;
+}
+.editLink:hover{
+    color: black;
+}
+.dsd{
+    position: relative;
+}
+
+
+.clas1{
+    position: absolute;
+    top: 10px;
+    right:  60px;
+
+}
+.clas{
+    position: absolute;
+    bottom: 0px;
+    right:  0px;
+    border-radius: 0 0 10px 0;
+}
+.DivTarefas{
+    width: 20px;
+    height: 20px;
+    background: red;
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    text-align: center;
+}
+.editLink2{
+    color: white;
+    font-size: 18px;
+}
+.editLink2:hover{
+     color: white;
+ }
+
+.divCurso{
+    width: 250px;
+    background: white;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    border-radius: 10px;
+}
+.divCurso:hover{
+    box-shadow: 0 3px 10px #3574cf;
+}
+
+.imgCurso{
+    width:250px;
+    height:160px;
+    border-radius: 10px 10px 0 0 ;
+}
+.linkCurso{
+    text-decoration: none;
+}
+
+.divCurso2{
+    color: black;
+    font-size: 14px;
+}
+.divCurso3{
+    color: #3574cf;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+}
+.divCurso4{
+    border-radius: 10px;
+    border: 1px solid #3574cf;
+}
+.barraProgresso25{
+    color: white;
+    background:  #3574cf;
+    height: 25px;
+    border-radius: 10px 0px 0px 10px;
+}
+.barraProgresso100{
+    color: white;
+    background:  #3574cf;
+    border-radius: 10px;
+    height: 25px;
+}
+.barraProgressoMenos25{
+    color: #00bfe3;
+    background:  #3574cf;
+    border-radius: 10px 0px 0px 10px;
+    height: 25px;
+}
+.btnVoltar{
+    display: block;
+    border: none;
+    text-align: center;
+    width: 100px;
+    background: #3574cf;
+    padding: 7px;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;!important;
+}
+.btnVoltar:hover{
+    box-shadow: 0 3px 10px #3574cf;
+    color: white;
+}
+
+.btnVoltar5{
+    display: block;
+    border: none;
+    width: 200px;
+    background: #3574cf;
+    padding: 7px;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.btnVoltar5:hover{
+    box-shadow: 0 3px 10px #3574cf;
+    color: white;
+}
+.divPets{
+    color: #3574cf;
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 150px;
+    box-shadow: 0 3px 10px #3574cf;
+    border-radius: 10px;
+}
+.divPetsParaComprar{
+    border: none;
+    color: white;
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 150px;
+    background: #3574cf;
+    border-radius: 10px;
+}
+
+.divPetsParaComprar:hover{
+    box-shadow: 0 3px 10px #3574cf;
+}
+.flexDivPets{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.flexPAluno{
+    display: flex;
+    justify-content: space-between;
+}
+.h4Pets{
+    color: #3574cf;
+}
+.tamanhoDivtrofeus{
+    width: 170px;
+}
+
+.sdfsd{
+    border-radius: 10px 10px 0 0 ;
+    background: black;
+    color: white;
+}
+.conquistado2{
+    border-radius: 10px 10px 0 0 ;
+    background:#3574cf ;
+    color: white;
+    box-shadow: 0 3px 10px #3574cf;
+}
+.conquistado{
+    border-radius:0 0 10px 10px ;
+    box-shadow: 0 3px 10px #3574cf;
+    color: #3574cf;
+}
+.colorBlack{
+    margin-top: 2px;
+    background: #3f3f3f;
+    color: white;
+    border-radius: 0 0 10px 10px;
+}
+.colorBlue{
+    margin-top: 2px;
+    background: #3574cf;
+    color: white;
+    border-radius: 0 0 10px 10px;
+}
+.sdczx{
+    border-radius: 10px 10px 0 0 ;
+    background:#3574cf ;
+    color: white;
+    box-shadow: 0 3px 10px #3574cf;
+}
+.sdczx2{
+    color: #3574cf;
+    box-shadow: 0 3px 10px #3574cf;
+    border-radius: 0 0 10px 10px;
+}
+.sdczx3{
+    border-radius: 0 0 10px 10px;
+    background:#3574cf ;
+    color: white;
+    box-shadow: 0 3px 10px #3574cf;
+}
+.tamanhoDivtrofeus2{
+    width: 170px;
+    border-radius: 10px;
+}
+.linkTrofeu{
+    color: white;
+}
+.linkTrofeu:hover{
+    color: greenyellow;
+}
+#table1 th{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+.ssds{
+    background: white;
+}
+.tamanho12{
+    width: 30%;
+}
+
+.tamanho123{
+    width: 20%;
+}
+
+#table1 td{
+    border: 1px solid white;
+    color: #3574cf;
+}
+
+.linkPlanilhaTarefa{
+    display: block;
+    text-align: center;
+    width: 100px;
+    background: #3574cf;
+    padding: 7px;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.linkPlanilhaTarefa:hover{
+    box-shadow: 0 3px 10px #3574cf;
+    color: white;
+}
+
+.flex78{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.colorYellow{
+    background: orange;
+    color: white;
+}
+
+.aczx{
+    background: orange;!important;
+    color: white;!important;
+}
+.flexHomeProfessor{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.linkHomeProfessor{
+    display: block;
+    text-align: center;
+    background: #3574cf;
+    padding: 7px;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.linkHomeProfessor:hover{
+    box-shadow: 0 3px 10px #3574cf;
+    color: white;
+}
+
+#table2 th{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+
+#table2 td{
+    background: #e8ebf5;
+    border: 1px solid white;
+    color: #3574cf;
+}
+.tamanhoListarAluno{
+    width: 30%;
+}
+.tamanhoListarAluno2{
+    width: 20%;
+}
+.linkHomeVisualizarAluno{
+
+    text-align: center;
+    background: #3574cf;
+    padding: 7px 20px;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.linkHomeVisualizarAluno:hover{
+    box-shadow: 0 3px 10px #3574cf;
+    color: white;
+}
+.linkHomeVisualizarAluno2{
+    display: block;
+    width: 250px;
+    text-align: center;
+    background: #3574cf;
+    padding: 10px;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.linkHomeVisualizarAluno2:hover{
+    box-shadow: 0 3px 10px #3574cf;
+    color: white;
+}
+.flexas2{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.dfcxzx{
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+.testeimagem{
+    width: 200px;
+}
+.espacamento{
+    margin-bottom: 200px;
+}
+#myTable th{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+
+#myTable td{
+    background: #e8ebf5;
+    border: 1px solid white;
+    color: #3574cf;
+}
+#myTable2 th{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+
+#myTable2 td{
+    background: #e8ebf5;
+    border: 1px solid white;
+    color: #3574cf;
+}
+.btnVoltar2{
+    border: none;
+    display: block;
+    text-align: center;
+    width: 100px;
+    background: #3574cf;
+    padding: 7px;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.btnVoltar2:hover{
+    box-shadow: 0 3px 10px #3574cf;
+    color: white;
+}
+
+.none{
+    display: none;
+}
+.btnVoltar3{
+    display: block;
+    text-align: center;
+    width: 240px;
+    border: 1px solid #3574cf;
+    background: white;
+    padding: 7px;
+    color:#3574cf ;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.btnVoltar3:hover{
+    box-shadow: 0 3px 10px #3574cf;
+    color: #3574cf;
+}
+
+.masds{
+    margin: 0 auto;
+}
+
+#TableProgresso th{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+
+#TableProgresso .teestr td{
+    background: #3574cf;
+    border: 1px solid white;
+    color: white;
+}
+#TableProgresso td{
+    background: #e8ebf5;
+    border: 1px solid white;
+    color: #3574cf;
+}
+#TableProgresso .trUnidade td{
+    background: #e8ebf5;
+    border: 1px solid white;
+    color: #3574cf;
+}
+#tableTarefa th{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+#tableTarefa td{
+    background: #e8ebf5;
+    border: 1px solid white;
+    color: #3574cf;
+}
+
+#tableDesempenho2 th{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+
+#tableDesempenho2 td{
+    background: #e8ebf5;
+    border: 1px solid white;
+    color: #3574cf;
+}
+
+
+#TableProgresso2 th{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+
+#TableProgresso2 td{
+    background: #e8ebf5;
+    border: 1px solid white;
+    color: #3574cf;
+}
+
+#TableProgresso2 .teestr td{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+.block{
+    padding: 10px;
+    border-radius: 10px;
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    width: 100%;
+    color: #3574cf;
+    box-shadow: 0 3px 10px #3574cf;
+}
+.block:hover{
+    box-shadow: 0 3px 10px #3574cf;
+    background: #3574cf;
+    border: none;
+    color: white;
+}
+
+.fles12{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: white;
+    border-radius: 0 0 10px 10px;
+}
+
+.fles123{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: white;
+    border-radius: 0 0 10px 10px;
+
+}
+
+.divLinksHomeAdmin{
+    width: 250px;
+}
+
+.FormCadastro{
+    width: 400px;
+    box-shadow: 0 3px 10px #3574cf;
+    border-radius: 10px;
+}
+.hsd2{
+    border-radius: 10px 10px 0 0 ;
+    padding: 10px;
+    background:#3574cf ;
+    color: white;
+    text-align: center;
+}
+
+.flexRegisterAluno{
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flexRegisterAluno2{
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-around;
+    align-items: start;
+}
+.btnVoltar4{
+    display: block;
+    border: none;
+    text-align: center;
+    background: #3574cf;
+    padding: 7px;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.btnVoltar4:hover{
+    box-shadow: 0 3px 10px #3574cf;
+    color: white;
+}
+.errosd{
+    color: red;
+    font-size: 12px;
+}
+.cadastro{
+    text-align: center;
+    padding: 10px;
+    background: #3574cf ;
+    color: white;
+    border-radius: 10px 10px 0 0 ;
+}
+.divApresentarHome{
+    box-shadow: 0 3px 10px #3574cf;
+    border-radius: 10px;
+}
+
+
+.divPets2{
+    color: #3574cf;
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    box-shadow: 0 3px 10px #3574cf;
+    border-radius: 10px;
+}
+.colorcs{
+    background: #3574cf;
+    border-radius: 0 0 10px 10px;
+}
+
+.linkPets{
+    color: white;
+}
+
+.linkPets:hover{
+    color: greenyellow;
+}
+
+.scsda{
+    display: flex;
+    justify-content: center;
+}
+.mostrarTexto{
+    width: 80%;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px #3574cf;
+    margin: 0 auto;
+}
+.mostrarTexto2{
+    width: 80%;
+    margin: 0 auto;
+}
+#myTable3 th{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+
+#myTable3 td{
+    background: #e8ebf5;
+    border: 1px solid white;
+    color: #3574cf;
+}
+#teste th{
+    background: #3574cf;
+    color: white;
+    border: 1px solid white;
+}
+
+#teste td{
+    background: #e8ebf5;
+    border: 1px solid white;
+    color: #3574cf;
+}

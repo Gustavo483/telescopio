@@ -12,6 +12,7 @@ class ConteudoModel extends Model
     protected $fillable=[
         'st_nome_conteudo',
         'fk_unidade',
+        'int_ordem_apresentacao',
     ];
 
     public function unidades(){

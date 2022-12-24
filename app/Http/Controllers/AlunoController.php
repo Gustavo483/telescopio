@@ -26,185 +26,33 @@ use App\Models\TrofeusModel;
 
 class AlunoController extends Controller
 {
-    public function SalvarProgressoMedianteTarefa(TarefasRevisaoModel $DatosTarefa, Request $request)
-    {
-        $ConquistaAluno = ConquistasAlunoModel::where('fk_aluno',$DatosTarefa->fk_aluno)->first();
-
-        $dadosProgresso = ProgressoModel::where('fk_aluno',$DatosTarefa->fk_aluno)->where('fk_unidade',$DatosTarefa->fk_unidade)->where('fk_curso',$DatosTarefa->fk_curso)->where('fk_conteudo',$DatosTarefa->fk_conteudo)->first();
-        if($request->int_estrela_obtida >$dadosProgresso->int_estrela_obtida){
-            $estrelasextrasGanhadas = intval($request->int_estrela_obtida ) - $dadosProgresso->int_estrela_obtida;
-            $TotalEstreas = $ConquistaAluno->int_total_estrelas + $estrelasextrasGanhadas;
-            $dadosProgresso->update([
-                'int_estrela_obtida' => intval($request->int_estrela_obtida),
-            ]);
-            $ConquistaAluno->update([
-                'int_total_estrelas'=> $TotalEstreas
-            ]);
-            $DatosTarefa->updade([
-
-            ]);
-        }
-        dd($dadosProgresso,$request->all(),$DatosTarefa);
-        dd('entramos aqui mlk doido', $request->all(), $DatosTarefa);
-    }
     public function direcionarAlunoParaTarefa(TarefasRevisaoModel $DatosTarefa)
     {
         $dadosProgresso = ProgressoModel::where('fk_aluno',$DatosTarefa->fk_aluno)->where('fk_unidade',$DatosTarefa->fk_unidade)->where('fk_curso',$DatosTarefa->fk_curso)->where('fk_conteudo',$DatosTarefa->fk_conteudo)->first();
 
+
         if ($dadosProgresso->int_submit_atividades == 1 or $dadosProgresso->int_submit_atividades == 2){
-            $dadosCronograma = CronogramaModel::where('fk_conteudo', $DatosTarefa->fk_conteudo)->where('fk_unidade', $DatosTarefa->fk_unidade)->get();
-            foreach ( $dadosCronograma as $dado){
-                if ($dado->st_tipo_atividade == 'testeConteudo'){
-                    // verificar se a atividade já foi feita ou não
-                    // fim verifição
 
-                    $questoes = QuestoesModel::where('fk_conteudo',$dado->fk_conteudo)->inRandomOrder()->limit(5)->get();
-                    return view('Permisions.TelasAluno.ApresentarAtividadesDetarefa',['questoes'=>$questoes,'DatosTarefa'=>$DatosTarefa, 'IdAluno'=>$DatosTarefa->fk_aluno,'idConteudo'=>$DatosTarefa->fk_conteudo,'IdCurso'=>$DatosTarefa->fk_curso,'tipoAtividade'=>$dado->st_tipo_atividade ]);
-
-                }
-                if ($dado->st_tipo_atividade == 'Teste Intermediario'){
-                    $colect = new Collection();
-                    $AtividadesIntermediarias = TesteIntermediarioModel::where('fk_conteudo_pertencente', $DatosTarefa->fk_conteudo)->get();
-                    foreach ($AtividadesIntermediarias as $atividade){
-                        $valorFkConteudo = $atividade->fk_conteudo;
-                        $QuantidadeQuestoes = $atividade->totalQuestao;
-                        $DadosQuestoes = QuestoesModel::where('fk_conteudo',$valorFkConteudo)->inRandomOrder()->limit($QuantidadeQuestoes)->get();
-                        foreach ($DadosQuestoes as $questoes){
-                            $colect->push($questoes);
-                        }
-                    }
-                    $questoes = $colect->all();
-                    return view('Permisions.TelasAluno.ApresentarAtividadesDetarefa',['questoes'=>$questoes,'DatosTarefa'=>$DatosTarefa, 'IdAluno'=>$DatosTarefa->fk_aluno,'idConteudo'=>$DatosTarefa->fk_conteudo,'IdCurso'=>$DatosTarefa->fk_curso,'tipoAtividade'=>$dado->st_tipo_atividade ]);
-                }
-
-                if ($dado->st_tipo_atividade == 'Teste Final'){
-                    $colect = new Collection();
-                    $dadosTesteFinalUnidade = TesteFinalModel::where('fk_conteudo_pertencente', $DatosTarefa->fk_conteudo)->get();
-                    foreach ($dadosTesteFinalUnidade as $testefinalUnidade){
-                        $valorFkConteudo = $testefinalUnidade->fk_conteudo;
-                        $QuantidadeQuestoes = $testefinalUnidade->totalQuestao;
-                        $DadosQuestoes = QuestoesModel::where('fk_conteudo',$valorFkConteudo)->inRandomOrder()->limit($QuantidadeQuestoes)->get();
-                        foreach ($DadosQuestoes as $questoes){
-                            $colect->push($questoes);
-                        }
-                    }
-                    $questoes = $colect->all();
-                    return view('Permisions.TelasAluno.ApresentarAtividadesDetarefa',['questoes'=>$questoes,'DatosTarefa'=>$DatosTarefa, 'IdAluno'=>$DatosTarefa->fk_aluno,'idConteudo'=>$DatosTarefa->fk_conteudo,'IdCurso'=>$DatosTarefa->fk_curso,'tipoAtividade'=>$dado->st_tipo_atividade ]);
-                }
-
-                if ($dado->st_tipo_atividade == 'Teste Final Curso'){
-                    $colect = new Collection();
-                    $dadosTesteFinalCurso = TesteCursoModel::where('fk_conteudo_pertencente', $DatosTarefa->fk_conteudo)->get();
-                    foreach ($dadosTesteFinalCurso as $TesteFinalCurso){
-                        $valorFkConteudo = $TesteFinalCurso->fk_conteudo;
-                        $QuantidadeQuestoes = $TesteFinalCurso->totalQuestao;
-                        $DadosQuestoes = QuestoesModel::where('fk_conteudo',$valorFkConteudo)->inRandomOrder()->limit($QuantidadeQuestoes)->get();
-                        foreach ($DadosQuestoes as $questoes){
-                            $colect->push($questoes);
-                        }
-                    }
-
-                    $questoes = $colect->all();
-                    return view('Permisions.TelasAluno.ApresentarAtividadesDetarefa',['questoes'=>$questoes,'DatosTarefa'=>$DatosTarefa, 'IdAluno'=>$DatosTarefa->fk_aluno,'idConteudo'=>$DatosTarefa->fk_conteudo,'IdCurso'=>$DatosTarefa->fk_curso,'tipoAtividade'=>$dado->st_tipo_atividade ]);
+            $cronogramas = CronogramaModel::where('fk_conteudo',$DatosTarefa->fk_conteudo )->get();
+            $IdCronograma = [];
+            foreach ($cronogramas as $cronograma){
+                if ($cronograma->st_tipo_atividade == 'testeConteudo' or $cronograma->st_tipo_atividade == 'Teste Intermediario' or $cronograma->st_tipo_atividade == 'Teste Final' or $cronograma->st_tipo_atividade == 'Teste Final Curso'){
+                    array_push($IdCronograma,[$cronograma->id,$cronograma->st_tipo_atividade]);
                 }
             }
+            return redirect()->route('Aluno.MostrarExercicio',['IdAluno'=>$DatosTarefa->fk_aluno,'idConteudo'=>$DatosTarefa->fk_conteudo,'IdCronograma'=>$IdCronograma[0][0],'tipoAtividade'=>$IdCronograma[0][1],'IdCurso'=>$DatosTarefa->fk_curso]);
         }
+
         if ($dadosProgresso->int_submit_atividades == 0){
-            $arrayIdUnidades = [];
-            $dadoscurso = CursoModel::where('id',$DatosTarefa->fk_curso )->get();
-            foreach ($dadoscurso as $cursos){
-                foreach ($cursos->unidades as $dd){
-                    array_push($arrayIdUnidades, $dd->id );
-                }
-            }
-            $dadosconteudos = ConteudoModel::wherein('fk_unidade',$arrayIdUnidades )->get();
-            $unidades = UnidadeModel::wherein('id',$arrayIdUnidades )->get();
-            $contadorUnidades = count($unidades);
-
-            $informacoesProgressos = ProgressoModel::where('fk_aluno',$DatosTarefa->fk_aluno)->where('fk_curso',$DatosTarefa->fk_curso)->get();
-            $DadosParaApresentar = [];
-            $PrimeiroDadoParaApresentar = [];
-            $NomesConteudos = [];
-            $nomeConteudo0 = [];
-            $FKUnidadeConteudo0 = [];
-            $contador = 0;
-            $NomeConteudoSemSubmit = [];
-            $nomeUnidadeSemSubmit = [];
-
-            foreach ($informacoesProgressos as $progresso){
-                $IdConteudo = $progresso->fk_conteudo;
-                $nomeCurso = $progresso->cursos->st_nome_curso;
-                $idCurso = $progresso->cursos->id;
-                $nomeUnidade = $progresso->unidades->st_nome_unidade;
-                $IDUnidade = $progresso->unidades->id;
-                $dadosCronograma = CronogramaModel::where('fk_conteudo',$IdConteudo)->orderBy('st_ordem_apresentacao')->get();
-                $nomeConteudo = ConteudoModel::where('id',$IdConteudo)->first();
-                if(in_array($nomeConteudo->st_nome_conteudo,$NomesConteudos )){
-                    foreach ($dadosCronograma as $dadoCronograma){
-                        $dados = [$DatosTarefa->fk_aluno,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
-                        array_push($DadosParaApresentar, $dados);
-                    }
-                }else{
-                    if ($contador != 0 ){
-                        array_push($NomesConteudos,$nomeConteudo->st_nome_conteudo);
-                    }
-                    foreach ($dadosCronograma as $dadoCronograma){
-                        if($contador == 0 ){
-
-                            $dados = [$DatosTarefa->fk_aluno,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
-                            array_push($PrimeiroDadoParaApresentar, $dados);
-                            $nomeConteudo0[0] = $nomeConteudo->st_nome_conteudo;
-                            $FKUnidadeConteudo0[0] = $nomeConteudo->fk_unidade;
-                        }else{
-                            if ($progresso->int_submit_atividades == 0 and ! in_array($nomeConteudo->st_nome_conteudo,$NomeConteudoSemSubmit)){
-                                array_push($nomeUnidadeSemSubmit, $nomeUnidade);
-                                array_push($NomeConteudoSemSubmit, $nomeConteudo->st_nome_conteudo);
-                            }
-                            $dados = [$DatosTarefa->fk_aluno,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
-                            array_push($DadosParaApresentar, $dados);
-                        }
-                    }
-                }
-                $contador = $contador + 1 ;
-            }
-
-            // pegando a porcentagem do curso
-            $porcentagens = [];
-            $totalAtiviades = count($informacoesProgressos);
-            $AtividadesRealizadas = [];
-            $NaoRespondeuNenhumaAtiviade = [];
-            $contador = 1;
-            foreach ($informacoesProgressos as $atividade){
-                if($atividade->int_submit_atividades == 2 ){
-                    array_push($AtividadesRealizadas, 1);
-                }
-                if($atividade->int_submit_atividades == 0 and $contador == 1 ){
-                    array_push($NaoRespondeuNenhumaAtiviade, 1);
-                }
-                $contador = $contador + 1;
-            }
-            if(count($NaoRespondeuNenhumaAtiviade) == 1){
-                $value = $cursos->st_nome_curso;
-                array_push($porcentagens, $value,0);
-            }
-            else{
-                $dado =intval((count($AtividadesRealizadas) * 100)/$totalAtiviades);
-                $value = $cursos->st_nome_curso;
-
-                array_push($porcentagens,$value,$dado );
-            }
-
-            $IdAluno = AlunoModel::where('id', $DatosTarefa->fk_aluno)->first();
-
-
-            $mensagemErro = "Realize as atividades anteriores para realizar a atividade do conteudo ". $DatosTarefa->conteudos->st_nome_conteudo;
-            return view('Permisions.TelasAluno.aprensetarCursoParaAlunos',['IdAluno'=>$IdAluno,'porcentagens'=>$porcentagens,'mensagemErro'=>$mensagemErro,'nomeUnidadeSemSubmit'=>$nomeUnidadeSemSubmit,'NomeConteudoSemSubmit'=>$NomeConteudoSemSubmit,'fkUnidade0'=>$FKUnidadeConteudo0,'nomeConteudo0'=>$nomeConteudo0,'PrimeiroDadoParaApresentar'=>$PrimeiroDadoParaApresentar,'DadosParaApresentar'=>$DadosParaApresentar, 'NomesConteudos'=>$NomesConteudos, 'IdCurso'=>$idCurso,'DadosConteudos'=>$dadosconteudos, 'IDsUnidades'=>$unidades, 'contadorUnidades'=>$contadorUnidades]);
+            return redirect()->route('Aluno.vizualizarCurso',['IdAluno'=>$DatosTarefa->fk_aluno,'IdCurso'=>$DatosTarefa->fk_curso])->with('error','Realize as atividades anteriores do curso para liberar a atividade da tarefa.');
         }
     }
-    public function VizualizarTarefasAluno( $IdAluno)
+    public function VizualizarTarefasAluno($IdAluno)
     {
-        $TarefasCadastras = TarefasRevisaoModel::where('fk_aluno',$IdAluno)->where('submit_atividade',0)->get();
-        return view('Permisions.TelasAluno.VizualizarTarefasAluno',['TarefasCadastras'=>$TarefasCadastras] );
+        $TarefasRealizadas = TarefasRevisaoModel::where('fk_aluno',$IdAluno)->where('submit_atividade',1)->get();
+        $TarefasNaoRealizadas = TarefasRevisaoModel::where('fk_aluno',$IdAluno)->where('submit_atividade',0)->get();
+        $TarefasAtrasadas = TarefasRevisaoModel::where('fk_aluno',$IdAluno)->where('submit_atividade',3)->get();
+        return view('Permisions.TelasAluno.VizualizarTarefasAluno',['TarefasRealizadas'=>$TarefasRealizadas,'TarefasNaoRealizadas'=>$TarefasNaoRealizadas,'TarefasAtrasadas'=>$TarefasAtrasadas] );
     }
 
     public function VizualizarTrofeusAluno(AlunoModel $IdAluno)
@@ -279,7 +127,7 @@ class AlunoController extends Controller
                 }
             }
             $verificador = 0;
-            //dd($idCursosConquistados,$idCursosNaoConquistados);
+
             return view('Permisions.TelasAluno.VizualizarTrofeusPeloAluno',['verificador'=>$verificador,'idTrofeusConquistados'=>$idCursosConquistados,'idTrofeusNaoConquistados'=>$idCursosNaoConquistados,'trofeusConquistados'=>$trofeusConquistados,'trofeusEmAbertosComPorcentagem'=>$trofeusEmAbertosComPorcentagem,'TodosTrofeus'=>$verificarTrofeus] );
         }
 
@@ -330,98 +178,6 @@ class AlunoController extends Controller
 
         return view('Permisions.TelasAluno.VizualizarPetsPeloAluno',['IdAluno'=>$IdAluno,'PetsParaComprar'=>$PetsParaComprar,'PetsComprados'=>$PetsComprados]);
     }
-    public function vizualizarCurso2($IdAluno,CursoModel $IdCurso, ConteudoModel $fkConteudo){
-        // Pegando informações das unidades realizadas e atividades
-        $arrayIdUnidades = [];
-        $dadoscurso = CursoModel::where('id',$IdCurso->id )->get();
-        foreach ($dadoscurso as $cursos){
-            foreach ($cursos->unidades as $dd){
-                array_push($arrayIdUnidades, $dd->id );
-            }
-        }
-        $dadosconteudos = ConteudoModel::wherein('fk_unidade',$arrayIdUnidades )->get();
-        $unidades = UnidadeModel::wherein('id',$arrayIdUnidades )->get();
-        $contadorUnidades = count($unidades);
-
-        $informacoesProgressos = ProgressoModel::where('fk_aluno',$IdAluno)->where('fk_curso',$IdCurso->id)->get();
-        $DadosParaApresentar = [];
-        $PrimeiroDadoParaApresentar = [];
-        $NomesConteudos = [];
-        $nomeConteudo0 = [];
-        $FKUnidadeConteudo0 = [];
-        $contador = 0;
-        $NomeConteudoSemSubmit = [];
-        $nomeUnidadeSemSubmit = [];
-
-        foreach ($informacoesProgressos as $progresso){
-            $IdConteudo = $progresso->fk_conteudo;
-            $nomeCurso = $progresso->cursos->st_nome_curso;
-            $idCurso = $progresso->cursos->id;
-            $nomeUnidade = $progresso->unidades->st_nome_unidade;
-            $IDUnidade = $progresso->unidades->id;
-            $dadosCronograma = CronogramaModel::where('fk_conteudo',$IdConteudo)->orderBy('st_ordem_apresentacao')->get();
-            $nomeConteudo = ConteudoModel::where('id',$IdConteudo)->first();
-            if(in_array($nomeConteudo->st_nome_conteudo,$NomesConteudos )){
-                foreach ($dadosCronograma as $dadoCronograma){
-                    $dados = [$IdAluno,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
-                    array_push($DadosParaApresentar, $dados);
-                }
-            }else{
-                if ($contador != 0 ){
-                    array_push($NomesConteudos,$nomeConteudo->st_nome_conteudo);
-                }
-                foreach ($dadosCronograma as $dadoCronograma){
-                    if($contador == 0 ){
-
-                        $dados = [$IdAluno,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
-                        array_push($PrimeiroDadoParaApresentar, $dados);
-                        $nomeConteudo0[0] = $nomeConteudo->st_nome_conteudo;
-                        $FKUnidadeConteudo0[0] = $nomeConteudo->fk_unidade;
-                    }else{
-                        if ($progresso->int_submit_atividades == 0 and ! in_array($nomeConteudo->st_nome_conteudo,$NomeConteudoSemSubmit)){
-                            array_push($nomeUnidadeSemSubmit, $nomeUnidade);
-                            array_push($NomeConteudoSemSubmit, $nomeConteudo->st_nome_conteudo);
-                        }
-
-                        $dados = [$IdAluno,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
-                        array_push($DadosParaApresentar, $dados);
-                    }
-                }
-            }
-            $contador = $contador + 1 ;
-        }
-
-        // pegando a porcentagem do curso
-        $porcentagens = [];
-        $totalAtiviades = count($informacoesProgressos);
-        $AtividadesRealizadas = [];
-        $NaoRespondeuNenhumaAtiviade = [];
-        $contador = 1;
-        foreach ($informacoesProgressos as $atividade){
-            if($atividade->int_submit_atividades == 2 ){
-                array_push($AtividadesRealizadas, 1);
-            }
-            if($atividade->int_submit_atividades == 0 and $contador == 1 ){
-                array_push($NaoRespondeuNenhumaAtiviade, 1);
-            }
-            $contador = $contador + 1;
-        }
-        if(count($NaoRespondeuNenhumaAtiviade) == 1){
-            $value = $cursos->st_nome_curso;
-            array_push($porcentagens, $value,0);
-        }
-        else{
-            $dado =intval((count($AtividadesRealizadas) * 100)/$totalAtiviades);
-            $value = $cursos->st_nome_curso;
-            array_push($porcentagens,$value,$dado );
-        }
-        $nome = AlunoModel::where('id', $IdAluno)->first();
-
-
-        $mensagemSucess = 'Parabens!!! Você realizou a tarefa do conteudo '.$fkConteudo->st_nome_conteudo.'do Curso' .$IdCurso->st_nome_curso;
-        return view('Permisions.TelasAluno.aprensetarCursoParaAlunos',['IdAluno'=>$nome,'porcentagens'=>$porcentagens,'mensagemSucess'=>$mensagemSucess,'nomeUnidadeSemSubmit'=>$nomeUnidadeSemSubmit,'NomeConteudoSemSubmit'=>$NomeConteudoSemSubmit,'fkUnidade0'=>$FKUnidadeConteudo0,'nomeConteudo0'=>$nomeConteudo0,'PrimeiroDadoParaApresentar'=>$PrimeiroDadoParaApresentar,'DadosParaApresentar'=>$DadosParaApresentar, 'NomesConteudos'=>$NomesConteudos, 'IdCurso'=>$IdCurso,'DadosConteudos'=>$dadosconteudos, 'IDsUnidades'=>$unidades, 'contadorUnidades'=>$contadorUnidades]);
-
-    }
 
     public function vizualizarCurso(AlunoModel $IdAluno, $IdCurso)
     {
@@ -446,6 +202,7 @@ class AlunoController extends Controller
         $contador = 0;
         $NomeConteudoSemSubmit = [];
         $nomeUnidadeSemSubmit = [];
+        $nomeUnidadeComSubmit = [];
         foreach ($informacoesProgressos as $progresso){
             $IdConteudo = $progresso->fk_conteudo;
             $nomeCurso = $progresso->cursos->st_nome_curso;
@@ -454,9 +211,10 @@ class AlunoController extends Controller
             $IDUnidade = $progresso->unidades->id;
             $dadosCronograma = CronogramaModel::where('fk_conteudo',$IdConteudo)->orderBy('st_ordem_apresentacao')->get();
             $nomeConteudo = ConteudoModel::where('id',$IdConteudo)->first();
+
             if(in_array($nomeConteudo->st_nome_conteudo,$NomesConteudos )){
                 foreach ($dadosCronograma as $dadoCronograma){
-                    $dados = [$IdAluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
+                    $dados = [$IdAluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade,$progresso->int_estrela_obtida];
                     array_push($DadosParaApresentar, $dados);
                 }
             }else{
@@ -465,16 +223,21 @@ class AlunoController extends Controller
                 }
                 foreach ($dadosCronograma as $dadoCronograma){
                     if($contador == 0 ){
-                        $dados = [$IdAluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
+                        $dados = [$IdAluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade,$progresso->int_estrela_obtida];
                         array_push($PrimeiroDadoParaApresentar, $dados);
                         $nomeConteudo0[0] = $nomeConteudo->st_nome_conteudo;
                         $FKUnidadeConteudo0[0] = $nomeConteudo->fk_unidade;
                     }else{
+                        if($progresso->int_submit_atividades == 1 or $progresso->int_submit_atividades == 2 ){
+                            array_push($nomeUnidadeComSubmit, $nomeUnidade);
+                        }
                         if ($progresso->int_submit_atividades == 0 and ! in_array($nomeConteudo->st_nome_conteudo,$NomeConteudoSemSubmit)){
-                            array_push($nomeUnidadeSemSubmit, $nomeUnidade);
+                            if(! in_array($nomeUnidade,$nomeUnidadeComSubmit) and $PrimeiroDadoParaApresentar[0][4] != $nomeUnidade ){
+                                array_push($nomeUnidadeSemSubmit, $nomeUnidade);
+                            }
                             array_push($NomeConteudoSemSubmit, $nomeConteudo->st_nome_conteudo);
                         }
-                        $dados = [$IdAluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
+                        $dados = [$IdAluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade,$progresso->int_estrela_obtida];
                         array_push($DadosParaApresentar, $dados);
                     }
                 }
@@ -507,45 +270,47 @@ class AlunoController extends Controller
             array_push($porcentagens,$value,$dado );
         }
 
-        return view('Permisions.TelasAluno.aprensetarCursoParaAlunos',['IdAluno'=>$IdAluno,'porcentagens'=>$porcentagens,'nomeUnidadeSemSubmit'=>$nomeUnidadeSemSubmit,'NomeConteudoSemSubmit'=>$NomeConteudoSemSubmit,'fkUnidade0'=>$FKUnidadeConteudo0,'nomeConteudo0'=>$nomeConteudo0,'PrimeiroDadoParaApresentar'=>$PrimeiroDadoParaApresentar,'DadosParaApresentar'=>$DadosParaApresentar, 'NomesConteudos'=>$NomesConteudos, 'IdCurso'=>$IdCurso,'DadosConteudos'=>$dadosconteudos, 'IDsUnidades'=>$unidades, 'contadorUnidades'=>$contadorUnidades]);
+        return view('Permisions.TelasAluno.aprensetarCursoParaAlunos',['nomeUnidadeSemSubmit'=>$nomeUnidadeSemSubmit,'IdAluno'=>$IdAluno,'porcentagens'=>$porcentagens,'nomeUnidadeSemSubmit'=>$nomeUnidadeSemSubmit,'NomeConteudoSemSubmit'=>$NomeConteudoSemSubmit,'fkUnidade0'=>$FKUnidadeConteudo0,'nomeConteudo0'=>$nomeConteudo0,'PrimeiroDadoParaApresentar'=>$PrimeiroDadoParaApresentar,'DadosParaApresentar'=>$DadosParaApresentar, 'NomesConteudos'=>$NomesConteudos, 'IdCurso'=>$IdCurso,'DadosConteudos'=>$dadosconteudos, 'IDsUnidades'=>$unidades, 'contadorUnidades'=>$contadorUnidades]);
     }
 
     public function MostrarExercicioAluno($IdAluno,$idConteudo,$IdCronograma,$tipoAtividade,$IdCurso)
     {
         if($tipoAtividade == 'TEXTO'){
-            $func = $this->vizualizarCurso4545( $IdAluno, $IdCurso);
+            $func = $this->vizualizarCursoFuncao( $IdAluno, $IdCurso);
             $dados = ConteudoEscritoModel::where('fk_cronograma',$IdCronograma)->first();
-            return view('Permisions.TelasAluno.ApresentarTextoConteudo',
-                ['texto'=>$dados,
-                'IdAluno'=>$func['IdAluno'],
-                'IdConteudo'=>$idConteudo,
-                'IdCurso'=>$IdCurso,
-                'tipoAtividade'=>$tipoAtividade,
-                'porcentagens'=> $func['porcentagens'],
-                'nomeUnidadeSemSubmit'=> $func['nomeUnidadeSemSubmit'],
-                'NomeConteudoSemSubmit'=>$func['NomeConteudoSemSubmit'],
-                'fkUnidade0'=>$func['fkUnidade0'],
-                'nomeConteudo0'=>$func['nomeConteudo0'],
-                'PrimeiroDadoParaApresentar'=>$func['PrimeiroDadoParaApresentar'],
-                'DadosParaApresentar'=>$func['DadosParaApresentar'],
-                'NomesConteudos'=>$func['NomesConteudos'],
-                'DadosConteudos'=>$func['DadosConteudos'],
-                'IDsUnidades'=>$func['IDsUnidades'],
-                'contadorUnidades'=>$func['contadorUnidades'],
-                ]);
+            return view('Permisions.TelasAluno.ApresentarTextoConteudo', ['texto'=>$dados, 'IdAluno'=>$func['IdAluno'], 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso, 'tipoAtividade'=>$tipoAtividade, 'porcentagens'=> $func['porcentagens'],'nomeUnidadeSemSubmit'=> $func['nomeUnidadeSemSubmit'], 'NomeConteudoSemSubmit'=>$func['NomeConteudoSemSubmit'], 'fkUnidade0'=>$func['fkUnidade0'], 'nomeConteudo0'=>$func['nomeConteudo0'], 'PrimeiroDadoParaApresentar'=>$func['PrimeiroDadoParaApresentar'], 'DadosParaApresentar'=>$func['DadosParaApresentar'], 'NomesConteudos'=>$func['NomesConteudos'], 'DadosConteudos'=>$func['DadosConteudos'], 'IDsUnidades'=>$func['IDsUnidades'], 'contadorUnidades'=>$func['contadorUnidades'],]);
         }
 
         if($tipoAtividade == 'AtividadeFixacao'){
+            $func = $this->vizualizarCursoFuncao( $IdAluno, $IdCurso);
             $dados = QuestoesFizacaoModel::where('fk_conteudo',$idConteudo)->get();
-            return view('Permisions.TelasAluno.apresentarAtividadeFixacao', ['Atividades'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
+
+            $idsAtividades = [];
+
+            foreach ($dados as $dado){
+                array_push($idsAtividades, $dado->id);
+            }
+            $DadosConteudo = ConteudoModel::where('id',$idConteudo)->first();
+            $jsonsd = json_encode($idsAtividades);
+
+            return view('Permisions.TelasAluno.testeConteudo', ['jsonsd'=>$jsonsd,'DadosConteudo'=>$DadosConteudo,'idsAtividades'=>$idsAtividades,'Atividades'=>$dados, 'IdAluno'=>$func['IdAluno'], 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso, 'tipoAtividade'=>$tipoAtividade, 'porcentagens'=> $func['porcentagens'],'nomeUnidadeSemSubmit'=> $func['nomeUnidadeSemSubmit'], 'NomeConteudoSemSubmit'=>$func['NomeConteudoSemSubmit'], 'fkUnidade0'=>$func['fkUnidade0'], 'nomeConteudo0'=>$func['nomeConteudo0'], 'PrimeiroDadoParaApresentar'=>$func['PrimeiroDadoParaApresentar'], 'DadosParaApresentar'=>$func['DadosParaApresentar'], 'NomesConteudos'=>$func['NomesConteudos'], 'DadosConteudos'=>$func['DadosConteudos'], 'IDsUnidades'=>$func['IDsUnidades'], 'contadorUnidades'=>$func['contadorUnidades'],]);
         }
 
         if($tipoAtividade == 'testeConteudo'){
+            $func = $this->vizualizarCursoFuncao( $IdAluno, $IdCurso);
             $dados = QuestoesModel::where('fk_conteudo', $idConteudo)->inRandomOrder()->limit(5)->get();
-            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dados, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo , 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
+            $idsAtividades = [];
+
+            foreach ($dados as $dado){
+                array_push($idsAtividades, $dado->id);
+            }
+            $DadosConteudo = ConteudoModel::where('id',$idConteudo)->first();
+            $jsonsd = json_encode($idsAtividades);
+            return view('Permisions.TelasAluno.testeConteudo', ['jsonsd'=>$jsonsd,'DadosConteudo'=>$DadosConteudo,'idsAtividades'=>$idsAtividades,'Atividades'=>$dados, 'IdAluno'=>$func['IdAluno'], 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso, 'tipoAtividade'=>$tipoAtividade, 'porcentagens'=> $func['porcentagens'],'nomeUnidadeSemSubmit'=> $func['nomeUnidadeSemSubmit'], 'NomeConteudoSemSubmit'=>$func['NomeConteudoSemSubmit'], 'fkUnidade0'=>$func['fkUnidade0'], 'nomeConteudo0'=>$func['nomeConteudo0'], 'PrimeiroDadoParaApresentar'=>$func['PrimeiroDadoParaApresentar'], 'DadosParaApresentar'=>$func['DadosParaApresentar'], 'NomesConteudos'=>$func['NomesConteudos'], 'DadosConteudos'=>$func['DadosConteudos'], 'IDsUnidades'=>$func['IDsUnidades'], 'contadorUnidades'=>$func['contadorUnidades'],]);
         }
 
         if ($tipoAtividade == 'Teste Final'){
+            $func = $this->vizualizarCursoFuncao( $IdAluno, $IdCurso);
             $colect = new Collection();
             $dados = TesteFinalModel::where('fk_conteudo_pertencente', $idConteudo)->get();
             foreach ($dados as $dado){
@@ -556,11 +321,19 @@ class AlunoController extends Controller
                     $colect->push($questoes);
                 }
             }
-            $dadosAtividadeIntermediaria = $colect->all();
-            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosAtividadeIntermediaria, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
+            $dadosAtividadeFinalUnidade = $colect->all();
+            $idsAtividades = [];
+
+            foreach ($dadosAtividadeFinalUnidade as $dado){
+                array_push($idsAtividades, $dado->id);
+            }
+            $DadosConteudo = ConteudoModel::where('id',$idConteudo)->first();
+            $jsonsd = json_encode($idsAtividades);
+            return view('Permisions.TelasAluno.testeConteudo', ['jsonsd'=>$jsonsd,'DadosConteudo'=>$DadosConteudo,'idsAtividades'=>$idsAtividades,'Atividades'=>$dadosAtividadeFinalUnidade, 'IdAluno'=>$func['IdAluno'], 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso, 'tipoAtividade'=>$tipoAtividade, 'porcentagens'=> $func['porcentagens'],'nomeUnidadeSemSubmit'=> $func['nomeUnidadeSemSubmit'], 'NomeConteudoSemSubmit'=>$func['NomeConteudoSemSubmit'], 'fkUnidade0'=>$func['fkUnidade0'], 'nomeConteudo0'=>$func['nomeConteudo0'], 'PrimeiroDadoParaApresentar'=>$func['PrimeiroDadoParaApresentar'], 'DadosParaApresentar'=>$func['DadosParaApresentar'], 'NomesConteudos'=>$func['NomesConteudos'], 'DadosConteudos'=>$func['DadosConteudos'], 'IDsUnidades'=>$func['IDsUnidades'], 'contadorUnidades'=>$func['contadorUnidades'],]);
         }
 
         if ($tipoAtividade == 'Teste Intermediario'){
+            $func = $this->vizualizarCursoFuncao( $IdAluno, $IdCurso);
             $colect = new Collection();
             $dados = TesteIntermediarioModel::where('fk_conteudo_pertencente', $idConteudo)->get();
             foreach ($dados as $dado){
@@ -572,11 +345,24 @@ class AlunoController extends Controller
                 }
             }
             $dadosAtividadeIntermediaria = $colect->all();
-            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosAtividadeIntermediaria, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
+
+            $idsAtividades = [];
+
+            foreach ($dadosAtividadeIntermediaria as $dado){
+                array_push($idsAtividades, $dado->id);
+            }
+
+            $DadosConteudo = ConteudoModel::where('id',$idConteudo)->first();
+            $jsonsd = json_encode($idsAtividades);
+
+            return view('Permisions.TelasAluno.testeConteudo', ['jsonsd'=>$jsonsd,'DadosConteudo'=>$DadosConteudo,'idsAtividades'=>$idsAtividades,'Atividades'=>$dadosAtividadeIntermediaria, 'IdAluno'=>$func['IdAluno'], 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso, 'tipoAtividade'=>$tipoAtividade, 'porcentagens'=> $func['porcentagens'],'nomeUnidadeSemSubmit'=> $func['nomeUnidadeSemSubmit'], 'NomeConteudoSemSubmit'=>$func['NomeConteudoSemSubmit'], 'fkUnidade0'=>$func['fkUnidade0'], 'nomeConteudo0'=>$func['nomeConteudo0'], 'PrimeiroDadoParaApresentar'=>$func['PrimeiroDadoParaApresentar'], 'DadosParaApresentar'=>$func['DadosParaApresentar'], 'NomesConteudos'=>$func['NomesConteudos'], 'DadosConteudos'=>$func['DadosConteudos'], 'IDsUnidades'=>$func['IDsUnidades'], 'contadorUnidades'=>$func['contadorUnidades'],]);
         }
+
         if ($tipoAtividade == 'Teste Final Curso'){
+            $func = $this->vizualizarCursoFuncao( $IdAluno, $IdCurso);
             $colect = new Collection();
             $dados = TesteCursoModel::where('fk_conteudo_pertencente', $idConteudo)->get();
+
             foreach ($dados as $dado){
                 $valorFkConteudo = $dado->fk_conteudo;
                 $QuantidadeQuestoes = $dado->totalQuestao;
@@ -586,8 +372,33 @@ class AlunoController extends Controller
                 }
             }
             $dadosTesteFinal = $colect->all();
-            return view('Permisions.TelasAluno.testeConteudo', ['Atividades'=>$dadosTesteFinal, 'IdAluno'=>$IdAluno, 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso,'tipoAtividade'=>$tipoAtividade]);
+            $idsAtividades = [];
+
+            foreach ($dadosTesteFinal as $dado){
+                array_push($idsAtividades, $dado->id);
+            }
+
+            $DadosConteudo = ConteudoModel::where('id',$idConteudo)->first();
+            $jsonsd = json_encode($idsAtividades);
+
+            return view('Permisions.TelasAluno.testeConteudo', ['jsonsd'=>$jsonsd,'DadosConteudo'=>$DadosConteudo,'idsAtividades'=>$idsAtividades,'Atividades'=>$dadosTesteFinal, 'IdAluno'=>$func['IdAluno'], 'IdConteudo'=>$idConteudo, 'IdCurso'=>$IdCurso, 'tipoAtividade'=>$tipoAtividade, 'porcentagens'=> $func['porcentagens'],'nomeUnidadeSemSubmit'=> $func['nomeUnidadeSemSubmit'], 'NomeConteudoSemSubmit'=>$func['NomeConteudoSemSubmit'], 'fkUnidade0'=>$func['fkUnidade0'], 'nomeConteudo0'=>$func['nomeConteudo0'], 'PrimeiroDadoParaApresentar'=>$func['PrimeiroDadoParaApresentar'], 'DadosParaApresentar'=>$func['DadosParaApresentar'], 'NomesConteudos'=>$func['NomesConteudos'], 'DadosConteudos'=>$func['DadosConteudos'], 'IDsUnidades'=>$func['IDsUnidades'], 'contadorUnidades'=>$func['contadorUnidades'],]);
         }
+    }
+
+    public function SalvarAtividadeFizacao(Request $request, $IdAluno, ConteudoModel $idConteudo, $IdCurso, $tipoAtividade)
+    {
+        HistoricoNotasAluno::create([
+            'st_nome_disciplina' =>Null,
+            'fk_aluno'=> $IdAluno,
+            'fk_curso'=> $IdCurso,
+            'fk_unidade'=> $idConteudo->fk_unidade,
+            'fk_conteudo'=> $idConteudo->id,
+            'st_tipo_atividade'=>$tipoAtividade,
+            'int_acertos'=>$request->int_acertos,
+            'int_tempo_execucao'=>$request->int_tempo_execucao,
+        ]);
+
+        return redirect()->route('Aluno.vizualizarCurso',['IdAluno'=>$IdAluno,'IdCurso'=>$IdCurso]);
     }
 
     public function Salvarprogresso(Request $request, $IdAluno, ConteudoModel $idConteudo, $IdCurso, $tipoAtividade)
@@ -606,6 +417,7 @@ class AlunoController extends Controller
         }
 
         $dado = ProgressoModel::where('fk_aluno',$IdAluno)->where('fk_conteudo',$idConteudo->id)->where('fk_curso',$IdCurso)->first();
+
 
         $conquistas = ConquistasAlunoModel::where('fk_aluno',$IdAluno)->first();
 
@@ -646,6 +458,10 @@ class AlunoController extends Controller
                     'int_total_estrelas'=> $totalEstrelas,
                 ]
             );
+
+            if ($request->int_acertos < 60){
+                return redirect()->route('Aluno.vizualizarCurso',['IdAluno'=>$IdAluno,'IdCurso'=>$IdCurso])->with('error', 'Você precisa acertar pelo menos 60% da questão para progredir no curso');
+            }
             $dado->update(
                 [
                     'int_submit_atividades'=> 2,
@@ -708,15 +524,16 @@ class AlunoController extends Controller
                 'int_estrelas_obtidas'=>$request->int_estrela_obtida,
                 'submit_atividade'=> 1,
             ]);
-            return redirect()->route('Aluno.vizualizarCurso2',['IdAluno'=>$IdAluno,'IdCurso'=>$IdCurso,'fkConteudo'=>$idConteudo->id]);
+
+            return redirect()->route('Aluno.vizualizarCurso',['IdAluno'=>$IdAluno,'IdCurso'=>$IdCurso,'fkConteudo'=>$idConteudo->id])->with('success','Parabéns, você concluíu uma tarefa que estava cadastrada');
+
         }else{
             return redirect()->route('Aluno.vizualizarCurso',['IdAluno'=>$IdAluno,'IdCurso'=>$IdCurso]);
         }
-
     }
 
 
-    public function vizualizarCurso4545($IdAluno, $IdCurso)
+    public function vizualizarCursoFuncao($IdAluno, $IdCurso)
     {
         $Aluno = AlunoModel::where('id',$IdAluno)->first();
 
@@ -741,6 +558,8 @@ class AlunoController extends Controller
         $contador = 0;
         $NomeConteudoSemSubmit = [];
         $nomeUnidadeSemSubmit = [];
+        $nomeUnidadeComSubmit = [];
+
         foreach ($informacoesProgressos as $progresso){
             $IdConteudo = $progresso->fk_conteudo;
             $nomeCurso = $progresso->cursos->st_nome_curso;
@@ -751,7 +570,7 @@ class AlunoController extends Controller
             $nomeConteudo = ConteudoModel::where('id',$IdConteudo)->first();
             if(in_array($nomeConteudo->st_nome_conteudo,$NomesConteudos )){
                 foreach ($dadosCronograma as $dadoCronograma){
-                    $dados = [$Aluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
+                    $dados = [$Aluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade,$progresso->int_estrela_obtida ];
                     array_push($DadosParaApresentar, $dados);
                 }
             }else{
@@ -760,16 +579,22 @@ class AlunoController extends Controller
                 }
                 foreach ($dadosCronograma as $dadoCronograma){
                     if($contador == 0 ){
-                        $dados = [$Aluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
+                        $dados = [$Aluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade,$progresso->int_estrela_obtida];
                         array_push($PrimeiroDadoParaApresentar, $dados);
                         $nomeConteudo0[0] = $nomeConteudo->st_nome_conteudo;
                         $FKUnidadeConteudo0[0] = $nomeConteudo->fk_unidade;
                     }else{
+                        if($progresso->int_submit_atividades == 1 or $progresso->int_submit_atividades == 2 ){
+                            array_push($nomeUnidadeComSubmit, $nomeUnidade);
+                        }
                         if ($progresso->int_submit_atividades == 0 and ! in_array($nomeConteudo->st_nome_conteudo,$NomeConteudoSemSubmit)){
-                            array_push($nomeUnidadeSemSubmit, $nomeUnidade);
+                            if(! in_array($nomeUnidade,$nomeUnidadeComSubmit) and $PrimeiroDadoParaApresentar[0][4] != $nomeUnidade ){
+                                array_push($nomeUnidadeSemSubmit, $nomeUnidade);
+                            }
                             array_push($NomeConteudoSemSubmit, $nomeConteudo->st_nome_conteudo);
                         }
-                        $dados = [$Aluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade];
+
+                        $dados = [$Aluno->id,$IdConteudo,$nomeConteudo->st_nome_conteudo,$nomeCurso,$nomeUnidade,$dadoCronograma->st_tipo_atividade,$dadoCronograma->id,$progresso->int_submit_atividades,$IDUnidade,$progresso->int_estrela_obtida];
                         array_push($DadosParaApresentar, $dados);
                     }
                 }
@@ -801,6 +626,6 @@ class AlunoController extends Controller
             $value = $cursos->st_nome_curso;
             array_push($porcentagens,$value,$dado );
         }
-        return ['IdAluno'=>$Aluno,'porcentagens'=>$porcentagens,'nomeUnidadeSemSubmit'=>$nomeUnidadeSemSubmit,'NomeConteudoSemSubmit'=>$NomeConteudoSemSubmit,'fkUnidade0'=>$FKUnidadeConteudo0,'nomeConteudo0'=>$nomeConteudo0,'PrimeiroDadoParaApresentar'=>$PrimeiroDadoParaApresentar,'DadosParaApresentar'=>$DadosParaApresentar, 'NomesConteudos'=>$NomesConteudos, 'IdCurso'=>$IdCurso,'DadosConteudos'=>$dadosconteudos, 'IDsUnidades'=>$unidades, 'contadorUnidades'=>$contadorUnidades];
+        return ['nomeUnidadeSemSubmit'=>$nomeUnidadeSemSubmit,'IdAluno'=>$Aluno,'porcentagens'=>$porcentagens,'nomeUnidadeSemSubmit'=>$nomeUnidadeSemSubmit,'NomeConteudoSemSubmit'=>$NomeConteudoSemSubmit,'fkUnidade0'=>$FKUnidadeConteudo0,'nomeConteudo0'=>$nomeConteudo0,'PrimeiroDadoParaApresentar'=>$PrimeiroDadoParaApresentar,'DadosParaApresentar'=>$DadosParaApresentar, 'NomesConteudos'=>$NomesConteudos, 'IdCurso'=>$IdCurso,'DadosConteudos'=>$dadosconteudos, 'IDsUnidades'=>$unidades, 'contadorUnidades'=>$contadorUnidades];
     }
 }

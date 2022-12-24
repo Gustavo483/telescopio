@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\ConteudoModel;
 use Illuminate\Http\Request;
 use App\Models\QuestoesFizacaoModel;
-
 class QuestoesFizacaoController extends Controller
 {
-    public function vizualizarAtividadesfZ( $dadosconteudo)
+    public function vizualizarAtividadesfZ(ConteudoModel $dadosconteudo)
     {
-        $todasQuestoesConteudo = QuestoesFizacaoModel::where('fk_conteudo',$dadosconteudo)->get();
+        $todasQuestoesConteudo = QuestoesFizacaoModel::where('fk_conteudo',$dadosconteudo->id)->get();
         return view('CadastrarAtividadesFizacao.VizualizarQuestoesFizacao',['todasQuestoesConteudo'=>$todasQuestoesConteudo,'dadosconteudo'=>$dadosconteudo]);
     }
     public function criarQuestaoFZ(ConteudoModel $dadosconteudo)
@@ -45,7 +44,7 @@ class QuestoesFizacaoController extends Controller
         $questoes->st_alternativa4 = $request->st_alternativa4;
         $questoes->st_alternativa5 = $request->st_alternativa5;
         $questoes->save();
-        return  redirect()->route('criarQuestaoFZ.conteudo',['dadosconteudo'=>$dadosconteudo]);
+        return  redirect()->route('criarQuestaoFZ.conteudo',['dadosconteudo'=>$dadosconteudo])->with('success','Questão cadastrada com sucesso');
     }
 
     public function StoreQuestaoRN(Request $request, ConteudoModel $dadosconteudo)
@@ -69,7 +68,7 @@ class QuestoesFizacaoController extends Controller
         $questoes->st_pergunta = $request->st_pergunta;
         $questoes->st_resolusao = $request->st_resolusao;
         $questoes->save();
-        return  redirect()->route('criarQuestaoFZ.conteudo',['dadosconteudo'=>$dadosconteudo]);
+        return  redirect()->route('criarQuestaoFZ.conteudo',['dadosconteudo'=>$dadosconteudo])->with('success','Questão cadastrada com sucesso');
     }
     public function StoreQuestaoRB(Request $request, ConteudoModel $dadosconteudo)
     {
@@ -91,22 +90,25 @@ class QuestoesFizacaoController extends Controller
         $questoes->st_pergunta = $request->st_pergunta;
         $questoes->st_resolusao = $request->st_resolusao;
         $questoes->save();
-        return  redirect()->route('criarQuestaoFZ.conteudo',['dadosconteudo'=>$dadosconteudo]);
+        return  redirect()->route('criarQuestaoFZ.conteudo',['dadosconteudo'=>$dadosconteudo])->with('success','Questão cadastrada com sucesso');
     }
 
     public function EditarQuestaoConteudoME(QuestoesFizacaoModel $IDQuestao)
     {
-        return view('CadastrarAtividadesFizacao.EditarQuestaoME',['Questao'=>$IDQuestao]);
+        $conteudo = ConteudoModel::where('id',$IDQuestao->fk_conteudo)->first();
+        return view('CadastrarAtividadesFizacao.EditarQuestaoME',['Questao'=>$IDQuestao,'conteudo'=>$conteudo]);
     }
 
     public function EditarQuestaoConteudoRB(QuestoesFizacaoModel $IDQuestao)
     {
-        return view('CadastrarAtividadesFizacao.EditarQuestaoRB',['Questao'=>$IDQuestao]);
+        $conteudo = ConteudoModel::where('id',$IDQuestao->fk_conteudo)->first();
+        return view('CadastrarAtividadesFizacao.EditarQuestaoRB',['Questao'=>$IDQuestao,'conteudo'=>$conteudo]);
     }
 
     public function EditarQuestaoConteudoRN(QuestoesFizacaoModel $IDQuestao)
     {
-        return view('CadastrarAtividadesFizacao.EditarQuestaoRN',['Questao'=>$IDQuestao]);
+        $conteudo = ConteudoModel::where('id',$IDQuestao->fk_conteudo)->first();
+        return view('CadastrarAtividadesFizacao.EditarQuestaoRN',['Questao'=>$IDQuestao,'conteudo'=>$conteudo]);
     }
 
     public function updadeQuestaoME(Request $request,QuestoesFizacaoModel $IDQuestao)
@@ -124,7 +126,7 @@ class QuestoesFizacaoController extends Controller
         ];
         $request->validate($validacao, $feedback);
         $IDQuestao->update($request->all());
-        return  redirect()->route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$idConteudo]);
+        return  redirect()->route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$idConteudo])->with('success','Questão atualizada com sucesso');
     }
     public function updadeQuestaoRB(Request $request,QuestoesFizacaoModel $IDQuestao)
     {
@@ -140,7 +142,7 @@ class QuestoesFizacaoController extends Controller
         $request->validate($validacao, $feedback);
 
         $IDQuestao->update($request->all());
-        return  redirect()->route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$idConteudo]);
+        return  redirect()->route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$idConteudo])->with('success','Questão atualizada com sucesso');
     }
 
     public function updadeQuestaoRN(Request $request, QuestoesFizacaoModel $IDQuestao)
@@ -157,13 +159,13 @@ class QuestoesFizacaoController extends Controller
         ];
         $request->validate($validacao, $feedback);
         $IDQuestao->update($request->all());
-        return  redirect()->route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$idConteudo]);
+        return  redirect()->route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$idConteudo])->with('success','Questão atualizada com sucesso');
 
     }
     public function DeleteQuestaoConteudosdsd(QuestoesFizacaoModel $IDQuestao)
     {
         $dadosconteudo = $IDQuestao->fk_conteudo;
         $IDQuestao->delete();
-        return  redirect()->route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$dadosconteudo]);
+        return  redirect()->route('vizualizar.TodasAtividadesFZ',['dadosconteudo'=>$dadosconteudo])->with('success','Questão excluída com sucesso');
     }
 }

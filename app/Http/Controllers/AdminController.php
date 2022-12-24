@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminModel;
 use App\Models\AlunoModel;
 use App\Models\ConquistasAlunoModel;
 use App\Models\HistoricoNotasAluno;
@@ -47,6 +48,15 @@ class AdminController extends Controller
 
     public function UpdadePet(Request $request, PetsModel $Pet)
     {
+        $validacao = [
+            'st_nome_pet' => 'required',
+            'int_estrelas_paraComprar' => 'required',
+        ];
+
+        $feedback =[
+            'required'=> 'O campo deve ser preenchido',
+        ];
+        $request->validate($validacao, $feedback);
 
         if(isset($request->image)){
             $imageName = time().'.'.$request->image->extension();
@@ -64,7 +74,7 @@ class AdminController extends Controller
         if (!isset($request->image)){
             $Pet->update($request->all());
         }
-        return redirect()->route('vizualizarPets');
+        return redirect()->route('vizualizarPets')->with('success','Pet Atualizado com sucesso');
     }
     public function EditarPet(PetsModel $Pet)
     {
@@ -95,9 +105,12 @@ class AdminController extends Controller
             'st_nome_pet' => 'required',
             'int_estrelas_paraComprar'=> 'required',
         ];
+
         $feedback =[
             'required'=> 'O campo deve ser preenchido',
+            'image'=>'O campo deve ser preenchido',
         ];
+
         $request->validate($validacao, $feedback);
 
         $imageName = time().'.'.$request->image->extension();
@@ -111,19 +124,32 @@ class AdminController extends Controller
                 'image'=>$imageName,
             ]
         );
+
         /*
             Write Code Here for
             Store $imageName name in DATABASE from HERE
         */
 
-        return back()
-            ->with('success','Arquivos Salvos com Sucesso');
+        return back()->with('success','Arquivo Salvo com Sucesso');
 
     }
 
 
     public function UpdadeTroveu(Request $request,TrofeusModel $trofeu )
     {
+
+        $validacao = [
+            'st_nome_trofeu' => 'required',
+            'int_total_atividades' => 'required',
+            'fk_disciplina' => 'required',
+        ];
+
+        $feedback =[
+            'required'=> 'O campo deve ser preenchido',
+        ];
+        $request->validate($validacao, $feedback);
+
+
         if(isset($request->image)){
             $imageName = time().'.'.$request->image->extension();
 
@@ -141,7 +167,7 @@ class AdminController extends Controller
         if (!isset($request->image)){
             $trofeu->update($request->all());
         }
-        return redirect()->route('CadastrarTrofeus');
+        return redirect()->route('CadastrarTrofeus')->with('success','Arquivo Atualizado com sucesso.');
     }
 
     public function EditarTroveu(TrofeusModel $trofeu)
@@ -161,6 +187,7 @@ class AdminController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'st_nome_trofeu' => 'required',
             'int_total_atividades'=> 'required',
+            'fk_disciplina'=>'required',
         ];
         $feedback =[
             'required'=> 'O campo deve ser preenchido',
@@ -193,14 +220,58 @@ class AdminController extends Controller
     }
 
 
-    public function RegistrarAluno()
+    public function RegistrarAluno(AdminModel $Admin)
     {
-        return view('Permisions.TelasAdmin.registrarAluno');
+        return view('Permisions.TelasAdmin.registrarAluno',['Admin'=>$Admin]);
     }
 
-    public function RegistrarProfessor()
+    public function RegistrarProfessor(AdminModel $Admin)
     {
-        return view('Permisions.TelasAdmin.registrarProfessor');
+        return view('Permisions.TelasAdmin.registrarProfessor',['Admin'=>$Admin]);
+    }
+    public function registerAdmin(AdminModel $Admin)
+    {
+        return view('Permisions.TelasAdmin.registrarAdmin',['Admin'=>$Admin]);
+    }
+
+    public function registerAdminStore(Request $request)
+    {
+        $validacao = [
+            'name' => 'required',
+            'email'=> 'required|email',
+            'password'=> 'required|min:8',
+        ];
+        $feedback =[
+            'required'=> 'O campo deve ser preenchido',
+            'min'=>'Digite ao menos 8 caracteres',
+        ];
+        $request->validate($validacao, $feedback);
+        $curso = $request->all();
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'permision' => 3,
+        ]);
+
+        $DadosUser = User::orderBy('id', 'desc')->first();
+
+        $arrayValues = [ $DadosUser->name,$DadosUser->id];
+
+        AdminModel::create([
+            'st_nome_admin' => $arrayValues[0],
+            'fk_user' => $arrayValues[1] ,
+        ]);
+
+        $idaluno = AlunoModel::orderBy('id', 'DESC')->first();
+        $conquistasAluno = new ConquistasAlunoModel();
+        $conquistasAluno->fk_aluno = $idaluno->id;
+        $conquistasAluno->int_total_pets = 0;
+        $conquistasAluno->int_total_cursos_concluidos = 0;
+        $conquistasAluno->int_total_estrelas = 0;
+        $conquistasAluno->int_total_trofeus = 0;
+        $conquistasAluno->save();
+        return back()->with('success','Administrador cadastrado Com sucesso');
     }
 
     public function RegistrarAlunoStore(Request $request)
@@ -208,10 +279,11 @@ class AdminController extends Controller
         $validacao = [
             'name' => 'required',
             'email'=> 'required|email',
-            'password'=> 'required',
+            'password'=> 'required|min:8',
         ];
         $feedback =[
             'required'=> 'O campo deve ser preenchido',
+            'min'=>'Digite ao menos 8 caracteres',
         ];
         $request->validate($validacao, $feedback);
         $curso = $request->all();
@@ -239,7 +311,7 @@ class AdminController extends Controller
         $conquistasAluno->int_total_estrelas = 0;
         $conquistasAluno->int_total_trofeus = 0;
         $conquistasAluno->save();
-        return  redirect()->route('inicio.pagina');
+        return back()->with('success','Aluno cadastrado Com sucesso');
     }
 
     public function RegistrarProfessorStore(Request $request)
@@ -247,13 +319,15 @@ class AdminController extends Controller
         $validacao = [
             'name' => 'required',
             'email'=> 'required|email',
-            'password'=> 'required',
+            'password'=> 'required|min:8',
         ];
         $feedback =[
             'required'=> 'O campo deve ser preenchido',
+            'email'=>'Digite um e-mail válido',
+            'min'=>'Digite ao menos 8 caracteres'
         ];
         $request->validate($validacao, $feedback);
-        $curso = $request->all();
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -268,7 +342,7 @@ class AdminController extends Controller
             'st_nome_professor' => $arrayValues[0],
             'fk_user' => $arrayValues[1] ,
         ]);
-        return  redirect()->route('inicio.pagina');
+        return back()->with('success','Professor cadastrado Com sucesso');
     }
 
     public function VincularAlunoCursoCreate()
@@ -283,32 +357,29 @@ class AdminController extends Controller
         //código que esta funcionando para o cadastro de alunos nos cursos
         $validacao = [
             'id_aluno' => 'required',
-            'cursos'=> 'required',
+            'curso'=> 'required',
         ];
         $feedback =[
             'id_aluno.required'=> 'O aluno deve ser preenchido.',
-            'cursos.required'=> 'Pelo meno um curso deve ser preenchido.',
+            'curso.required'=> 'O curso deve ser preenchido.',
         ];
         $request->validate($validacao, $feedback);
 
         $dbAluno = AlunoModel::where('id', $request->id_aluno)->first();
 
-        foreach ($request->cursos as $curso) {
-            $dbAluno->cursos()->attach($curso);
-        }
+        $ProgressoModel = ProgressoModel::where('fk_aluno',$dbAluno->id)->where('fk_curso',$request->curso)->get();
 
-        // Código para teste da tabela de cronograma
 
-        $Aluno = AlunoModel::find($request->id_aluno);
+        $curso = CursoModel::find($request->curso);
 
-        foreach ($request->cursos as $IDcurso) {
-            $curso = CursoModel::find($IDcurso);
+        if (count($ProgressoModel) == 0){
+            $dbAluno->cursos()->attach($request->curso);
+            $Aluno = AlunoModel::find($request->id_aluno);
             foreach ($curso->unidades as $idUnidade){
-                $conteudos = ConteudoModel::where('fk_unidade',$idUnidade->id)->get();
+                $conteudos = ConteudoModel::where('fk_unidade',$idUnidade->id)->orderBy('int_ordem_apresentacao')->get();
                 foreach ( $conteudos as $conteudo) {
                     $dadosCronograma = CronogramaModel::where('fk_conteudo',$conteudo->id)->get();
                     $totalAtiviadesConteudo = count($dadosCronograma);
-                    $arrayIntermediatio = [$Aluno->id,$curso->id,$idUnidade->id,$conteudo->id,$totalAtiviadesConteudo];
                     ProgressoModel::create([
                         'fk_aluno' => $Aluno->id,
                         'fk_unidade' => $idUnidade->id,
@@ -320,18 +391,44 @@ class AdminController extends Controller
                     ]);
                 }
             }
+            return back()->with('success','Curso '.$curso->st_nome_curso.' cadastrdo para o aluno '.$dbAluno->st_nome_aluno);
         }
-        //redirect para a roda de vincular aluno e curso
-        $alunos = AlunoModel::all();
-        $cursos = CursoModel::all();
-        return view('Permisions.TelasAdmin.vincularCursoAluno', ['alunos'=>$alunos, 'cursos'=>$cursos]);
+
+        else{
+            return back()->with('error', 'O aluno '.$dbAluno->st_nome_aluno.' já esta cadastrado no curso '.$curso->st_nome_curso);
+        }
+
+    }
+    public function VizualizarCursosCadastradosAluno(AlunoModel $aluno)
+    {
+        $cursos = $aluno->cursos;
+        $ListCursos = [];
+        foreach ($cursos as $curso){
+            $progresso = ProgressoModel::where('fk_curso',$curso->id)->where('fk_aluno',$aluno->id)->get();
+            if(count($progresso)> 0){
+                $concluidos = ProgressoModel::where('fk_curso',$curso->id)->where('fk_aluno',$aluno->id)->where('int_submit_atividades',2)->get();
+                $porcentagem = intval(count($concluidos)/count($progresso)* 100);
+                array_push($ListCursos,[$curso->id, $curso->st_nome_curso,$porcentagem]);
+            }else{
+                array_push($ListCursos,[$curso->id, $curso->st_nome_curso,0]);
+            }
+        }
+        return view('Permisions.TelasAdmin.VizualizarCursosCadastradosAluno', ['cursos'=>$ListCursos,'aluno'=>$aluno]);
     }
     public function listarAlunosCursos()
     {
-        $dados = AlunoModel::all();
-        return view('Permisions.TelasAdmin.listarAlunosCursos', ['dados'=>$dados]);
-        //var_dump($a->books);
+        $alunos = AlunoModel::all();
+
+        $ArrayFinal = [];
+        foreach ($alunos as $aluno){
+            $cursos =  $aluno->cursos;
+            $user = User::where('id',$aluno->fk_user)->first();
+            array_push($ArrayFinal,[$aluno->id,$aluno->st_nome_aluno,$user->email,$aluno->updated_at, count($cursos)]);
+        }
+
+        return view('Permisions.TelasAdmin.listarAlunosCursos', ['dados'=>$ArrayFinal]);
     }
+
     public function deleteAlunoCurso($aluno, $curso)
     {
 
@@ -347,55 +444,76 @@ class AdminController extends Controller
             $progresso->delete();
         }
         $aluno = AlunoModel::where('id',$aluno )->first();
+        $curso = CursoModel::where('id',$curso )->first();
         $aluno->cursos()->detach($curso);
+        return back()->with('success','Curso ' .$curso->st_nome_curso.' excluido para o aluno '.$aluno->st_nome_aluno);
 
-
-
-        $dados = AlunoModel::all();
-        return view('Permisions.TelasAdmin.listarAlunosCursos', ['dados'=>$dados]);
     }
 
     public function VincularProfessorCursoCreate()
     {
         $professores = ProfessorModel::all();
         $cursos = CursoModel::all();
+
         return view('Permisions.TelasAdmin.vincularCursoProfessor', ['professores'=>$professores, 'cursos'=>$cursos]);
     }
     public function VincularProfessorCursoStore(Request $request)
     {
-        //código que esta funcionando para o cadastro de alunos nos cursos
         $validacao = [
             'id_professor' => 'required',
-            'cursos'=> 'required',
+            'curso'=> 'required',
         ];
+
         $feedback =[
             'id_professor.required'=> 'O aluno deve ser preenchido.',
-            'cursos.required'=> 'Pelo meno um curso deve ser preenchido.',
+            'curso.required'=> 'Pelo meno um curso deve ser preenchido.',
         ];
-        $request->validate($validacao, $feedback);
 
+        $request->validate($validacao, $feedback);
         $dbProfessor = ProfessorModel::where('id', $request->id_professor)->first();
 
-        foreach ($request->cursos as $curso) {
-            $dbProfessor->cursos()->attach($curso);
+        $dado = $dbProfessor->cursos;
+        $array = [];
+
+        foreach ($dado as $item) {
+            array_push($array,$item->id);
         }
-        //redirect para a roda de vincular aluno e curso
-        $professores = ProfessorModel::all();
-        $cursos = CursoModel::all();
-        return view('Permisions.TelasAdmin.vincularCursoProfessor', ['professores'=>$professores, 'cursos'=>$cursos]);
+        $curso = CursoModel::where('id',$request->curso)->first();
+
+        if ( ! in_array($request->curso,$array)){
+            $dbProfessor->cursos()->attach($request->curso);
+            return back()->with('success','O curso '.$curso->st_nome_curso.' foi cadastrado ao professor '.$dbProfessor->st_nome_professor.' com sucesso.');
+        }
+        else{
+
+            return back()->with('error','O professor '.$dbProfessor->st_nome_professor. ' já esta cadastrado no curso '.$curso->st_nome_curso);
+        }
     }
+
     public function listarprofessoresCursos()
     {
         $dados = ProfessorModel::all();
-        return view('Permisions.TelasAdmin.listarProfessorCursos', ['dados'=>$dados]);
-        //var_dump($a->books);
+        $professores = [];
+        foreach ($dados as $professor){
+            array_push($professores, [$professor->id,$professor->st_nome_professor,$professor->updated_at,$professor->users->email,count($professor->cursos)]);
+        }
+        return view('Permisions.TelasAdmin.listarProfessorCursos', ['professores'=>$professores]);
     }
-    public function deleteProfessorCurso($professor, $curso)
+
+    public function VizualizarCursosCadastradosProfessor(ProfessorModel $professor)
     {
-        $professor = ProfessorModel::where('id',$professor )->first();
+        $DadosProfessor = [];
+        foreach ($professor->cursos as $curso){
+            array_push($DadosProfessor, [$curso->id,$curso->st_nome_curso,count($curso->alunos)]);
+        }
+        return view('Permisions.TelasAdmin.VizualizarCursosCadastradosProfessor', ['DadosProfessor'=>$DadosProfessor,'professor'=>$professor]);
+
+    }
+
+    public function deleteProfessorCurso(ProfessorModel $professor, $curso)
+    {
         $professor->cursos()->detach($curso);
-        $dados = ProfessorModel::all();
-        return view('Permisions.TelasAdmin.listarProfessorCursos', ['dados'=>$dados]);
+        return redirect()->route('VizualizarCursosCadastradosProfessor',['professor'=>$professor]);
     }
 }
 

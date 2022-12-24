@@ -12,7 +12,6 @@ use App\Models\TesteIntermediarioModel;
 use App\Models\QuestoesFizacaoModel;
 use Illuminate\Http\Request;
 
-
 class CronogramaController extends Controller
 {
     public function store(Request $request, ConteudoModel $dadosconteudo)
@@ -55,48 +54,49 @@ class CronogramaController extends Controller
             $cronograma->fk_conteudo = $dadosconteudo->id;
             $cronograma->fk_unidade = $dadosconteudo->fk_unidade;
             $cronograma->save();
-            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$dadosconteudo->id]);
+            return  back()->with('success','Atividade cadastrada com sucesso');
         }
     }
-
     public function deleteatividadeCronograma(CronogramaModel $cronograma)
     {
         if($cronograma->st_tipo_atividade == 'TEXTO'){
             ConteudoEscritoModel::where('fk_cronograma',$cronograma->id)->delete();
             $idConteudo = $cronograma->fk_conteudo;
             $cronograma->delete();
-            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo]);
+            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo])->with('success','Arquivo Excluido Com sucesso');
         }
         if($cronograma->st_tipo_atividade == 'Teste Final'){
             TesteFinalModel::where('fk_conteudo_pertencente',$cronograma->fk_conteudo)->delete();
             $idConteudo = $cronograma->fk_conteudo;
             $cronograma->delete();
-            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo]);
+            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo])->with('success','Arquivo Excluido Com sucesso');
         }
+
         if($cronograma->st_tipo_atividade == 'Teste Intermediario'){
             TesteIntermediarioModel::where('fk_conteudo_pertencente',$cronograma->fk_conteudo)->delete();
             $idConteudo = $cronograma->fk_conteudo;
             $cronograma->delete();
-            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo]);
+            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo])->with('success','Arquivo Excluido Com sucesso');
         }
+
         if($cronograma->st_tipo_atividade == 'AtividadeFixacao'){
             QuestoesFizacaoModel::where('fk_conteudo',$cronograma->fk_conteudo)->delete();
             $idConteudo = $cronograma->fk_conteudo;
             $cronograma->delete();
-            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo]);
+            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo])->with('success','Arquivo Excluido Com sucesso');
         }
 
         if($cronograma->st_tipo_atividade == 'Teste Final Conteudo'){
-            $dados = TesteCursoModel::where('fk_conteudo_pertencente',$cronograma->fk_conteudo)->delete();
+            TesteCursoModel::where('fk_conteudo_pertencente',$cronograma->fk_conteudo)->delete();
             $idConteudo = $cronograma->fk_conteudo;
             $cronograma->delete();
-            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo]);
+            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo])->with('success','Arquivo Excluido Com sucesso');
         }
 
         else{
             $idConteudo = $cronograma->fk_conteudo;
             $cronograma->delete();
-            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo]);
+            return  redirect()->route('vizualizar.conteudo',['conteudo'=>$idConteudo])->with('success','Arquivo Excluido Com sucesso');
         }
     }
 }

@@ -1,134 +1,103 @@
-@extends('layouts.basico')
+@extends('layouts.basicoProfessor')
 
-@section('titulo', 'HomeProfessor')
+@section('titulo', 'Histórico')
+@section('infoPágina', 'Painel do professor > '.$Aluno->st_nome_aluno.' > Cursos')
 
 @section('conteudo')
-    <h3 class="mt-5">Painel do professor > cursos aluno</h3>
-    <div class="d-flex justify-content-between">
-        <div>
-            <div>
-                img. Pets
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_pets}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. Caderno
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_cursos_concluidos}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img.troveu
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_trofeus}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. revisao
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_revisoes}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. estrelas
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_estrelas}}
-            </div>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between mt-5">
-        <div>
-            <a href="{{route('atividadesAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Atividades
-            </a>
-        </div>
-        <div>
-            <a href="{{route('CursosAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Cursos
-            </a>
-        </div>
-        <div>
-            <a href="{{route('ProgressoAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Progresso
-            </a>
-        </div>
-        <div>
-            <a href="{{route('TarefasAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Tarefas
-            </a>
-        </div>
-    </div>
+    <!-- Button trigger modal -->
+    <button id="btntessdx" type="button" class="none" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        enviar
+    </button>
 
-    <h6 class="text-center mt-5">Cursos</h6>
-    <div>
-        <h6>Em progresso:</h6>
-    </div>
-    <ul class="">
-        @foreach($porcentagens as $dados)
-            <li class="mt-3">
-                <div class="d-flex">
-                    <div class="me-5">
-                        {{$dados[0]}}
-                    </div>
-                    <div class="ms-5">
-                        porcentagem: {{$dados[1]}}
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Salvar Cursos para o Aluno {{$Aluno->st_nome_aluno}}</h5>
+                    <button id="FecharModal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="h4Pets ">Cursos Selecionados:</h6>
+                    <div id="divModal">
+
                     </div>
                 </div>
-            </li>
-        @endforeach
-    </ul>
-
-    <h1 class="text-center mt-5">Cadastrar novo curso para o aluno</h1>
-
-    <div class=" bg-danger text-center">
-        {{ $errors->has('cursos') ? $errors->first('cursos') : '' }}
-    </div>
-    <div class="d-flex justify-content-center">
-        <form method="post" action="{{route('VincularAlunoCurso2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-            @csrf
-            <div class="text-end mt-5">
-                <button type="submit" >Submit</button>
+                <div class="modal-footer">
+                    <button id="FecharModal2"  type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button id="SalvarCursosModal" type="button" class="btn btn-primary">Salvar Cursos</button>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <table class="">
+    <div>
+        <button id="AbrirDivCadastrarCurso" class="btnVoltar3" type="button"> <span id="dcsdcsqw22" class="dcsdcsqw">Cadastrar Novo Curso </span></button>
+    </div>
+
+    <div id="DivCadastrarCurso" class="none">
+        <h4 class="text-center mt-5 h4Pets">Cadastrar novo curso para o aluno</h4>
+
+        <div class=" mt-5 mb-5">
+            <div class="w-50 masds d-flex justify-content-end">
+                <button id="CadastrarCurso" class="btnVoltar2"> Salvar</button>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center espacamento">
+            <div class="w-50">
+                <form method="post" action="{{route('VincularAlunoCurso2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">                    @csrf
+
+                    <table id="myTable" class="100%">
+                        <thead>
+                        <tr>
+                            <th class="p-4">
+                                Nome do Curso
+                            </th >
+                            <th class="p-4">selecionar curso</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($CursoParaCadastrarAluno as $curso)
+                            @if(! in_array($curso->st_nome_curso, $arrayDados))
+                                <tr>
+                                    <td id="Curso{{$curso->st_nome_curso}}" class="text-center">
+                                        {{$curso->st_nome_curso}}
+                                    </td>
+                                    <td class="text-center">
+                                        <input class="checkboxCursos" type="checkbox" name="cursos[]" value="{{$curso->id}}@Asd24{{$curso->st_nome_curso}}">
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
+                        </tbody>
+                    </table>
+                    <button id="CadastrarCurso2" class="none" type="submit"> enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="CursosCadastrados" class="espacamento">
+        <h4 class="text-center mt-5 h4Pets mb-5">Cursos cadastrados para o aluno</h4>
+        <div class="d-flex justify-content-center">
+            <table id="table2" class="text-center mb-5">
                 <thead>
                 <tr>
-                    <th class="p-4">
-                        #
-                    </th>
-                    <th class="p-4">
-                        Nome do Curso
-                    </th >
-                    <th class="p-4">selecionar curso</th>
+                    <th class="p-4">Curso</th>
+                    <th class="p-4">Porcentagem</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($CursoParaCadastrarAluno as $curso)
+                @foreach($porcentagens as $dados)
                     <tr>
-                        <td class="text-center">
-                            {{$curso->id}}
-                        </td>
-                        <td class="text-center">
-                            {{$curso->st_nome_curso}}
-                        </td>
-                        <td class="text-center">
-                            <input type="checkbox" name="cursos[]" value="{{$curso->id}}">
-                        </td>
+                        <td class="p-4">{{$dados[0]}}</td>
+                        <td class="p-4">{{$dados[1]}}%</td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
-        </form>
+        </div>
     </div>
 
 

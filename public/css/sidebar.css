@@ -44,7 +44,7 @@
 }
 .sidebar .logo-details i{
     font-size: 30px;
-    color: #fff;
+
 
     min-width: 78px;
     text-align: center;
@@ -78,9 +78,7 @@
     list-style: none;
     transition: all 0.4s ease;
 }
-.sidebar .nav-links li:hover{
-    background: rgba(0, 170, 237, 1);
-}
+
 .sidebar .nav-links li .iocn-link{
     display: flex;
     align-items: center;
@@ -94,7 +92,7 @@
     min-width: 78px;
     text-align: center;
     line-height: 50px;
-    color: #fff;
+
     font-size: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -114,9 +112,11 @@
 .sidebar .nav-links li a .link_name{
     font-size: 14px;
     font-weight: 400;
-    color: #fff;
     transition: all 0.4s ease;
 
+}
+.tesdfg{
+    color: black;!important;
 }
 
 .sidebar.close .nav-links li a .link_name{
@@ -126,24 +126,28 @@
 .sidebar .nav-links li .sub-menu{
     padding: 10px;
     margin-top: -10px;
-    background:  rgba(0, 170, 237, 1);
+    background:  white;
     display: none;
     text-align: center;
+}
+
+.sdsdfs:hover{
+    background: rgba(76, 222, 255, 1);
+    color: white;!important;
+    border-radius: 10px;
 
 }
+
 .sidebar .nav-links li.showMenu .sub-menu{
     display: block;
 }
 .sidebar .nav-links li .sub-menu a{
-    color: #fff;
+    color: black;
     font-size: 15px;
     padding: 5px 0;
     white-space: nowrap;
-    opacity: 0.6;
+
     transition: all 0.3s ease;
-}
-.sidebar .nav-links li .sub-menu a:hover{
-    opacity: 1;
 }
 .sidebar.close .nav-links li .sub-menu{
     position: absolute;
@@ -163,7 +167,7 @@
     pointer-events: auto;
     transition: all 0.4s ease;
 }
-.sidebar .nav-links li .sub-menu .link_name{
+.sidebar .nav-links li .sub-menu .link_namelink_name{
     display: none;
 }
 .sidebar.close .nav-links li .sub-menu .link_name{
@@ -217,7 +221,7 @@
 }
 .sidebar .profile-details .profile_name,
 .sidebar .profile-details .job{
-    color: #fff;
+
     font-size: 18px;
     font-weight: 500;
     white-space: nowrap;
@@ -232,7 +236,7 @@
 }
 .home-section{
     position: relative;
-    background: #E4E9F7;
+    background: #edf5fb;
     left: 320px;
     width: calc(100% - 320px);
     transition: all 0.5s ease;
@@ -244,7 +248,9 @@
 }
 
 .home-section .home-content{
-    height: 60px;
+    min-height: 100vh;
+    background: #edf5fb;
+
 }
 
 .home-section .home-content .bx-menu,
@@ -281,17 +287,11 @@
         left: 0;
     }
 }
-.sdsdsdsd{
-    width: 100%;
-    color: red;
-    padding: 10px;
 
-}
 
 .sidebar .nav-links li a .link{
     font-size: 14px;
     font-weight: 400;
-    color: white;
     transition: all 0.4s ease;
 }
 .sidebar.close .nav-links li a .link{
@@ -301,15 +301,22 @@
 
 .badf{
     margin: 5px;
-    background: rgba(151, 151, 151, 1);
+    background: rgba(187, 187, 187, 1);
+    border-radius: 10px;
+    color: black;
 }
+.badf a{
+    color: black;
+}
+.badf a:hover{
+    color: black;
+}
+
 .testre{
     margin: 5px;
-    background: rgba(151, 151, 151, 1);
+    background: rgba(197, 197, 197, 1);
 }
-.sidebar .nav-links .testre:hover{
-    background: rgba(151, 151, 151, 1);
-}
+
 .testre2{
 
     background:  #3574cf;
@@ -317,6 +324,7 @@
 .sidebar .nav-links .testre2:hover{
     background: #3574cf;
 }
+
 .sdsd{
     margin: 10px;
     width: 100%;
@@ -324,17 +332,20 @@
 }
 
 .sidebar .nav-links li a .link_name2{
-    font-size: 14px;
-    font-weight: 400;
-    color: white;
-
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(228, 228, 228, 0.8);
     transition: all 0.4s ease;
 }
 .sidebar.close .nav-links li a .link_name2{
     opacity: 0;
     pointer-events: none;
+    font-size: 18px;
+    font-weight:700;
 }
-
+.colofd{
+    background: rgba(0, 170, 237, 1);
+}
 .dcdcd{
     background: red;
 }
@@ -342,12 +353,42 @@
     font-size: 14px;
     font-weight: 400;
     color: gray;
-
     transition: all 0.4s ease;
 }
 .sidebar.close .nav-links li a .link_name3{
     opacity: 0;
     pointer-events: none;
 }
+.dfdfdc{
+    background: gray;
+}
+.ddfdfd{
+    color: black;
+    background: white;
+    border-radius: 10px;
+    margin: 5px;
+}
+.liComSubmit{
+    color: black;
+    background: white;
+    margin: 5px;
+    border-radius: 10px;
+}
+.ssdsd{
+    color: black;
+}
 
+.colorblue{
+    color: black;
+}
 
+.d123{
+    padding-top: 10px;
+    width: 100%;
+    height: 100px;
+    background: #edf5fb;
+    position: fixed;
+    bottom: 0;
+    border: 3px solid #b5cae9;
+
+}

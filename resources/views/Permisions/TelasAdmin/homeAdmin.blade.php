@@ -3,68 +3,107 @@
 @section('titulo', 'HomeAdmin')
 
 @section('conteudo')
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success alert-dismissible fade show mb-2" role="alert">
-            {{ $message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="flexPAluno mt-3 ">
+        <h4 class="h4Pets">
+            Painal do Administrador > {{$Admin->st_nome_admin}}
+        </h4>
+    </div>
+    <div class="divApresentarHome my-3">
+        <div class="cadastro">
+            <h5>Cadastrar usuários</h5>
         </div>
-    @endif
+        <div class="fles12 p-2 ">
+            <div class="divLinksHomeAdmin m-3">
+                <a class="block" href="{{route('registerAluno', ['Admin'=> $Admin->id])}}">
+                    Aluno
+                </a>
+            </div>
 
-    <div>
-        <a class="me-5" href="{{route('registerAluno')}}">
-            cadastrar novo aluno
-        </a>
+            <div class="divLinksHomeAdmin m-3">
+                <a class=" block" href="{{route('registerProfessor',['Admin'=> $Admin->id] )}}">
+                    Professor
+                </a>
+            </div>
 
-        <a class="me-5" href="/registerProfessor">
-            cadastrar novo professor
-        </a>
-
-        <a class="me-5" href="/AlunoCurso">
-            vincular aluno e curso
-        </a>
-
-        <a class="me-5" href="{{route('ProfessorCurso')}}">
-            vincular Professor e curso
-        </a>
-
-        <a class="me-5" href="{{route('listarAlunosCursos')}}">
-            listarAlunosCursos
-        </a>
-
-        <a class="me-5" href="{{route('listarprofessoresCursos')}}">
-            listarProfessorCursos
-        </a>
-
-    </div>
-
-    <div class="mt-4">
-        <a href="{{route('CadastrarTrofeus')}}">
-            trofeus Cadastrados
-        </a>
-    </div>
-    <div class="mt-4">
-        <a href="{{route('revisaoForma')}}">
-            forma de revisao
-        </a>
-    </div>
-
-    <div>
-        <a href="{{route('vizualizarPets')}}">
-            Pets Cadastrados
-        </a>
-    </div>
-
-    <div class="mt-5">
-        <a href="{{route('curso.index')}}">
-            cursos
-        </a>
-    </div>
-    <div class="mt-5">
-        <a href="{{route('unidade.index')}}">
-            unidade
-        </a>
+            <div class="divLinksHomeAdmin m-3">
+                <a class=" block" href="{{route('registerAdmin',['Admin'=> $Admin->id] )}}">
+                    Admin
+                </a>
+            </div>
+        </div>
     </div>
 
 
+
+    <div class="divApresentarHome my-5">
+        <div class="cadastro">
+            <h5>Cadastro de cursos e vinculações</h5>
+        </div>
+
+        <div class="fles12 p-2">
+            <div class="divLinksHomeAdmin m-3">
+                <a class="block"  href="{{route('curso.index')}}">
+                    cursos
+                </a>
+            </div>
+
+            <div class="divLinksHomeAdmin m-3">
+                <a class="block"  href="{{route('unidade.index')}}">
+                    unidade
+                </a>
+            </div>
+            <div class="divLinksHomeAdmin m-3">
+                <a class=" block" href="/AlunoCurso">
+                    Vincular curso e aluno
+                </a>
+            </div>
+
+            <div class="divLinksHomeAdmin m-3">
+                <a class=" block" href="{{route('ProfessorCurso')}}">
+                    Vincular curso e professor
+                </a>
+            </div>
+        </div>
+
+        <div class="fles123">
+            <div class="divLinksHomeAdmin m-3">
+                <a class="block" href="{{route('listarAlunosCursos')}}">
+                    listar Alunos
+                </a>
+            </div>
+
+            <div class="divLinksHomeAdmin m-3">
+                <a class=" block" href="{{route('listarprofessoresCursos')}}">
+                    listar Professor
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="divApresentarHome my-5">
+        <div class="cadastro">
+            <h5>Cadastros e vizualizações</h5>
+        </div>
+
+        <div class="fles12 p-2">
+            <div class="divLinksHomeAdmin m-3">
+                <a class="block" href="{{route('CadastrarTrofeus')}}">
+                    trofeus
+                </a>
+            </div>
+
+            <div class="divLinksHomeAdmin m-3">
+                <a class="block" href="{{route('revisaoForma')}}">
+                    forma de revisao
+                </a>
+            </div>
+
+            <div class="divLinksHomeAdmin m-3">
+                <a class="block" href="{{route('vizualizarPets')}}">
+                    Pets
+                </a>
+            </div>
+        </div>
+    </div>
 
 @endsection

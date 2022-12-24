@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TarefasRevisaoModel;
+use App\Models\TesteCursoModel;
+use App\Models\TesteFinalModel;
+use App\Models\TesteIntermediarioModel;
 use Illuminate\Http\Request;
 
 use App\Models\UnidadeModel;
@@ -27,20 +31,27 @@ class ConteudoController extends Controller
         $conteudo->st_nome_conteudo = $request->st_nome_conteudo;
         $conteudo->fk_unidade = $idUnidade;
         $conteudo->save();
-        return  redirect()->route('vizualizar.unidade',['unidade'=>$idUnidade]);
+        return  back()->with('success', 'Conteudo Cadastrado Com Sucesso');
     }
 
     public function delete(ConteudoModel $conteudo)
     {
         $idUnidade = $conteudo->fk_unidade;
         $idconteudo= $conteudo->id;
-        CronogramaModel::where('fk_conteudo',$idconteudo)->delete();
         ConteudoEscritoModel::where('fk_conteudo',$idconteudo)->delete();
         QuestoesModel::where('fk_conteudo',$idconteudo)->delete();
         QuestoesFizacaoModel::where('fk_conteudo',$idconteudo)->delete();
+        TesteCursoModel::where('fk_conteudo_pertencente',$idconteudo)->delete();
+        TesteIntermediarioModel::where('fk_conteudo_pertencente',$idconteudo)->delete();
+        TesteFinalModel::where('fk_conteudo_pertencente',$idconteudo)->delete();
+        TesteCursoModel::where('fk_conteudo',$idconteudo)->delete();
+        TesteIntermediarioModel::where('fk_conteudo',$idconteudo)->delete();
+        TesteFinalModel::where('fk_conteudo',$idconteudo)->delete();
+        TarefasRevisaoModel::where('fk_conteudo',$idconteudo)->delete();
+        CronogramaModel::where('fk_conteudo',$idconteudo)->delete();
         $conteudo->delete();
-
         return  redirect()->route('vizualizar.unidade',['unidade'=>$idUnidade]);
+
     }
 
     public function  vizualizarConteudo(ConteudoModel $conteudo)

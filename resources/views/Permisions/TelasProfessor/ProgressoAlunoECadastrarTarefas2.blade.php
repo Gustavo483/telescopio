@@ -1,105 +1,28 @@
-@extends('layouts.basico')
+@extends('layouts.basicoProfessor')
 
-@section('titulo', 'HomeProfessor')
+@section('titulo', 'Histórico')
+@section('infoPágina', 'Painel do professor > '.$Aluno->st_nome_aluno.' > Progresso')
 
 @section('conteudo')
-    <h3 class="mt-5">Painel do professor> progresso > {{$Aluno->st_nome_aluno}} </h3>
-    <div class="d-flex justify-content-between">
-        <div>
-            <div>
-                img. Pets
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_pets}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. Caderno
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_cursos_concluidos}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img.troveu
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_trofeus}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. revisao
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_revisoes}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. estrelas
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_estrelas}}
-            </div>
-        </div>
-    </div>
-
-    <div class="d-flex justify-content-between mt-5">
-        <div>
-            <a href="{{route('atividadesAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Atividades
-            </a>
-        </div>
-        <div>
-            <a href="{{route('CursosAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Cursos
-            </a>
-        </div>
-        <div>
-            <a href="{{route('ProgressoAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Progresso
-            </a>
-        </div>
-        <div>
-            <a href="{{route('TarefasAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Tarefas
-            </a>
-        </div>
-    </div>
-
-    <h5 class="text-center mt-5">Progresso do aluno nos cursos cadastrados</h5>
-
-    <div class="fdvdd">
-        <div>
-            {{ $errors->has('QuantidadeAtividades') ? $errors->first('QuantidadeAtividades') : '' }}
-        </div>
-        <div>
-            {{ $errors->has('data') ? $errors->first('data') : '' }}
-        </div>
-    </div>
-
-    <div>
-        <table class="w-100 mt-4">
+    <div class="mb-5">
+        <table id="TableProgresso2" class="w-100 mt-4 mb-5">
             <thead>
             <tr>
-                <th class="text-center">nome do dado</th>
-                <th class="text-center">porcentagem</th>
-                <th class="text-center">data de realização</th>
-                <th class="text-center">estrelas obtidas</th>
-                <th class="text-center">adicionar tarefa</th>
+                <th class="text-center">Nome do dado</th>
+                <th class="text-center">Porcentagem</th>
+                <th class="text-center">Data de realização</th>
+                <th class="text-center">Estrelas obtidas</th>
+                <th class="text-center">Adicionar tarefa</th>
             </tr>
             </thead>
             <tbody>
             @foreach($porcentagemCurso as $PorcentagemCurso)
-                <tr class="corCurso">
-                    <td >{{$PorcentagemCurso[0]}}</td>
-                    <td class="text-center">{{$PorcentagemCurso[1]}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <tr class="teestr">
+                    <td class="p-2" >{{$PorcentagemCurso[0]}}</td>
+                    <td class="text-center p-2">{{$PorcentagemCurso[1]}}</td>
+                    <td class="p-2"></td>
+                    <td class="p-2"></td>
+                    <td class="p-2"></td>
                 </tr>
                 @foreach($PorcentagensUnidadeApresentar as $PorcentagemUnidade )
                     @if($PorcentagemUnidade[0] == $PorcentagemCurso[0])

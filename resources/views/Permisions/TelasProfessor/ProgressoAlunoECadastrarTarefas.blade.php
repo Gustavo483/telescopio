@@ -1,87 +1,14 @@
-@extends('layouts.basico')
+@extends('layouts.basicoProfessor')
 
-@section('titulo', 'HomeProfessor')
+@section('titulo', 'Histórico')
+@section('infoPágina', 'Painel do professor > '.$IDCurso->st_nome_curso.' > '.$dadosAluno->st_nome_aluno.' > Progresso')
 
 @section('conteudo')
-    <h3 class="mt-5">Painel do professor> {{$porcentagemCurso[0][0]}} > {{$dadosAluno->st_nome_aluno}} </h3>
-    <div class="d-flex justify-content-between">
-        <div>
-            <div>
-                img. Pets
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_pets}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. Caderno
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_cursos_concluidos}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img.troveu
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_trofeus}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. revisao
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_revisoes}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. estrelas
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_estrelas}}
-            </div>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between mt-5">
-        <div>
-            <a href="{{route('atividadesAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
-                Atividades
-            </a>
-        </div>
-        <div>
-            <a href="{{route('CursosAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
-                Cursos
-            </a>
-        </div>
-        <div>
-            <a href="{{route('ProgressoAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
-                Progresso
-            </a>
-        </div>
-        <div>
-            <a href="{{route('TarefasAluno.professor',['Aluno'=>$Aluno,'IDCurso'=>$IDCurso,'IDProfessor'=>$IDProfessor])}}">
-                Tarefas
-            </a>
-        </div>
-    </div>
 
-    <h5 class="text-center mt-5">Progresso do aluno no curso "{{$porcentagemCurso[0][0]}}"</h5>
-
-    <div class="fdvdd">
-        <div>
-            {{ $errors->has('QuantidadeAtividades') ? $errors->first('QuantidadeAtividades') : '' }}
-        </div>
-        <div>
-            {{ $errors->has('data') ? $errors->first('data') : '' }}
-        </div>
-    </div>
+    <h4 class="text-center mt-5 h4Pets">Progresso do aluno no curso "{{$porcentagemCurso[0][0]}}"</h4>
 
     <div>
-        <table class="w-100 mt-4">
+        <table id="TableProgresso" class="w-100 mt-4 mb-5">
             <thead>
                 <tr>
                     <th class="text-center">nome do dado</th>
@@ -93,16 +20,20 @@
             </thead>
             <tbody>
                 @foreach($porcentagemCurso as $PorcentagemCurso)
-                    <tr>
-                        <td >{{$PorcentagemCurso[0]}}</td>
+                    <tr class="teestr">
+                        <td class="">{{$PorcentagemCurso[0]}}</td>
                         <td class="text-center">{{$PorcentagemCurso[1]}}</td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                     </tr>
                     @foreach($PorcentagensUnidadeApresentar as $PorcentagemUnidade )
                         @if($PorcentagemUnidade[0] == $PorcentagemCurso[0])
-                            <tr class="espacamento50">
+                            <tr class="espacamento50 trUnidade" >
                                 <td class="espacamento50">{{$PorcentagemUnidade[1]}}</td>
                                 <td class="text-center">{{$PorcentagemUnidade[2]}}</td>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                             </tr>
                             @foreach($porcentagemConteudos as $dado)
@@ -129,9 +60,7 @@
                                                         </div>
                                                     </form>
                                                 @endif
-
                                                 @if($d[4] == 0)
-
                                                 @endif
                                             </td>
                                         </tr>

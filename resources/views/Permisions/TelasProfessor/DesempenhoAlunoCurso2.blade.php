@@ -1,76 +1,11 @@
-@extends('layouts.basico')
+@extends('layouts.basicoProfessor')
 
-@section('titulo', 'HomeProfessor')
+@section('titulo', 'Histórico')
+@section('infoPágina', 'Painel do professor > '.$Aluno->st_nome_aluno.' > historico')
 
 @section('conteudo')
-    <h3 class="mt-5">Painel do professor > desempenho aluno</h3>
-    <div class="d-flex justify-content-between">
-        <div>
-            <div>
-                img. Pets
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_pets}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. Caderno
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_cursos_concluidos}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img.troveu
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_trofeus}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. revisao
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_revisoes}}
-            </div>
-        </div>
-        <div>
-            <div>
-                img. estrelas
-            </div>
-            <div>
-                {{$ConquitasAlunos->int_total_estrelas}}
-            </div>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between mt-5">
-        <div>
-            <a href="{{route('atividadesAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Atividades
-            </a>
-        </div>
-        <div>
-            <a href="{{route('CursosAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Cursos
-            </a>
-        </div>
-        <div>
-            <a href="{{route('ProgressoAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Progresso
-            </a>
-        </div>
-        <div>
-            <a href="{{route('TarefasAluno2.professor',['Aluno'=>$Aluno,'IDProfessor'=>$IDProfessor])}}">
-                Tarefas
-            </a>
-        </div>
-    </div>
 
-    <h6 class="text-center mt-5">Atividades </h6>
-    <table class="text-center">
+    <table id="tableDesempenho2" class="text-center w-100 mt-5">
         <thead>
         <tr>
             <th class="p-4">data</th>

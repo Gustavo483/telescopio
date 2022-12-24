@@ -3,67 +3,58 @@
 @section('titulo', 'Vincular curso professor')
 
 @section('conteudo')
-    <div>
-        <a href="{{route('inicio.pagina')}}">
-            voltar
+    <div class="flexPAluno mt-3">
+        <h4 class="h4Pets">
+            Painal do Administrador > Vincular curso e professor
+        </h4>
+        <a href="{{route('inicio.pagina')}}" class="btnVoltar">
+            Voltar
         </a>
     </div>
-    <div class=" mt-5 ">
-        <div class="bg-danger">
-            <div>
-                {{ $errors->has('id_professor') ? $errors->first('id_aluno') : '' }}
-            </div>
-            <div>
-                {{ $errors->has('cursos') ? $errors->first('cursos') : '' }}
+
+    <div class="mt-5">
+        <div class="flexRegisterAluno mb-5">
+            <div class="FormCadastro">
+                <form action="{{route('VincularProfessorCurso')}}" method="post">
+                    @csrf
+                    <div class="hsd2">
+                        <h4>Cadastrar curso para um professor</h4>
+                    </div>
+                    <div class="p-3">
+                        <div>
+                            <label class="form-label mt-2" for="id_professor"> Selecione o professor: </label>
+                            <select class="js-example-tags form-control"  name="id_professor">
+                                <option value="">Selecione</option>
+                                @foreach ($professores as $professor)
+                                    <option value="{{$professor->id}}">
+                                        {{$professor->st_nome_professor}}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="errosd">
+                                {{ $errors->has('id_professor') ? $errors->first('id_professor') : '' }}
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label mt-2" for="name"> Selecione o curso: </label>
+                            <select class="js-example-tags form-control"  name="curso">
+                                <option value="">Selecione</option>
+                                @foreach ($cursos as $curso)
+                                    <option value="{{$curso->id}}">
+                                        {{$curso->st_nome_curso}}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="errosd">
+                                {{ $errors->has('curso') ? $errors->first('curso') : '' }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 mb-3 d-flex justify-content-center">
+                        <button class="btnVoltar4" type="submit">Cadastrar cursos</button>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <form action="{{route('VincularProfessorCurso')}}" method="post">
-            @csrf
-
-            <div class="text-center">
-                <h5>Selecione o professor e marque os cursos que ele administrará</h5>
-            </div>
-
-            <select id="select1"  name="id_professor" class="form-control">
-                <option value="">Selecione</option>
-                @foreach ($professores as $professor)
-                    <option value="{{$professor->id}}">
-                        {{$professor->st_nome_professor}}
-                    </option>
-                @endforeach
-            </select>
-            <div>
-                <button type="submit">enviar</button>
-            </div>
-            <table>
-                <thead>
-                <tr>
-                    <th class="p-4">
-                        #
-                    </th>
-                    <th class="p-4">
-                        Nome do Curso
-                    </th >
-                    <th class="p-4">selecionar curso</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach ($cursos as $curso)
-                    <tr>
-                        <td class="text-center">
-                            {{$curso->id}}
-                        </td>
-                        <td class="text-center">
-                            {{$curso->st_nome_curso}}
-                        </td>
-                        <td class="text-center">
-                            <input type="checkbox" name="cursos[]" value="{{$curso->id}}">
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </form>
     </div>
 @endsection
